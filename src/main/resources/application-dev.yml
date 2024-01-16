@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/techno_market_dev?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    #org.hibernate.type: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
