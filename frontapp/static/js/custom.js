@@ -83,7 +83,7 @@ $(document).ready(function(){
     $('#chat_input').on('input', function () {
         var chatInputLength = $('#chat_input').val().length;
         if (chatInputLength > 0) {
-          $('#chat_submit_btn').addClass('active');
+            $('#chat_submit_btn').addClass('active');
         } else {
             $('#chat_submit_btn').removeClass('active');
         }
