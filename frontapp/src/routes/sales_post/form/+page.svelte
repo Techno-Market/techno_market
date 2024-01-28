@@ -1,25 +1,73 @@
 <script>
     // export let data;
-    function submitArticleForm () {
-        const form = this;
+    const submitArticleForm = async (event) => {
+    event.preventDefault();
 
-        fetch("http://localhost:8080/api/articles", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                subject: form.subject.value,
-                content: form.content.value,
-                postImage: form.postImage.value,
-                price: form.price.value,
-                area: form.area.value,
-                category: form.category.value
-            })
-        })
-        .then(res => res.json())
-        .then(data => console.log(data))
+    const form = event.target;
+    const formData = new FormData(form);
+
+    // 클라이언트 측 유효성 검사 수행
+    const area = formData.get('area');
+    const category = formData.get('category');
+    const subject = formData.get('subject');
+    const postImage = formData.get('postImage');
+    const content = formData.get('content');
+    const price = formData.get('price');
+
+    const errors = {};
+
+    const numericPrice = Number(price.replace(/,/g, ''));
+    formData.set('price', numericPrice);
+
+    if (!category) {
+      errors.category = '카테고리를 선택하세요.';
     }
+
+    if (!subject.trim()) {
+      errors.subject = '제목을 입력하세요.';
+    }
+
+    if (!postImage) {
+      errors.postImage = '이미지를 선택하세요.';
+    }
+
+    if (!content.trim()) {
+      errors.content = '내용을 입력하세요.';
+    }
+
+    if (!price || isNaN(numericPrice) || numericPrice <= 0) {
+      errors.price = '유효한 금액을 입력하세요.';
+    }
+
+    if (!area.trim()) {
+      errors.area = '지역을 입력하세요.';
+    }
+
+
+    // 클라이언트 측에서 유효성 검사 실패 시 제출 중단
+    if (Object.keys(errors).length > 0) {
+      console.log(errors);
+      return;
+    }
+
+    // 서버로 데이터 전송
+    try {
+      const response = await fetch('http://localhost:8080/api/articles', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log(responseData);
+      } else {
+        const responseData = await response.json();
+        console.error(responseData);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };
 
 </script>
 
