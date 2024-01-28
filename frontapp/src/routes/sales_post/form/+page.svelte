@@ -1,14 +1,39 @@
+<script>
+    // export let data;
+    function submitArticleForm () {
+        const form = this;
+
+        fetch("http://localhost:8080/api/articles", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                subject: form.subject.value,
+                content: form.content.value,
+                postImage: form.postImage.value,
+                price: form.price.value,
+                area: form.area.value,
+                category: form.category.value
+            })
+        })
+        .then(res => res.json())
+        .then(data => console.log(data))
+    }
+
+</script>
+
 <div class="cnt-area w100per rel zi2">
     <div class="con w100per">
         <h1 class="title-text lh120 c222 tb f32 mb40 tac wow fadeIn" data-wow-delay="0.3s" data-wow-duration="0.6s">판매 등록</h1>
         <div class="signup-box flex fdc wow fadeIn" data-wow-delay="0.6s" data-wow-duration="0.6s">
-<!--                <form th:object="${matchingForm}" method="post">-->
+               <form on:submit|preventDefault={submitArticleForm}>
 <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <ul class="flex fdc g36">
                     <li>
                         <h3 class="c333 f18 tb mb16">카테고리<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="select-type-2 rel">
-                            <select name="" id="">
+                            <select name="category" id="">
                                 <option value="">모든 카테고리</option>
                                 <option value="1">핸드폰</option>
                                 <option value="2">테블릿</option>
@@ -28,7 +53,7 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">제목<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="제목">
+                            <input type="text" name="subject" placeholder="제목">
                         </div>
                         <div class="error-text-box wsn flex g8 mt8">
                             <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -38,7 +63,7 @@
                         <h3 class="c333 f18 tb mb16">이미지<span class="tb cCC0000 inblock">*</span></h3>
                         <ul class="product-img-area flex g8">
                             <li class="file-btn">
-                                <input type="file" id="product_img_btn">
+                                <input type="file" name="postImage" id="product_img_btn">
                                 <label for="product_img_btn" class="wh100per block rel cp">
                                     <div class="img-box w32 abs xy-middle">
                                         <img src="/img/ico_plus_333.svg" alt="">
@@ -65,7 +90,7 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">내용<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="textarea-type-1">
-                            <textarea name="" id="" placeholder="내용"></textarea>
+                            <textarea name="content" id="" placeholder="내용"></textarea>
                         </div>
                         <div class="error-text-box wsn flex g8 mt8">
                             <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -76,7 +101,7 @@
                             <li class="w50per">
                                 <h3 class="c333 f18 tb mb16">금액<span class="tb cCC0000 inblock">*</span></h3>
                                 <div class="input-type-1 rel">
-                                    <input type="text" placeholder="금액" style="padding-right: 24px;" id="moneyInput">
+                                    <input type="text" name="price" placeholder="금액" style="padding-right: 24px;" id="moneyInput">
                                     <span class="abs y-middle f16 c999" style="right: 16px;">원</span>
                                 </div>
                                 <div class="error-text-box wsn flex g8 mt8">
@@ -86,7 +111,7 @@
                             <li class="w50per">
                                 <h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
                                 <div class="input-type-1">
-                                    <input type="text" placeholder="지역">
+                                    <input type="text" name="area" placeholder="지역">
                                 </div>
                                 <div class="error-text-box wsn flex g8 mt8">
                                     <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -119,7 +144,7 @@
                     <input type="submit" value="저장" class="btn-type-1 w100per">
                     <a href="/" class="btn-type-1-2 w100per">취소</a>
                 </div>
-<!--                </form>-->
+               </form>
         </div>
     </div>
 </div>
