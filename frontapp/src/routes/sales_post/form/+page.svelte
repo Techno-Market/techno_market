@@ -1,11 +1,21 @@
 <script>
     // export let data;
+    let directly = false;
+    let parcel = false;
+    let selectedImages = [];
+
     const submitArticleForm = async (event) => {
     event.preventDefault();
 
     const form = event.target;
     const formData = new FormData(form);
+    
+    const uniqueImages = Array.from(new Set(selectedImages)); // 중복 제거
+        uniqueImages.forEach((image, index) => {
+            formData.append('postImage', image);
+        });
 
+    console.log('postImage');
     // 클라이언트 측 유효성 검사 수행
     const area = formData.get('area');
     const category = formData.get('category');
@@ -18,6 +28,8 @@
 
     const numericPrice = Number(price.replace(/,/g, ''));
     formData.set('price', numericPrice);
+    formData.set('directly', directly);
+    formData.set('parcel', parcel);
 
     if (!category) {
       errors.category = '카테고리를 선택하세요.';
@@ -43,10 +55,14 @@
       errors.area = '지역을 입력하세요.';
     }
 
+    if (!directly && !parcel) {
+      errors.transactionType = '거래 유형을 선택하세요.';
+    }
+
 
     // 클라이언트 측에서 유효성 검사 실패 시 제출 중단
     if (Object.keys(errors).length > 0) {
-      console.log(errors);
+      updateErrorMessages(errors);
       return;
     }
 
@@ -69,6 +85,58 @@
     }
   };
 
+    const updateErrorMessages = (errors) => {
+        // 각 오류 메시지 업데이트
+        for (const fieldName in errors) {
+            const errorElement = document.querySelector(`.error-text-box[data-field="${fieldName}"] .error-text`);
+            if (errorElement) {
+                errorElement.textContent = errors[fieldName];
+            }
+        }
+    };
+
+    function previewImage(event) {
+        const imgPreviewContainer = document.getElementById('imgPreviewContainer');
+
+        // 새로운 이미지만 추가
+        for (const file of event.target.files) {
+            if (!selectedImages.includes(file)) { // 중복 체크
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imgPreview = document.createElement('img');
+                    imgPreview.src = e.target.result;
+
+                    const imgBox = document.createElement('li');
+                    imgBox.className = 'img-box rel';
+
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'img-box abs w20 zi2 xy-tr cp';
+                    removeButton.innerHTML = '<img src="/img/ico_point_x.svg" alt="">';
+                    removeButton.onclick = function () {
+                        imgPreviewContainer.removeChild(imgBox);
+                        const index = selectedImages.indexOf(file);
+                        if (index !== -1) {
+                            selectedImages.splice(index, 1);
+                        }
+                    };
+
+                    imgBox.appendChild(imgPreview);
+                    imgBox.appendChild(removeButton);
+
+                    imgPreviewContainer.appendChild(imgBox);
+
+                    // 이미지 추가 시에 selectedImages 배열에도 추가
+                    selectedImages.push(file);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 파일 선택이 변경되었음을 알림
+        event.target.value = null; // 이 부분이 추가되었습니다.
+    }
 </script>
 
 <div class="cnt-area w100per rel zi2">
@@ -94,8 +162,8 @@
                                 <img src="/img/arrow_bottom_999999.svg" alt="">
                             </span>
                         </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 선택 항목 입니다.</span>
+                        <div class="error-text-box wsn flex g8 mt8" data-field="category">
+                            <span class="error-text f14 cCC0000"></span>
                         </div>
                     </li>
                     <li>
@@ -103,22 +171,28 @@
                         <div class="input-type-1">
                             <input type="text" name="subject" placeholder="제목">
                         </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        <div class="error-text-box wsn flex g8 mt8" data-field="subject">
+                            <span class="error-text f14 cCC0000"></span>
                         </div>
                     </li>
                     <li>
                         <h3 class="c333 f18 tb mb16">이미지<span class="tb cCC0000 inblock">*</span></h3>
-                        <ul class="product-img-area flex g8">
+                        <ul id="imgPreviewContainer" class="product-img-area flex g8">
                             <li class="file-btn">
-                                <input type="file" name="postImage" id="product_img_btn">
+                                <input multiple="multiple" type="file" id="product_img_btn" on:change={previewImage}>
                                 <label for="product_img_btn" class="wh100per block rel cp">
                                     <div class="img-box w32 abs xy-middle">
                                         <img src="/img/ico_plus_333.svg" alt="">
                                     </div>
                                 </label>
                             </li>
-                            <li class="img-box rel">
+                            <!-- <li class="img-box rel">
+                                <img id="imgPreview" alt="이미지 미리보기">
+                                <button class="img-box abs w20 zi2 xy-tr cp" on:click={removeImagePreview}>
+                                    <img src="/img/ico_point_x.svg" alt="">
+                                </button>
+                            </li> -->
+                            <!-- <li class="img-box rel">
                                 <img src="/img/product_img_1_1.jpg" alt="">
                                 <button class="img-box abs w20 zi2 xy-tr cp">
                                     <img src="/img/ico_point_x.svg" alt="">
@@ -129,10 +203,10 @@
                                 <button class="img-box abs w20 zi2 xy-tr cp">
                                     <img src="/img/ico_point_x.svg" alt="">
                                 </button>
-                            </li>
+                            </li> -->
                         </ul>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        <div class="error-text-box wsn flex g8 mt8" data-field="postImage">
+                            <span class="error-text f14 cCC0000"></span>
                         </div>
                     </li>
                     <li>
@@ -140,8 +214,8 @@
                         <div class="textarea-type-1">
                             <textarea name="content" id="" placeholder="내용"></textarea>
                         </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        <div class="error-text-box wsn flex g8 mt8" data-field="content">
+                            <span class="error-text f14 cCC0000"></span>
                         </div>
                     </li>
                     <li>
@@ -152,8 +226,8 @@
                                     <input type="text" name="price" placeholder="금액" style="padding-right: 24px;" id="moneyInput">
                                     <span class="abs y-middle f16 c999" style="right: 16px;">원</span>
                                 </div>
-                                <div class="error-text-box wsn flex g8 mt8">
-                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <div class="error-text-box wsn flex g8 mt8" data-field="price">
+                                    <span class="error-text f14 cCC0000"></span>
                                 </div>
                             </li>
                             <li class="w50per">
@@ -161,8 +235,8 @@
                                 <div class="input-type-1">
                                     <input type="text" name="area" placeholder="지역">
                                 </div>
-                                <div class="error-text-box wsn flex g8 mt8">
-                                    <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                                <div class="error-text-box wsn flex g8 mt8" data-field="area">
+                                    <span class="error-text f14 cCC0000"></span>
                                 </div>
                             </li>
                         </ul>
@@ -171,20 +245,20 @@
                         <h3 class="c333 f18 tb mb16">거래 유형<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="flex aic g32">
                             <div class="check-text-type-3 type-2 flex aic">
-                                <input type="checkbox" id="directly"/>
+                                <input type="checkbox" bind:checked={directly} id="directly"/>
                                 <label for="directly">
                                     <span class="text">직거래</span>
                                 </label>
                             </div>
                             <div class="check-text-type-3 type-2 flex aic">
-                                <input type="checkbox" id="parcel"/>
+                                <input type="checkbox" bind:checked={parcel} id="parcel"/>
                                 <label for="parcel">
                                     <span class="text">택배거래</span>
                                 </label>
                             </div>
                         </div>
-                        <div class="error-text-box wsn flex g8 mt8">
-                            <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
+                        <div class="error-text-box wsn flex g8 mt8" data-field="transactionType">
+                            <span class="error-text f14 cCC0000"></span>
                         </div>
                     </li>
                 </ul>

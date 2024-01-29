@@ -69,6 +69,8 @@ public class SellArticleController {
         private String area;
         @NotBlank
         private String category;
+        private Boolean directly;
+        private Boolean parcel;
         @NotNull
         private List<MultipartFile> postImage;
     }
@@ -76,7 +78,10 @@ public class SellArticleController {
     @PostMapping("")
     public RsData<SellArticleCreateDto> write(@Valid WriteRequest writeRequest) throws Exception{
 
-        RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(), writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getPostImage());
+        RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(),
+                writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getDirectly(),
+                writeRequest.getParcel(), writeRequest.getPostImage());
+
 
         return rsArticle;
     }

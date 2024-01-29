@@ -29,6 +29,8 @@ public class SellArticle {
     private int price;
     private String area;
     private String category;
+    private Boolean directly;
+    private Boolean parcel;
     @OneToMany(
             mappedBy = "sellArticle",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},

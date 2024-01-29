@@ -13,5 +13,7 @@ public class SellArticleCreateDto {
     private int price;
     private String area;
     private String category;
+    private Boolean directly;
+    private Boolean parcel;
 }
 

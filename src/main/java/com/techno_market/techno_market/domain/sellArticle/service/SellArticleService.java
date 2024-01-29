@@ -24,13 +24,16 @@ public class SellArticleService {
     private final FileHandler fileHandler;
 
     @Transactional
-    public RsData<SellArticleCreateDto> create(String title, String subject, int price, String area, String category, List<MultipartFile> postImage) throws Exception {
+    public RsData<SellArticleCreateDto> create(String title, String subject, int price, String area, String category, Boolean directly,
+                                               Boolean parcel, List<MultipartFile> postImage) throws Exception {
         SellArticle a = new SellArticle();
         a.setContent(title);
         a.setSubject(subject);
         a.setPrice(price);
         a.setArea(area);
         a.setCategory(category);
+        a.setDirectly(directly);
+        a.setParcel(parcel);
         a.setCreateDate(LocalDateTime.now());
 
         List<Photo> photoList = fileHandler.parseFileInfo(postImage);
@@ -42,13 +45,15 @@ public class SellArticleService {
         }
         this.sellArticleRepository.save(a).getId();
 
-        // ArticleDto로 변환
+        // SellArticleDto로 변환
         SellArticleCreateDto sellArticleCreateDto = new SellArticleCreateDto();
         sellArticleCreateDto.setSubject(a.getSubject());
         sellArticleCreateDto.setContent(a.getContent());
         sellArticleCreateDto.setPrice(a.getPrice());
         sellArticleCreateDto.setArea(a.getArea());
         sellArticleCreateDto.setCategory(a.getCategory());
+        sellArticleCreateDto.setDirectly(a.getDirectly());
+        sellArticleCreateDto.setParcel(a.getParcel());
 
         return RsData.of("S-2", "게시물이 생성되었습니다.", sellArticleCreateDto);
     }
