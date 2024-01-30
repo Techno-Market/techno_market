@@ -1,6 +1,8 @@
 <script>
 	export let data;
 
+	console.log(data.data.sellArticle.photo);
+
 	import { onMount } from 'svelte';
 	import Swiper from 'swiper';
 	import 'swiper/swiper-bundle.css';
@@ -30,11 +32,17 @@
 			<div class="product-detail-swiper-box wh100per rel zi1">
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						<!-- <div class="swiper-slide">
+					{#each data.data.sellArticle.photo as photo}
+
+						<div class="swiper-slide">
 							<div class="img-box rel">
-								<img src="/img/product_img_1_1.jpg" alt="" />
+								<img src="{photo.filePath}" alt="{photo.origFileName}" />
 							</div>
 						</div>
+
+						
+					{/each}
+					 
 						<div class="swiper-slide">
 							<div class="img-box rel">
 								<img src="/img/product_img_2_1.jpg" alt="" />
@@ -44,14 +52,8 @@
 							<div class="img-box rel">
 								<img src="/img/product_img_3_1.jpg" alt="" />
 							</div>
-						</div> -->
-						{#each data.data.sellArticle.photo as photo (photo.id)}
-							<div class="swiper-slide">
-								<div class="img-box rel">
-									<img src={`/image/${photo.id}`} alt="" />
-								</div>
-							</div>
-						{/each}
+						</div>
+
 					</div>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<!-- svelte-ignore a11y-no-static-element-interactions -->

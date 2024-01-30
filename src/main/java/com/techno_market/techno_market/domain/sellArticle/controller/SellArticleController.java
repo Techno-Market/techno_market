@@ -1,5 +1,6 @@
 package com.techno_market.techno_market.domain.sellArticle.controller;
 
+import com.techno_market.techno_market.domain.photo.entity.Photo;
 import com.techno_market.techno_market.domain.photo.service.PhotoService;
 import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateDto;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
@@ -47,7 +48,6 @@ public class SellArticleController {
     @GetMapping("/{id}")
     public RsData<ArticleResponse> article(@PathVariable("id") Long id) {
         SellArticle sellArticle = this.sellArticleService.getArticle(id);
-
         return RsData.of("S-2", "성공", new ArticleResponse(sellArticle));
     }
 
