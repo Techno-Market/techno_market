@@ -35,37 +35,12 @@
                     <li>
                         <a href="" class="c333 f14 tm">로그아웃</a>
                     </li> -->
-                    
-<!--                    <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">-->
-<!--                        <a th:href="@{/user/mypage}" class="c999 f16">내 정보</a>-->
-<!--                    </li>-->
-<!--                    <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">-->
-<!--                        <a th:href="@{/team/team_list}" class="c999 f16">팀 정보</a>-->
-<!--                    </li>-->
-<!--                    <li sec:authorize="isAuthenticated()">-->
-<!--                        <a th:href="@{/matching/history}" class="c999 f16">매칭 내역</a>-->
-<!--                    </li>-->
-<!--                    <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">-->
-<!--                        <a th:href="@{/wishlist}" class="c999 f16">위시리스트</a>-->
-<!--                    </li>-->
-<!--                    <li sec:authorize="isAuthenticated()">-->
-<!--                        <a th:href="@{/user/logout}" class="c999 f16">로그아웃</a>-->
-<!--                    </li>-->
                 </ul>
-<!--                <div sec:authorize="isAuthenticated()" class="user-name-box flex aic jcc f16 tm c777">-->
-<!--                    <span class="img-box w28 mr8">-->
-<!--                        <img th:if="${@rq.profileImgUrl != null}" th:src="@{|/gen${@rq.profileImgUrl}|}" alt="Profile Image">-->
-<!--                        <img th:unless="${@rq.profileImgUrl != null}" th:src="@{/img/user_img.svg}" alt="Default Image">-->
-<!--                    </span>-->
-<!--                    <div th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}" class="flex aic g4">-->
-<!--                        <span class="c333 tb" th:text="${@rq.member.name}"></span>-->
-<!--                        <span class="c999">님</span>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
         <div class="header-box-2 w100per h50 flex aic jcsb">
-            <div class="left-box flex aic g120">
+            <div class="left-box flex aic g24">
+                <a href="" class="f14 b333 cfff bsb bdr4 pt8 pb8 pl16 pr16">ALL</a>
                 <ul class="menu-box flex aic g32 c222 f16">
                     <li>
                         <a href="" class="tm">핸드폰</a>
@@ -87,7 +62,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="right-box">
+            <!-- <div class="right-box">
                 <div class="search-swiper-box h20 rel zi1" style="width: 180px;">
                     <div class="search-swiper swiper">
                         <div class="swiper-wrapper">
@@ -115,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </header>

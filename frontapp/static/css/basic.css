@@ -116,6 +116,7 @@ body.active {overflow-y: hidden;}
 .bdr20 {border-radius: 20px;}
 .bdr20 {border-radius: 30px;}
 .bdr50 {border-radius: 50%;}
+.ofh {overflow: hidden;}
 span, a {display: block;}
 .ex::after {
     content: "";
