@@ -1,8 +1,33 @@
+
+<script>
+import { onMount } from "svelte";
+import Swiper from "swiper";
+import "swiper/swiper-bundle.css";
+
+let swiper;
+
+onMount(() => {
+    swiper = new Swiper(".swiper-container", {
+        loop: true,
+        slidesPerView: 1, 
+        spaceBetween: 0, 
+        // pagination: {
+        //     el: ".swiper-pagination",
+        //     clickable: true,
+        // },
+        // navigation: {
+        //     nextEl: ".swiper-button-next",
+        //     prevEl: ".swiper-button-prev",
+        // },
+    });
+});
+</script>
+
 <div class="product-detail-area bsb w100per rel zi2 pt60">
     <div class="con w100per">
         <div class="product-infor-box-1 flex jcsb g40">
             <div class="product-detail-swiper-box wh100per rel zi1">
-                <div class="product-detail-swiper swiper">
+                <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="img-box rel">
@@ -20,8 +45,10 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-pagination"></div> -->
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
             <div class="product-text-box">
                 <div class="flex aic jcsb">

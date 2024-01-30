@@ -1,3 +1,30 @@
+<script>
+    let username;
+    let nickname;
+    let password;
+    let email;
+    let name;
+    let birthDate;
+    let privacy;
+
+function getDivLength() {
+    const divLength = myDiv.textContent.length; // 요소의 너비를 구함
+    console.log("Div length:", divLength);
+}
+</script>
+
+<!-- <script>
+    let test;
+    let testLength;
+
+    function testInput(event) {
+        testLength = test.textContent.length;
+    }
+</script>
+
+<input type="text" bind:this={test} on:input={testInput}> -->
+<!-- <div>{testLength}</div> -->
+
 <div class="signup-area login-cnt-area w100per rel zi2">
     <div class="con w100per">
         <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">회원가입</h1>
@@ -6,7 +33,7 @@
                 <li>
                     <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="input-type-1">
-                        <input type="text" placeholder="아이디">
+                        <input type="text" placeholder="아이디" bind:this={username}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -17,7 +44,7 @@
                 <li>
                     <h3 class="c333 f18 tb mb16">닉네임<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="input-type-1">
-                        <input type="text" placeholder="닉네임">
+                        <input type="text" placeholder="닉네임" bind:this={}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -28,7 +55,7 @@
                 <li>
                     <h3 class="c333 f18 tb mb16">비밀번호<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="input-type-1">
-                        <input type="password" placeholder="비밀번호">
+                        <input type="password" placeholder="비밀번호" bind:this={}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -36,7 +63,7 @@
                         <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
                     </div>
                     <div class="input-type-1 mt8">
-                        <input type="password" placeholder="비밀번호 확인">
+                        <input type="password" placeholder="비밀번호 확인" bind:this={}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -48,7 +75,7 @@
                     <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="input-btn-box flex g8">
                         <div class="input-type-1">
-                            <input type="text" placeholder="이메일">
+                            <input type="text" placeholder="이메일" bind:this={}>
                         </div>
                         <button type="button" class="btn-type-2">전송</button>
                     </div>
@@ -60,7 +87,7 @@
                     </div>
                     <div class="input-btn-box flex g8 mt8">
                         <div class="input-type-1">
-                            <input type="text" placeholder="인증번호">
+                            <input type="text" placeholder="인증번호" bind:this={}>
                         </div>
                         <button type="button" class="btn-type-2">확인</button>
                     </div>
@@ -73,7 +100,7 @@
                 <li>
                     <h3 class="c333 f18 tb mb16">이름<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="input-type-1">
-                        <input type="text" placeholder="이름">
+                        <input type="text" placeholder="이름" bind:this={}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
@@ -82,13 +109,13 @@
                 <li>
                     <h3 class="c333 f18 tb mb16">생년월일<span class="tb cCC0000 inblock">*</span></h3>
                     <div class="date-type-1">
-                        <input type="date">
+                        <input type="date" bind:this={}>
                     </div>
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 입력 항목 입니다.</span>
                     </div>
                 </li>
-                <li>
+                <!-- <li>
                     <h3 class="c333 f18 tb mb16">관심사<span class="tb cCC0000 inblock">*</span><span class="c999 f14 inblock ml4">최소 1개 다중 선택 가능</span></h3>
                     <ul class="interest-box flex aic fww g8">
                         <li>
@@ -131,10 +158,10 @@
                     <div class="error-text-box wsn flex g8 mt8">
                         <span class="error-text f14 cCC0000">필수 선택 항목 입니다.</span>
                     </div>
-                </li>
+                </li> -->
             </ul>
             <div class="check-text-type-2 mt100 flex aic">
-                <input type="checkbox" id="privacy">
+                <input type="checkbox" bind:this={}>
                 <label for="privacy">
                     <span class="text">개인정보 수집 및 이용 동의</span>
                 </label>
@@ -142,7 +169,7 @@
             <div class="error-text-box wsn flex g8 mt8">
                 <span class="error-text f14 cCC0000">필수 체크 항목 입니다.</span>
             </div>
-            <button type="button" class="btn-type-1 mt40">회원가입</button>
+            <button type="button" class="btn-type-1 mt40" id="signupBtn">회원가입</button>
         </div>
     </div>
 </div>

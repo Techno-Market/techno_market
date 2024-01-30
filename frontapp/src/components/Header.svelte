@@ -22,6 +22,20 @@
                     <li>
                         <a href="" class="c333 f14 tm">회원가입</a>
                     </li>
+
+                    <!-- <li>
+                        <a href="" class="c333 f14 tm test">내 정보</a>
+                    </li>
+                    <li>
+                        <a href="" class="c333 f14 tm">채팅</a>
+                    </li>
+                    <li>
+                        <a href="" class="c333 f14 tm">찜 목록</a>
+                    </li>
+                    <li>
+                        <a href="" class="c333 f14 tm">로그아웃</a>
+                    </li> -->
+                    
 <!--                    <li sec:authorize="isAuthenticated()" th:if="${@rq.member.rating == 1 or @rq.member.rating == 3 or @rq.member.rating == 4}">-->
 <!--                        <a th:href="@{/user/mypage}" class="c999 f16">내 정보</a>-->
 <!--                    </li>-->
@@ -54,16 +68,22 @@
             <div class="left-box flex aic g120">
                 <ul class="menu-box flex aic g32 c222 f16">
                     <li>
-                        <a href="" class="tm">카테고리</a>
+                        <a href="" class="tm">핸드폰</a>
                     </li>
                     <li>
-                        <a href="" class="tm">카테고리</a>
+                        <a href="" class="tm">테블릿</a>
                     </li>
                     <li>
-                        <a href="" class="tm">카테고리</a>
+                        <a href="" class="tm">노트북</a>
                     </li>
                     <li>
-                        <a href="" class="tm">카테고리</a>
+                        <a href="" class="tm">모니터</a>
+                    </li>
+                    <li>
+                        <a href="" class="tm">스마트워치</a>
+                    </li>
+                    <li>
+                        <a href="" class="tm">이어폰</a>
                     </li>
                 </ul>
             </div>

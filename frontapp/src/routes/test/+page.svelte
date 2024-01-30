@@ -35,28 +35,20 @@
     {/each}
   </div>
 </div> -->
-// +page.svelte
 
 <script>
-  import { Swiper, SwiperSlide } from 'swiper/svelte';
-  import 'swiper/css';
-  import 'swiper/css/navigation';
-  import 'swiper/css/pagination';
-
-  // Your additional imports or logic for the page
+  let testInput;
 </script>
 
-<Swiper
-  spaceBetween={50}
-  slidesPerView={3}
-  on:slideChange={() => console.log('slide change')}
-  on:swiper={(e) => console.log(e.detail[0])}
->
-  <SwiperSlide>Slide 1</SwiperSlide>
-  <SwiperSlide>Slide 2</SwiperSlide>
-  <SwiperSlide>Slide 3</SwiperSlide>
-  <SwiperSlide>Slide 4</SwiperSlide>
-  <!-- 추가적인 슬라이드 추가 -->
-</Swiper>
+<style>
+  .error-msg {
+    display: none;
+  }
+  .error-msg.active {
+    display: block;
+  }
+</style>
 
-<!-- Your page content goes here -->
+<input type="text" bind:this={testInput}>
+<div class="error-msg">에러메세지</div>
+<button>클릭</button>
