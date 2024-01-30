@@ -3,6 +3,7 @@ package com.techno_market.techno_market.domain.sellArticle.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -31,6 +32,7 @@ public class SellArticle {
     private String category;
     private Boolean directly;
     private Boolean parcel;
+    private int viewCount;
     @OneToMany(
             mappedBy = "sellArticle",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -54,5 +56,7 @@ public class SellArticle {
             // 파일 저장
             photo.setSellArticle(this);
     }
-
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }

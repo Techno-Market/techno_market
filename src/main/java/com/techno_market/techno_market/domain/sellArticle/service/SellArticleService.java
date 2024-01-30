@@ -24,11 +24,11 @@ public class SellArticleService {
     private final FileHandler fileHandler;
 
     @Transactional
-    public RsData<SellArticleCreateDto> create(String title, String subject, int price, String area, String category, Boolean directly,
+    public RsData<SellArticleCreateDto> create(String subject, String content, int price, String area, String category, Boolean directly,
                                                Boolean parcel, List<MultipartFile> postImage) throws Exception {
         SellArticle a = new SellArticle();
-        a.setContent(title);
         a.setSubject(subject);
+        a.setContent(content);
         a.setPrice(price);
         a.setArea(area);
         a.setCategory(category);
@@ -62,16 +62,16 @@ public class SellArticleService {
         return this.sellArticleRepository.findAll();
     }
 
+    @Transactional
     public SellArticle getArticle(Long id) {
-        Optional<SellArticle> optionalArticle = this.sellArticleRepository.findById(id);
+        SellArticle sellArticle = this.sellArticleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다."));
 
-        if (optionalArticle.isEmpty()) {
-            throw  new RuntimeException("없음");
-        }
+        // 조회수 증가
+        sellArticle.increaseViewCount();
 
-        return optionalArticle.get();
+        return sellArticle;
     }
-
 
     public RsData<SellArticle> modify(SellArticle sellArticle, String subject, String content, int price, String area) {
         sellArticle.setSubject(subject);

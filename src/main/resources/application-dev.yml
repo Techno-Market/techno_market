@@ -25,4 +25,4 @@ multipart:
   enabled: treu
 custom:
   genFile:
-    dirPath: C:\Users\SBS\Desktop\work\techno_market\src\main\resources\static
+    dirPath: C:\Users\techno_market_image
