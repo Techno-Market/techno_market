@@ -32,28 +32,16 @@
 			<div class="product-detail-swiper-box wh100per rel zi1">
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-					{#each data.data.sellArticle.photo as photo}
-
-						<div class="swiper-slide">
-							<div class="img-box rel">
-								<img src="{photo.filePath}" alt="{photo.origFileName}" />
+						{#each data.data.sellArticle.photo as photo}
+							<div class="swiper-slide">
+								<div class="img-box rel">
+									<img
+										src={`http://localhost:8080/gen/${photo.filePath}`}
+										alt={photo.origFileName}
+									/>
+								</div>
 							</div>
-						</div>
-
-						
-					{/each}
-					 
-						<div class="swiper-slide">
-							<div class="img-box rel">
-								<img src="/img/product_img_2_1.jpg" alt="" />
-							</div>
-						</div>
-						<div class="swiper-slide">
-							<div class="img-box rel">
-								<img src="/img/product_img_3_1.jpg" alt="" />
-							</div>
-						</div>
-
+						{/each}
 					</div>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<!-- svelte-ignore a11y-no-static-element-interactions -->

@@ -83,7 +83,7 @@ public class FileHandler {
                 // 파일 DTO 생성
                 PhotoDto photoDto = PhotoDto.builder()
                         .origFileName(multipartFile.getOriginalFilename())
-                        .filePath(path + File.separator + new_file_name)
+                        .filePath(new_file_name)
                         .fileSize(multipartFile.getSize())
                         .build();
 
