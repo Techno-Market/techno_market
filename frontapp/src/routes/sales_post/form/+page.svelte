@@ -141,6 +141,20 @@
 		// 파일 선택이 변경되었음을 알림
 		event.target.value = null; // 이 부분이 추가되었습니다.
 	}
+
+
+	let priceModification = ""; // 입력된 금액을 저장하는 변수
+
+// 숫자 포맷팅 함수
+const formatNumber = (value) => {
+  return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+const handleInput = (event) => {
+  // 입력된 값에서 숫자만 추출하고, 쉼표를 추가하여 price 변수에 저장
+  priceModification = formatNumber(event.target.value);
+};
+
 </script>
 
 <div class="cnt-area w100per rel zi2">
@@ -243,7 +257,8 @@
 										name="price"
 										placeholder="금액"
 										style="padding-right: 24px;"
-										id="moneyInput"
+										id="moneyInput" bind:value={priceModification}
+										on:input={handleInput}
 									/>
 									<span class="abs y-middle f16 c999" style="right: 16px;">원</span>
 								</div>

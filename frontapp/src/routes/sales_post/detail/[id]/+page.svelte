@@ -11,7 +11,6 @@
 
 	onMount(() => {
 		swiper = new Swiper('.swiper-container', {
-			loop: true,
 			slidesPerView: 1,
 			spaceBetween: 0,
 			pagination: {
@@ -72,13 +71,13 @@
 							<span class="img-box w20">
 								<img src="/img/ico_heart_777.svg" alt="" />
 							</span>
-							<span class="c777 f14">5</span>
+							<span class="c777 f14">0</span>
 						</li>
 						<li class="flex aic g4">
 							<span class="img-box w20">
 								<img src="/img/ico_chat_777.svg" alt="" />
 							</span>
-							<span class="c777 f14">3</span>
+							<span class="c777 f14">0</span>
 						</li>
 						<li class="flex aic g4">
 							<span class="img-box w20">

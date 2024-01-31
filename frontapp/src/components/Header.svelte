@@ -17,10 +17,10 @@
             <div class="right-box flex aic cg24">
                 <ul class="sub-menu-box flex aic cg12">
                     <li>
-                        <a href="" class="c333 f14 tm test">로그인</a>
+                        <a href="/login" class="c333 f14 tm test">로그인</a>
                     </li>
                     <li>
-                        <a href="" class="c333 f14 tm">회원가입</a>
+                        <a href="/signup" class="c333 f14 tm">회원가입</a>
                     </li>
 
                     <!-- <li>
@@ -40,7 +40,7 @@
         </div>
         <div class="header-box-2 w100per h50 flex aic jcsb">
             <div class="left-box flex aic g24">
-                <a href="" class="f14 b333 cfff bsb bdr4 pt8 pb8 pl16 pr16">ALL</a>
+                <a href="/all_product" class="f14 b333 cfff bsb bdr4 pt8 pb8 pl16 pr16">ALL</a>
                 <ul class="menu-box flex aic g32 c222 f16">
                     <li>
                         <a href="" class="tm">핸드폰</a>

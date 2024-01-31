@@ -62,7 +62,7 @@
             <div class="swiper-slide">
                 <a href="/">
                     <div class="img-box rel">
-                        <img src="/img/product_img_2_1.jpg" alt="">
+                        <img src="/img/product_img_3_1.jpg" alt="">
                         <button class="favor-box img-box w24 abs" id="favor_btn" style="top: 12px; right: 12px;">
                             <img src="/img/ico_heart.svg" alt="">
                         </button>
@@ -81,7 +81,7 @@
             <div class="swiper-slide">
                 <a href="/">
                     <div class="img-box rel">
-                        <img src="/img/product_img_2_1.jpg" alt="">
+                        <img src="/img/product_img_4_1.jpg" alt="">
                         <button class="favor-box img-box w24 abs" id="favor_btn" style="top: 12px; right: 12px;">
                             <img src="/img/ico_heart.svg" alt="">
                         </button>
@@ -101,7 +101,7 @@
             <div class="swiper-slide">
                 <a href="/">
                     <div class="img-box rel">
-                        <img src="/img/product_img_2_1.jpg" alt="">
+                        <img src="/img/product_img_5_1.jpg" alt="">
                         <button class="favor-box img-box w24 abs" id="favor_btn" style="top: 12px; right: 12px;">
                             <img src="/img/ico_heart.svg" alt="">
                         </button>
@@ -120,7 +120,7 @@
             <div class="swiper-slide">
                 <a href="/">
                     <div class="img-box rel">
-                        <img src="/img/product_img_2_1.jpg" alt="">
+                        <img src="/img/product_img_1_1.jpg" alt="">
                         <button class="favor-box img-box w24 abs" id="favor_btn" style="top: 12px; right: 12px;">
                             <img src="/img/ico_heart.svg" alt="">
                         </button>
