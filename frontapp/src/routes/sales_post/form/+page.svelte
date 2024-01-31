@@ -142,31 +142,21 @@
 		event.target.value = null; // 이 부분이 추가되었습니다.
 	}
 
+	//금액 입력할 때 , 찍히게
+	let priceModification = "";
+	const formatNumber = (value) => {
+		return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
 
-	let priceModification = ""; // 입력된 금액을 저장하는 변수
-
-// 숫자 포맷팅 함수
-const formatNumber = (value) => {
-  return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-const handleInput = (event) => {
-  // 입력된 값에서 숫자만 추출하고, 쉼표를 추가하여 price 변수에 저장
-  priceModification = formatNumber(event.target.value);
-};
-
+	const handleInput = (event) => {
+		priceModification = formatNumber(event.target.value)
+	};
 </script>
 
 <div class="cnt-area w100per rel zi2">
 	<div class="con w100per">
-		<h1
-			class="title-text lh120 c222 tb f32 mb40 tac wow fadeIn"
-			data-wow-delay="0.3s"
-			data-wow-duration="0.6s"
-		>
-			판매 등록
-		</h1>
-		<div class="signup-box flex fdc wow fadeIn" data-wow-delay="0.6s" data-wow-duration="0.6s">
+		<h1 class="title-text lh120 c222 tb f32 mb40 tac">판매 등록</h1>
+		<div class="signup-box flex fdc">
 			<form on:submit|preventDefault={submitArticleForm}>
 				<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 				<ul class="flex fdc g36">
