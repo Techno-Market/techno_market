@@ -4,15 +4,27 @@ import com.techno_market.techno_market.domain.photo.entity.Photo;
 import com.techno_market.techno_market.domain.photo.repository.PhotoRepository;
 import com.techno_market.techno_market.domain.photo.service.FileHandler;
 import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateDto;
+import com.techno_market.techno_market.domain.sellArticle.entity.CategoryType;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.sellArticle.repository.SellArticleRepository;
 import com.techno_market.techno_market.global.rsData.RsData;
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,6 +99,142 @@ public class SellArticleService {
     public RsData<SellArticle> delete(SellArticle sellArticle) {
         this.sellArticleRepository.delete(sellArticle);
         return RsData.of("S-3", "게시물이 삭제되었습니다.", sellArticle);
+    }
+    public Page<SellArticle> getSearchList(String kw, int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Specification<SellArticle> spec = search(kw);
+        return this.sellArticleRepository.findAll(spec, pageable);
+    }
+    private Specification<SellArticle> search(String kw) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
 
+            @Override
+            public Predicate toPredicate(Root<SellArticle> a, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);
+                return cb.or(
+                        cb.like(a.get("subject"), "%" + kw + "%"),
+                        cb.like(a.get("area"), "%" + kw + "%")
+                );
+            }
+        };
+    }
+    public Page<SellArticle> getHighPriceArticles(String kw, int page, CategoryType categoryType) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("price"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Specification<SellArticle> spec = searchCategory(kw, categoryType);
+        return this.sellArticleRepository.findAll(spec, pageable);
+    }
+
+    public Page<SellArticle> getLowPriceArticles(String kw, int page, CategoryType categoryType) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.asc("price"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Specification<SellArticle> spec = searchCategory(kw, categoryType);
+        return this.sellArticleRepository.findAll(spec, pageable);
+    }
+
+    public Page<SellArticle> getCategoryList(int page, CategoryType categoryType) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Specification<SellArticle> spec = categoryType(categoryType);
+        return this.sellArticleRepository.findAll(spec, pageable);
+    }
+    private Specification<SellArticle> categoryType(CategoryType categoryType) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Predicate toPredicate(Root<SellArticle> a, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);
+
+                if(categoryType == CategoryType.LAPTOP) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "laptop" + "%")
+                    );
+                } else if(categoryType == CategoryType.MOBILE) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "mobile" + "%")
+                    );
+                } else if(categoryType == CategoryType.MONITOR) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "monitor" + "%")
+                    );
+                } else if(categoryType == CategoryType.EARPHONE) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "earphone" + "%")
+                    );
+                } else if(categoryType == CategoryType.SMARTWATCH) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "smartwatch" + "%")
+                    );
+                } else if(categoryType == CategoryType.TABLET) {
+                    return cb.or(
+                            cb.like(a.get("category"), "%" + "tablet" + "%")
+                    );
+                }
+                return cb.conjunction();
+            }
+        };
+    }
+    private Specification<SellArticle> searchCategory(String kw, CategoryType categoryType) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Predicate toPredicate(Root<SellArticle> a, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);
+
+                List<Predicate> predicates = new ArrayList<>();
+
+                if (StringUtils.isNotBlank(kw) || categoryType == CategoryType.ALL) {
+                    predicates.add(cb.or(
+                            cb.like(a.get("subject"), "%" + kw + "%"),
+                            cb.like(a.get("area"), "%" + kw + "%")
+                    ));
+                }
+
+                if (categoryType != null) {
+                    switch (categoryType) {
+                        case LAPTOP:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "laptop" + "%")
+                            ));
+                            break;
+                        case MOBILE:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "mobile" + "%")
+                            ));
+                            break;
+                        case MONITOR:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "monitor" + "%")
+                            ));
+                            break;
+                        case EARPHONE:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "earphone" + "%")
+                            ));
+                            break;
+                        case SMARTWATCH:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "smartwatch" + "%")
+                            ));
+                            break;
+                        case TABLET:
+                            predicates.add(cb.or(
+                                    cb.like(a.get("category"), "%" + "tablet" + "%")
+                            ));
+                            break;
+                    }
+                }
+
+                return cb.and(predicates.toArray(new Predicate[0]));
+            }
+        };
     }
 }

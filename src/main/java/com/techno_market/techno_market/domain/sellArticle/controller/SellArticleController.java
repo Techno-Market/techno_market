@@ -3,6 +3,7 @@ package com.techno_market.techno_market.domain.sellArticle.controller;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
 import com.techno_market.techno_market.domain.photo.service.PhotoService;
 import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateDto;
+import com.techno_market.techno_market.domain.sellArticle.entity.CategoryType;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.sellArticle.service.SellArticleService;
 import com.techno_market.techno_market.global.rsData.RsData;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -115,6 +117,31 @@ public class SellArticleController {
         SellArticle sellArticle = this.sellArticleService.getArticle(id);
         RsData<SellArticle> articleRsData = this.sellArticleService.delete(sellArticle);
         return articleRsData;
+    }
+    @AllArgsConstructor
+    @Getter
+    public static class SearchArticlesResponse {
+        private final Page<SellArticle> articles;
+    }
+    @GetMapping("/search")
+    public RsData<SearchArticlesResponse> searchArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<SellArticle> articles = this.sellArticleService.getSearchList(kw, page);
+        return RsData.of("S-3", "성공", new SearchArticlesResponse(articles));
+    }
+    @GetMapping("/category")
+    public RsData<SearchArticlesResponse> categoryArticles(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
+        Page<SellArticle> articles = this.sellArticleService.getCategoryList(page, categoryType);
+        return RsData.of("S-4", "성공", new SearchArticlesResponse(articles));
+    }
+    @GetMapping("/priceDesc")
+    public RsData<SearchArticlesResponse> HighestPriceArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
+        Page<SellArticle> priceArticles = this.sellArticleService.getHighPriceArticles(kw, page, categoryType);
+        return RsData.of("S-5", "성공", new SearchArticlesResponse(priceArticles));
+    }
+    @GetMapping("/priceAsc")
+    public RsData<SearchArticlesResponse> LowestPriceArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
+        Page<SellArticle> priceArticles = this.sellArticleService.getLowPriceArticles(kw, page, categoryType);
+        return RsData.of("S-6", "성공", new SearchArticlesResponse(priceArticles));
     }
 
 }
