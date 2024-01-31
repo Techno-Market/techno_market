@@ -71,7 +71,9 @@ public class SellArticleService {
     }
 
     public List<SellArticle> getList() {
-        return this.sellArticleRepository.findAll();
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        return this.sellArticleRepository.findAll(Sort.by(sorts));
     }
 
     @Transactional
