@@ -1,13 +1,12 @@
 <script>
-    let username;
-    let nickname;
-    let password1;
-    let password2;
-    let email;
-    let name;
-    let birthDate;
-    let privacy;
-
+    let username = "";
+    let nickname = "";
+    let password1 = "";
+    let password2 = "";
+    let email = "";
+    let name = "";
+    let birthDate = "";
+    let privacy = "";
 </script>
 
 <div class="signup-area login-cnt-area w100per rel zi2">

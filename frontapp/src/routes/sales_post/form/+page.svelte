@@ -1,5 +1,5 @@
 <script>
-	import { navigate } from 'svelte-routing';
+	// import { navigate } from 'svelte-routing';
 	let directly = false;
 	let parcel = false;
 	let selectedImages = [];

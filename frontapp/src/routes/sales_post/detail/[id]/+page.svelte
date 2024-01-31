@@ -11,7 +11,6 @@
 
 	onMount(() => {
 		swiper = new Swiper('.swiper-container', {
-			loop: true,
 			slidesPerView: 1,
 			spaceBetween: 0,
 			pagination: {
@@ -102,12 +101,12 @@
 				</p>
 
 				<!--본인 작성 글이 아닐 경우-->
-				<div class="flex aic g12 bsb pl16 pr16 mt20">
+				<!-- <div class="flex aic g12 bsb pl16 pr16 mt20">
 					<button class="favor-box img-box w32" id="favor_btn">
 						<img src="/img/ico_heart.svg" alt="" />
 					</button>
 					<a href="/" class="btn-type-1" style="width: calc(100% - 44px);">채팅하기</a>
-				</div>
+				</div> -->
 
 				<!--본인 작성 글-->
 				<div class="flex aic g12 bsb pl16 pr16 mt20">
