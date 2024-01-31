@@ -17,6 +17,32 @@
     let birthDateEmpty = false;
     let privacyEmpty = false;
 
+    let passwordMatchSuccess = false;
+    let passwordMatchFail = false;
+
+    const handlePassword2Input = () => {
+        password2Empty = false;
+
+        if (password1 === password2) {
+            passwordMatchSuccess = true;
+            passwordMatchFail = false;
+        }
+        else {
+            passwordMatchSuccess = false;
+            passwordMatchFail = true;
+        }
+    };
+
+//   const checkPasswordMatch = () => {
+//     if (password1 === password2) {
+//       passwordMatchSuccess = true;
+//       passwordMatchError = false;
+//     } else {
+//       passwordMatchSuccess = false;
+//       passwordMatchError = true;
+//     }
+//   };
+
     const handleSignup = () => {
         if (username.trim() === "") usernameEmpty = true;
         else usernameEmpty = false;
@@ -70,11 +96,10 @@
                     <div class="input-type-1">
                         <input type="text" placeholder="아이디" bind:value={username} on:input={() => usernameEmpty = false}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${usernameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                        <span class="error-text f14 cCC0000"></span>
-                        <span class="error-text f14 cCC0000">중복된 아이디 입니다.</span>
-                        <span class="confirm-text f14 c009521">사용가능한 아이디 입니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${usernameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                        <span class="error-text f14 cCC0000 mt8">중복된 아이디 입니다.</span>
+                        <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
                     </div>
                 </li>
                 <li>
@@ -82,10 +107,10 @@
                     <div class="input-type-1">
                         <input type="text" placeholder="닉네임" bind:value={nickname} on:input={() => nicknameEmpty = false}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${nicknameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                        <span class="error-text f14 cCC0000">중복된 닉네임 입니다.</span>
-                        <span class="confirm-text f14 c009521">사용가능한 아이디 입니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${nicknameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                        <span class="error-text f14 cCC0000 mt8">중복된 닉네임 입니다.</span>
+                        <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
                     </div>
                 </li>
                 <li>
@@ -93,18 +118,16 @@
                     <div class="input-type-1">
                         <input type="password" placeholder="비밀번호" bind:value={password1} on:input={() => password1Empty = false}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${password1Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                        <span class="error-text f14 cCC0000">사용할 수 없는 비밀번호 입니다.</span>
-                        <span class="confirm-text f14 c009521">사용가능한 비밀번호 입니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${password1Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                     </div>
                     <div class="input-type-1 mt8">
-                        <input type="password" placeholder="비밀번호 확인" bind:value={password2} on:input={() => password2Empty = false}>
+                        <input type="password" placeholder="비밀번호 확인" bind:value={password2} on:input={handlePassword2Input}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${password2Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                        <span class="error-text f14 cCC0000">비밀번호가 일치하지 않습니다.</span>
-                        <span class="confirm-text f14 c009521">비밀번호가 일치합니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${password2Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                        <span class={`error-text f14 cCC0000 mt8 ${passwordMatchFail ? 'active' : ''}`}>비밀번호가 일치하지 않습니다.</span>
+                        <span class={`confirm-text f14 c009521 mt8 ${passwordMatchSuccess ? 'active' : ''}`}>비밀번호가 일치합니다.</span>
                     </div>
                 </li>
                 <li>
@@ -115,10 +138,10 @@
                         </div>
                         <button type="button" class="btn-type-2">전송</button>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class="error-text f14 cCC0000">올바른 이메일 형식이 아닙니다.</span>
-                        <span class="error-text f14 cCC0000">이미 인증된 이메일 입니다.</span>
-                        <span class="confirm-text f14 c009521">인증번호가 발송되었습니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class="error-text f14 cCC0000 mt8">올바른 이메일 형식이 아닙니다.</span>
+                        <span class="error-text f14 cCC0000 mt8">이미 인증된 이메일 입니다.</span>
+                        <span class="confirm-text f14 c009521 mt8">인증번호가 발송되었습니다.</span>
                     </div>
                     <div class="input-btn-box flex g8 mt8">
                         <div class="input-type-1">
@@ -126,10 +149,10 @@
                         </div>
                         <button type="button" class="btn-type-2">확인</button>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${emailEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                        <span class="error-text f14 cCC0000">인증번호가 일치하지 않습니다.</span>
-                        <span class="confirm-text f14 c009521">인증번호가 일치합니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${emailEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                        <span class="error-text f14 cCC0000 mt8">인증번호가 일치하지 않습니다.</span>
+                        <span class="confirm-text f14 c009521 mt8">인증번호가 일치합니다.</span>
                     </div>
                 </li>
                 <li>
@@ -137,8 +160,8 @@
                     <div class="input-type-1">
                         <input type="text" placeholder="이름" bind:value={name} on:input={() => nameEmpty = false}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${nameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${nameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                     </div>
                 </li>
                 <li>
@@ -146,8 +169,8 @@
                     <div class="date-type-1">
                         <input type="date" bind:value={birthDate} on:input={() => birthDateEmpty = false}>
                     </div>
-                    <div class="error-text-box wsn flex g8 mt8">
-                        <span class={`error-text f14 cCC0000 ${birthDateEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                    <div class="error-text-box wsn flex g8">
+                        <span class={`error-text f14 cCC0000 mt8 ${birthDateEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                     </div>
                 </li>
             </ul>
@@ -157,8 +180,8 @@
                     <span class="text">개인정보 수집 및 이용 동의</span>
                 </label>
             </div>
-            <div class="error-text-box wsn flex g8 mt8">
-                <span class={`error-text f14 cCC0000 ${privacyEmpty ? 'active' : ''}`}>필수 동의 항목 입니다.</span>
+            <div class="error-text-box wsn flex g8">
+                <span class={`error-text f14 cCC0000 mt8 ${privacyEmpty ? 'active' : ''}`}>필수 동의 항목 입니다.</span>
             </div>
             <button type="button" class="btn-type-1 mt40" on:click={handleSignup}>회원가입</button>
         </div>
