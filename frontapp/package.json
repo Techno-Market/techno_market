@@ -24,6 +24,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"svelte-routing": "^2.11.0",
 		"swiper": "^11.0.5"
 	}
 }

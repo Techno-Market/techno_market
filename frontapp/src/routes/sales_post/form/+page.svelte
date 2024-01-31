@@ -1,5 +1,5 @@
 <script>
-	// export let data;
+	import { navigate } from 'svelte-routing';
 	let directly = false;
 	let parcel = false;
 	let selectedImages = [];
@@ -74,9 +74,12 @@
 			if (response.ok) {
 				const responseData = await response.json();
 				console.log(responseData);
+				window.alert('저장되었습니다.');
+				// navigate(`/sales_post/detail/${responseData.data.sellArticle.id}`);
 			} else {
 				const responseData = await response.json();
 				console.error(responseData);
+				window.alert('저장에 실패했습니다.');
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
