@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SellArticleRepository extends JpaRepository<SellArticle, Long> {
     Page<SellArticle> findAll(Specification<SellArticle> spec, Pageable pageable);
+    Page<SellArticle> findAll(Pageable pageable);
 }

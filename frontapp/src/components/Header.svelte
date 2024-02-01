@@ -40,7 +40,7 @@
         </div>
         <div class="header-box-2 w100per h50 flex aic jcsb">
             <div class="left-box flex aic g24">
-                <a href="/all_product" class="f14 b333 cfff bsb bdr4 pt8 pb8 pl16 pr16">ALL</a>
+                <a href="http://localhost:5173/all_product/0" class="f14 b333 cfff bsb bdr4 pt8 pb8 pl16 pr16">ALL</a>
                 <ul class="menu-box flex aic g32 c222 f16">
                     <li>
                         <a href="" class="tm">핸드폰</a>

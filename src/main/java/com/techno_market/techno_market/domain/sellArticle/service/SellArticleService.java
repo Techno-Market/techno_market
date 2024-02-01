@@ -70,10 +70,11 @@ public class SellArticleService {
         return RsData.of("S-2", "게시물이 생성되었습니다.", sellArticleCreateDto);
     }
 
-    public List<SellArticle> getList() {
+    public Page<SellArticle> getList(int page) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        return this.sellArticleRepository.findAll(Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.sellArticleRepository.findAll(pageable);
     }
 
     @Transactional

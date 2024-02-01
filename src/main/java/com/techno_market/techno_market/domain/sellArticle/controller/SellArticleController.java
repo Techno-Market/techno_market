@@ -30,13 +30,13 @@ public class SellArticleController {
     @AllArgsConstructor
     @Getter
     public static class ArticlesResponse {
-        private final List<SellArticle> articles;
+        private final Page<SellArticle> articles;
     }
 
 
     @GetMapping("")
-    public RsData<ArticlesResponse> articles() {
-        List<SellArticle> sellArticles = this.sellArticleService.getList();
+    public RsData<ArticlesResponse> articles(@RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<SellArticle> sellArticles = this.sellArticleService.getList(page);
 
         return RsData.of("S-1", "성공", new ArticlesResponse(sellArticles));
     }
