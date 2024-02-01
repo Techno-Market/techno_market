@@ -70,7 +70,7 @@
 	<div class="suggestion-product-swiper swiper-container ofh">
 		<div class="swiper-wrapper">
 			{#if data && data.data}
-				{#each data.data.articles.slice(0, 10) as article}
+				{#each data.data.articles.content.slice(0, 10) as article}
 					<div class="swiper-slide">
 						<a href="/sales_post/detail/{article.id}">
 							<div class="img-box rel">

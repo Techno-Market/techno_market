@@ -108,15 +108,19 @@
 		</ul>
 	</div>
 </div>
-<div class="paging-box flex jcc mt40">
+<div class="paging-box flex jcc mt80">
 	<ul class="flex aic jcc">
 		{#if data.data.articles.number > 0}
 			<!-- 현재 페이지가 첫 페이지가 아닐 때만 이전 버튼을 표시 -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<li class="page-btn" on:click={() => changePage(data.data.articles.number - 1)}>
 				<a href="">이전</a>
 			</li>
 		{/if}
 		{#each generatePageButtons(data.data.articles.totalPages) as button}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<li
 				class="num"
 				on:click={() => data.data.articles.number !== button - 1 && changePage(button - 1)}
@@ -126,6 +130,8 @@
 		{/each}
 		{#if data.data.articles.number < data.data.articles.totalPages - 1}
 			<!-- 현재 페이지가 마지막 페이지가 아닐 때만 다음 버튼을 표시 -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<li class="page-btn" on:click={() => changePage(data.data.articles.number + 1)}>
 				<a href="">다음</a>
 			</li>

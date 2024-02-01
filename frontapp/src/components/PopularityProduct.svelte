@@ -11,7 +11,7 @@
 		try {
 			let res = await fetch('http://localhost:8080/api/articles');
 			data = await res.json();
-            data.data.articles.sort((a, b) => b.viewCount - a.viewCount);
+            data.data.articles.content.sort((a, b) => b.viewCount - a.viewCount);
 		} catch (error) {
 			console.error('데이터를 불러오는 중 에러 발생:', error);
 		}
@@ -70,7 +70,7 @@
 	<div class="popularity-product-swiper swiper-container ofh">
 		<div class="swiper-wrapper">
 			{#if data && data.data}
-				{#each data.data.articles.slice(0, 10) as article}
+				{#each data.data.articles.content.slice(0, 10) as article}
 					<div class="swiper-slide">
 						<a href="/sales_post/detail/{article.id}">
 							<div class="img-box rel">
