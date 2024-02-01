@@ -103,10 +103,17 @@ public class SellArticleController {
     }
 
     @PatchMapping("/{id}")
-    public RsData<SellArticle> modify(@Valid @RequestBody WriteRequest writeRequest, @PathVariable("id") Long id) {
-        SellArticle sellArticle = this.sellArticleService.getArticle(id);
+    public RsData<SellArticle> modify(@Valid WriteRequest writeRequest, @PathVariable("id") Long id) throws Exception{
 
-        RsData<SellArticle> modifyArticle = sellArticleService.modify(sellArticle, writeRequest.getSubject(), writeRequest.getContent(), writeRequest.getPrice(), writeRequest.getArea());
+        RsData<SellArticle> modifyArticle = sellArticleService.modify(id,
+                writeRequest.getSubject(),
+                writeRequest.getContent(),
+                writeRequest.getPrice(),
+                writeRequest.getArea(),
+                writeRequest.getCategory(),
+                writeRequest.getDirectly(),
+                writeRequest.getParcel(),
+                writeRequest.getPostImage());
 
         return modifyArticle;
     }

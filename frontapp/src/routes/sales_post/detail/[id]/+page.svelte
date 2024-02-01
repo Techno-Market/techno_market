@@ -23,6 +23,27 @@
 			}
 		});
 	});
+
+	import { goto } from '$app/navigation';
+
+    async function deleteArticle() {
+        try {
+            const response = await fetch(`http://localhost:8080/api/articles/${data.data.sellArticle.id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                // 삭제 성공
+                // TODO: 필요한 처리 추가
+                goto('/all_product/0', { replaceState: true }); // 삭제 후 이동할 경로
+            } else {
+                // 삭제 실패
+                console.error('Failed to delete article');
+            }
+        } catch (error) {
+            console.error('Error while deleting article:', error);
+        }
+    }
 </script>
 
 <div class="product-detail-area bsb w100per rel zi2 pt60">
@@ -110,8 +131,8 @@
 
 				<!--본인 작성 글-->
 				<div class="flex aic g12 bsb pl16 pr16 mt20">
-					<a href="/" class="btn-type-1 w50per">수정하기</a>
-					<a href="/" class="btn-type-1-2 w50per">삭제하기</a>
+					<a href="/sales_post/modify/{data.data.sellArticle.id}" class="btn-type-1 w50per">수정하기</a>
+					<button on:click={deleteArticle} class="btn-type-1-2 w50per">삭제하기</button>
 				</div>
 			</div>
 		</div>

@@ -88,12 +88,26 @@ public class SellArticleService {
         return sellArticle;
     }
 
-    public RsData<SellArticle> modify(SellArticle sellArticle, String subject, String content, int price, String area) {
+    public RsData<SellArticle> modify(Long sellArticleId, String subject, String content, int price, String area, String category,
+                                      Boolean directly, Boolean parcel, List<MultipartFile> postImage) throws  Exception {
+        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
+                .orElseThrow(() -> new Exception("해당 ID의 게시물을 찾을 수 없습니다."));
+
         sellArticle.setSubject(subject);
         sellArticle.setContent(content);
         sellArticle.setPrice(price);
         sellArticle.setArea(area);
+        sellArticle.setCategory(category);
+        sellArticle.setDirectly(directly);
+        sellArticle.setParcel(parcel);
 
+        List<Photo> photoList = fileHandler.parseFileInfo(postImage);
+
+        if (!photoList.isEmpty()) {
+            for (Photo photo : photoList) {
+                sellArticle.addPhoto(photoRepository.save(photo));
+            }
+        }
         sellArticleRepository.save(sellArticle);
 
         return RsData.of("S-3", "게시물이 수정되었습니다.", sellArticle);
