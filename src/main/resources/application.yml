@@ -4,6 +4,10 @@ spring:
     include: secret
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
+  data:
+    jpa:
+      repositories:
+        enabled: true
 
 
 

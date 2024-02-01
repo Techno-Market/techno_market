@@ -1,18 +1,20 @@
 <script>
-    let username = "";
-    let nickname = "";
+    let userName = "";
+    let nickName = "";
     let password1 = "";
     let password2 = "";
     let email = "";
+    let emailNum = "";
     let name = "";
     let birthDate = "";
     let privacy = false;
 
-    let usernameEmpty = false;
-    let nicknameEmpty = false;
+    let userNameEmpty = false;
+    let nickNameEmpty = false;
     let password1Empty = false;
     let password2Empty = false;
     let emailEmpty = false;
+    let emailNumEmpty = false;
     let nameEmpty = false;
     let birthDateEmpty = false;
     let privacyEmpty = false;
@@ -36,11 +38,12 @@
     const submitSignupForm = async (event) => {
         event.preventDefault();
 
-        if (username.trim() === "") usernameEmpty = true;
-        else usernameEmpty = false;
+        //빈 공백 유효성 검사
+        if (userName.trim() === "") userNameEmpty = true;
+        else userNameEmpty = false;
 
-        if (nickname.trim() === "") nicknameEmpty = true;
-        else nicknameEmpty = false;
+        if (nickName.trim() === "") nickNameEmpty = true;
+        else nickNameEmpty = false;
 
         if (password1.trim() === "") password1Empty = true;
         else password1Empty = false;
@@ -51,6 +54,9 @@
         if (email.trim() === "") emailEmpty = true;
         else emailEmpty = false;
 
+        if (emailNum.trim() === "") emailNumEmpty = true;
+        else emailNumEmpty = false;
+
         if (name.trim() === "") nameEmpty = true;
         else nameEmpty = false;
 
@@ -60,11 +66,23 @@
         if (!privacy) privacyEmpty = true;
         else privacyEmpty = false;
 
-        if (!usernameEmpty && !nicknameEmpty && !password1Empty && !password2Empty && !emailEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess) {
+        if (!userNameEmpty && !nickNameEmpty && !password1Empty && !password2Empty && !emailEmpty && !emailNumEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess) {
             try {
+                const data = {
+                    userName,
+                    nickName,
+                    password: password1,
+                    email,
+                    name,
+                    birthDate,
+                };
+
                 const response = await fetch('http://localhost:8080/api/user/signup', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
                 });
 
                 if (response.ok) {
@@ -104,10 +122,10 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="아이디" bind:value={username} on:input={() => usernameEmpty = false}>
+                            <input type="text" placeholder="아이디" bind:value={userName} on:input={() => userNameEmpty = false}>
                         </div>
                         <div class="error-text-box wsn flex g8">
-                            <span class={`error-text f14 cCC0000 mt8 ${usernameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${userNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                             <span class="error-text f14 cCC0000 mt8">중복된 아이디 입니다.</span>
                             <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
                         </div>
@@ -115,10 +133,10 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">닉네임<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="닉네임" bind:value={nickname} on:input={() => nicknameEmpty = false}>
+                            <input type="text" placeholder="닉네임" bind:value={nickName} on:input={() => nickNameEmpty = false}>
                         </div>
                         <div class="error-text-box wsn flex g8">
-                            <span class={`error-text f14 cCC0000 mt8 ${nicknameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${nickNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                             <span class="error-text f14 cCC0000 mt8">중복된 닉네임 입니다.</span>
                             <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
                         </div>
@@ -144,23 +162,24 @@
                         <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-btn-box flex g8">
                             <div class="input-type-1">
-                                <input type="text" placeholder="이메일">
+                                <input type="text" placeholder="이메일" bind:value={email} on:input={() => emailEmpty = false}>
                             </div>
                             <button type="button" class="btn-type-2">전송</button>
                         </div>
                         <div class="error-text-box wsn flex g8">
+                            <span class={`error-text f14 cCC0000 mt8 ${emailEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                             <span class="error-text f14 cCC0000 mt8">올바른 이메일 형식이 아닙니다.</span>
                             <span class="error-text f14 cCC0000 mt8">이미 인증된 이메일 입니다.</span>
                             <span class="confirm-text f14 c009521 mt8">인증번호가 발송되었습니다.</span>
                         </div>
                         <div class="input-btn-box flex g8 mt8">
                             <div class="input-type-1">
-                                <input type="text" placeholder="인증번호" bind:value={email} on:input={() => emailEmpty = false}>
+                                <input type="text" placeholder="인증번호" bind:value={emailNum} on:input={() => emailNumEmpty = false}>
                             </div>
                             <button type="button" class="btn-type-2">확인</button>
                         </div>
                         <div class="error-text-box wsn flex g8">
-                            <span class={`error-text f14 cCC0000 mt8 ${emailEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${emailNumEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                             <span class="error-text f14 cCC0000 mt8">인증번호가 일치하지 않습니다.</span>
                             <span class="confirm-text f14 c009521 mt8">인증번호가 일치합니다.</span>
                         </div>
