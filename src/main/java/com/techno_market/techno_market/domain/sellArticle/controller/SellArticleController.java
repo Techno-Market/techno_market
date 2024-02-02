@@ -73,7 +73,6 @@ public class SellArticleController {
         private String category;
         private Boolean directly;
         private Boolean parcel;
-        @NotNull
         private List<MultipartFile> postImage;
     }
 

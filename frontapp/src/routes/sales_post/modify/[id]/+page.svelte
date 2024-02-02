@@ -92,9 +92,9 @@
 			errors.subject = '제목을 입력하세요.';
 		}
 
-		if (!postImage) {
-			errors.postImage = '이미지를 선택하세요.';
-		}
+		// if (!postImage) {
+		// 	errors.postImage = '이미지를 선택하세요.';
+		// }
 
 		if (!content.trim()) {
 			errors.content = '내용을 입력하세요.';
