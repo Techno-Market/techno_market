@@ -33,6 +33,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	implementation 'commons-io:commons-io:2.6'
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+
 }
 
 tasks.named('test') {
