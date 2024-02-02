@@ -28,4 +28,22 @@ public class UserService {
 
         return RsData.of("S-1", "회원가입 완료", siteUser);
     }
+
+    public RsData<Boolean> isUserNameDuplicate(String userName) {
+        SiteUser user = userRepository.findByUserName(userName);
+        if (user != null) {
+            return RsData.of("S-2", "중복", true);
+        } else {
+            return RsData.of("S-3", "사용 가능", false);
+        }
+    }
+
+    public RsData<Boolean> isNickNameDuplicate(String nickName) {
+        SiteUser user = userRepository.findByNickName(nickName);
+        if (user != null) {
+            return RsData.of("S-2", "중복", true);
+        } else {
+            return RsData.of("S-3", "사용 가능", false);
+        }
+    }
 }

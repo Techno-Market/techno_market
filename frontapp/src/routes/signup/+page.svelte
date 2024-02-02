@@ -19,9 +19,62 @@
     let birthDateEmpty = false;
     let privacyEmpty = false;
 
+    let userNameDuplicationSuccess = false;
+    let userNameDuplicationFail = false;
+
+    let nickNameDuplicationSuccess = false;
+    let nickNameDuplicationFail = false;
+
     let passwordMatchSuccess = false;
     let passwordMatchFail = false;
 
+    //아이디 중복 검사
+    const handleUserNameInput = async () => {
+        userNameEmpty = false;
+
+        let userNameValue = document.querySelector('#userName').value;
+
+        if (!userNameValue) {
+            userNameDuplicationSuccess = false;
+            userNameDuplicationFail = false;
+            return;
+        }
+
+        let response = await fetch(`http://localhost:8080/api/user/userNameCheck/${encodeURIComponent(userNameValue)}`);
+        let result = await response.json();
+        if (result.data) {
+            userNameDuplicationSuccess = false;
+            userNameDuplicationFail = true;
+        } else {
+            userNameDuplicationSuccess = true;
+            userNameDuplicationFail = false;
+        }
+    };
+
+    //닉네임 중복 검사
+    const handleNickNameInput = async () => {
+        nickNameEmpty = false;
+
+        let nickNameValue = document.querySelector('#nickName').value;
+
+        if (!nickNameValue) {
+            nickNameDuplicationSuccess = false;
+            nickNameDuplicationFail = false;
+            return;
+        }
+
+        let response = await fetch(`http://localhost:8080/api/user/nickNameCheck/${encodeURIComponent(nickNameValue)}`);
+        let result = await response.json();
+        if (result.data) {
+            nickNameDuplicationSuccess = false;
+            nickNameDuplicationFail = true;
+        } else {
+            nickNameDuplicationSuccess = true;
+            nickNameDuplicationFail = false;
+        }
+    };
+
+    //패스워드 일치 검사
     const handlePassword2Input = () => {
         password2Empty = false;
 
@@ -66,7 +119,7 @@
         if (!privacy) privacyEmpty = true;
         else privacyEmpty = false;
 
-        if (!userNameEmpty && !nickNameEmpty && !password1Empty && !password2Empty && !emailEmpty && !emailNumEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess) {
+        if (!userNameEmpty && !nickNameEmpty && !password1Empty && !password2Empty && !emailEmpty && !emailNumEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess && userNameDuplicationSuccess && nickNameDuplicationSuccess) {
             try {
                 const data = {
                     userName,
@@ -88,16 +141,18 @@
                 if (response.ok) {
                     const responseData = await response.json();
                     console.log(responseData);
-                    window.alert('저장되었습니다.');
+                    window.alert('회원가입이 완료되었습니다.');
+                    window.location.href = 'http://localhost:5173/login';
                 } else {
                     const responseData = await response.json();
                     console.error(responseData);
-                    window.alert('저장에 실패했습니다.');
+                    window.alert('회원가입이 실패했습니다.');
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
             }
         }
+        else window.alert('입력 내용을 확인해 주세요.');
     };
 </script>
 
@@ -122,23 +177,23 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="아이디" bind:value={userName} on:input={() => userNameEmpty = false}>
+                            <input type="text" placeholder="아이디" id="userName" bind:value={userName} on:input={handleUserNameInput}>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${userNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                            <span class="error-text f14 cCC0000 mt8">중복된 아이디 입니다.</span>
-                            <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${userNameDuplicationFail ? 'active' : ''}`}>중복된 아이디 입니다.</span>
+                            <span class={`confirm-text f14 c009521 mt8 ${userNameDuplicationSuccess ? 'active' : ''}`}>사용가능한 아이디 입니다.</span>
                         </div>
                     </li>
                     <li>
                         <h3 class="c333 f18 tb mb16">닉네임<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="닉네임" bind:value={nickName} on:input={() => nickNameEmpty = false}>
+                            <input type="text" placeholder="닉네임" id="nickName" bind:value={nickName} on:input={handleNickNameInput}>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${nickNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                            <span class="error-text f14 cCC0000 mt8">중복된 닉네임 입니다.</span>
-                            <span class="confirm-text f14 c009521 mt8">사용가능한 아이디 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${nickNameDuplicationFail ? 'active' : ''}`}>중복된 닉네임 입니다.</span>
+                            <span class={`confirm-text f14 c009521 mt8 ${nickNameDuplicationSuccess ? 'active' : ''}`}>사용가능한 닉네임 입니다.</span>
                         </div>
                     </li>
                     <li>

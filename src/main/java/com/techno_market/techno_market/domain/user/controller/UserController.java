@@ -15,10 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -46,5 +43,15 @@ public class UserController {
         RsData<SiteUser> RsSiteUser = this.userService.signup(signRequest.getUserName(), signRequest.getNickName(), signRequest.getPassword(),signRequest.getEmail(), signRequest.getName(), signRequest.getBirthDate());
 
         return RsSiteUser;
+    }
+
+    @GetMapping("/userNameCheck/{userName}")
+    public RsData<Boolean> checkUserNameDuplicate(@PathVariable("userName") String userName) {
+        return userService.isUserNameDuplicate(userName);
+    }
+
+    @GetMapping("/nickNameCheck/{nickName}")
+    public RsData<Boolean> checkNickNameDuplicate(@PathVariable("nickName") String nickName) {
+        return userService.isNickNameDuplicate(nickName);
     }
 }
