@@ -1,54 +1,48 @@
-<!-- <script>
-  import { onMount } from "svelte";
-  import Swiper from "swiper";
-  import "swiper/swiper-bundle.css";
-
-  let swiper;
-
-  onMount(() => {
-    swiper = new Swiper(".swiper-container", {
-      loop: true,
-      slidesPerView: 2, 
-      spaceBetween: 30, 
-      autoplay : 3000
-    });
-  });
-</script>
-
-<style>
-  .swiper-container {
-    width: 100%;
-    height: 300px;
-    overflow: hidden;
-  }
-  .swiper-slide {
-    text-align: center;
-    font-size: 30px;
-    background-color: #f0f0f0;
-  }
-</style>
-
-<div class="swiper-container">
-  <div class="swiper-wrapper">
-    {#each [1, 2, 3] as slide}
-      <div class="swiper-slide">슬라이드 {slide}</div>
-    {/each}
-  </div>
-</div> -->
-
 <script>
-  let testInput;
+  let username = "";
+  let password = "";
+  let usernameErrorVisible = false;
+  let passwordErrorVisible = false;
+
+  const handleSignup = () => {
+    // 검증 로직 추가
+    if (username.trim() === "") {
+      usernameErrorVisible = true;
+    } else {
+      usernameErrorVisible = false;
+    }
+
+    if (password.trim() === "") {
+      passwordErrorVisible = true;
+    } else {
+      passwordErrorVisible = false;
+    }
+
+    // 회원가입 로직 추가
+    if (!usernameErrorVisible && !passwordErrorVisible) {
+      // 실제 회원가입 로직 수행
+      console.log("회원가입 성공");
+    }
+  };
 </script>
 
 <style>
-  .error-msg {
+  .error-text {
     display: none;
+    color: #CC0000;
+    font-size: 14px;
   }
-  .error-msg.active {
+
+  .error-text.active {
     display: block;
   }
 </style>
 
-<input type="text" bind:this={testInput}>
-<div class="error-msg">에러메세지</div>
-<button>클릭</button>
+<!-- 나머지 HTML 코드 -->
+<input type="text" placeholder="아이디" bind:value={username} on:input={() => usernameErrorVisible = false}>
+<span class={`error-text f14 cCC0000 ${usernameErrorVisible ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+
+<input type="password" placeholder="비밀번호" bind:value={password} on:input={() => passwordErrorVisible = false}>
+<span class={`error-text f14 cCC0000 ${passwordErrorVisible ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+
+<button type="button" class="btn-type-1 mt40" on:click={handleSignup}>회원가입</button>

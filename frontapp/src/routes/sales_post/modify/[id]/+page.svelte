@@ -1,8 +1,62 @@
 <script>
 	import { goto } from '$app/navigation';
+	export let data;
+	// import { navigate } from 'svelte-routing';
+	import { onMount } from 'svelte';
 	let directly = false;
 	let parcel = false;
 	let selectedImages = [];
+	let existingImages = []; // 기존에 저장된 이미지 목록
+
+	let category = ''; // 기존에 저장된 카테고리 값
+	let subject = ''; // 기존에 저장된 제목 값
+	let content = ''; // 기존에 저장된 내용 값
+	let price = ''; // 기존에 저장된 금액 값
+	let area = ''; // 기존에 저장된 지역 값
+
+	onMount(async () => {
+		category = data.data.sellArticle.category;
+		subject = data.data.sellArticle.subject;
+		content = data.data.sellArticle.content;
+		price = data.data.sellArticle.price.toString();
+		area = data.data.sellArticle.area;
+		existingImages = data.data.sellArticle.photo; // 기존 이미지 목록 가져오기
+		directly = data.data.sellArticle.directly;
+		parcel = data.data.sellArticle.parcel;
+
+		// 이미지 미리보기에 기존 이미지 추가
+		if (existingImages && Array.isArray(existingImages)) {
+			const imgPreviewContainer = document.getElementById('imgPreviewContainer');
+			existingImages.forEach((photo) => {
+				const imgBox = document.createElement('li');
+				imgBox.className = 'img-box rel';
+
+				const imgPreview = document.createElement('img');
+				imgPreview.src = `http://localhost:8080/gen/${photo.filePath}`;
+
+				const removeButton = document.createElement('button');
+				removeButton.className = 'img-box abs w20 zi2 xy-tr cp';
+				removeButton.innerHTML = '<img src="/img/ico_point_x.svg" alt="">';
+				removeButton.onclick = function () {
+					imgPreviewContainer.removeChild(imgBox);
+					// 기존 이미지 목록에서도 제거
+					const index = existingImages.indexOf(photo);
+					if (index !== -1) {
+						existingImages.splice(index, 1);
+					}
+				};
+
+				imgBox.appendChild(imgPreview);
+				imgBox.appendChild(removeButton);
+
+				imgPreviewContainer.appendChild(imgBox);
+			});
+		}
+
+		// 택배/직거래 체크 여부 설정
+		document.getElementById('directly').checked = directly;
+		document.getElementById('parcel').checked = parcel;
+	});
 
 	const submitArticleForm = async (event) => {
 		event.preventDefault();
@@ -38,9 +92,9 @@
 			errors.subject = '제목을 입력하세요.';
 		}
 
-		if (!postImage) {
-			errors.postImage = '이미지를 선택하세요.';
-		}
+		// if (!postImage) {
+		// 	errors.postImage = '이미지를 선택하세요.';
+		// }
 
 		if (!content.trim()) {
 			errors.content = '내용을 입력하세요.';
@@ -66,20 +120,23 @@
 
 		// 서버로 데이터 전송
 		try {
-			const response = await fetch('http://localhost:8080/api/articles', {
-				method: 'POST',
-				body: formData
-			});
+			const response = await fetch(
+				`http://localhost:8080/api/articles/${data.data.sellArticle.id}`,
+				{
+					method: 'PATCH',
+					body: formData
+				}
+			);
 
 			if (response.ok) {
 				const responseData = await response.json();
 				console.log(responseData);
-				window.alert('저장되었습니다.');
-				goto('/all_product/0', { replaceState: true });
+				window.alert('수정되었습니다.');
+				goto(`/sales_post/detail/${data.data.sellArticle.id}`);
 			} else {
 				const responseData = await response.json();
 				console.error(responseData);
-				window.alert('저장에 실패했습니다.');
+				window.alert('수정에 실패했습니다.');
 			}
 		} catch (error) {
 			console.error('Error submitting form:', error);
@@ -142,19 +199,15 @@
 		event.target.value = null; // 이 부분이 추가되었습니다.
 	}
 
+	// 숫자 포맷팅 함수
+	const formatNumber = (value) => {
+		return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	};
 
-	let priceModification = ""; // 입력된 금액을 저장하는 변수
-
-// 숫자 포맷팅 함수
-const formatNumber = (value) => {
-  return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-const handleInput = (event) => {
-  // 입력된 값에서 숫자만 추출하고, 쉼표를 추가하여 price 변수에 저장
-  priceModification = formatNumber(event.target.value);
-};
-
+	const handleInput = (event) => {
+		// 입력된 값에서 숫자만 추출하고, 쉼표를 추가하여 price 변수에 저장
+		price = formatNumber(event.target.value);
+	};
 </script>
 
 <div class="cnt-area w100per rel zi2">
@@ -164,16 +217,15 @@ const handleInput = (event) => {
 			data-wow-delay="0.3s"
 			data-wow-duration="0.6s"
 		>
-			판매 등록
+			판매 등록 수정
 		</h1>
 		<div class="signup-box flex fdc wow fadeIn" data-wow-delay="0.6s" data-wow-duration="0.6s">
 			<form on:submit|preventDefault={submitArticleForm}>
-				<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 				<ul class="flex fdc g36">
 					<li>
 						<h3 class="c333 f18 tb mb16">카테고리<span class="tb cCC0000 inblock">*</span></h3>
 						<div class="select-type-2 rel">
-							<select name="category" id="">
+							<select name="category" bind:value={category}>
 								<option value="">모든 카테고리</option>
 								<option value="핸드폰">핸드폰</option>
 								<option value="테블릿">테블릿</option>
@@ -193,7 +245,7 @@ const handleInput = (event) => {
 					<li>
 						<h3 class="c333 f18 tb mb16">제목<span class="tb cCC0000 inblock">*</span></h3>
 						<div class="input-type-1">
-							<input type="text" name="subject" placeholder="제목" />
+							<input type="text" name="subject" bind:value={subject} placeholder="제목" />
 						</div>
 						<div class="error-text-box wsn flex g8 mt8" data-field="subject">
 							<span class="error-text f14 cCC0000"></span>
@@ -223,7 +275,7 @@ const handleInput = (event) => {
 					<li>
 						<h3 class="c333 f18 tb mb16">내용<span class="tb cCC0000 inblock">*</span></h3>
 						<div class="textarea-type-1">
-							<textarea name="content" id="" placeholder="내용"></textarea>
+							<textarea name="content" bind:value={content} placeholder="내용"></textarea>
 						</div>
 						<div class="error-text-box wsn flex g8 mt8" data-field="content">
 							<span class="error-text f14 cCC0000"></span>
@@ -239,7 +291,8 @@ const handleInput = (event) => {
 										name="price"
 										placeholder="금액"
 										style="padding-right: 24px;"
-										id="moneyInput" bind:value={priceModification}
+										id="moneyInput"
+										bind:value={price}
 										on:input={handleInput}
 									/>
 									<span class="abs y-middle f16 c999" style="right: 16px;">원</span>
@@ -251,7 +304,7 @@ const handleInput = (event) => {
 							<li class="w50per">
 								<h3 class="c333 f18 tb mb16">지역<span class="tb cCC0000 inblock">*</span></h3>
 								<div class="input-type-1">
-									<input type="text" name="area" placeholder="지역" />
+									<input type="text" name="area" bind:value={area} placeholder="지역" />
 								</div>
 								<div class="error-text-box wsn flex g8 mt8" data-field="area">
 									<span class="error-text f14 cCC0000"></span>

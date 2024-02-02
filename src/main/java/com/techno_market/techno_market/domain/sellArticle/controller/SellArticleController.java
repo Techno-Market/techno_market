@@ -30,13 +30,13 @@ public class SellArticleController {
     @AllArgsConstructor
     @Getter
     public static class ArticlesResponse {
-        private final List<SellArticle> articles;
+        private final Page<SellArticle> articles;
     }
 
 
     @GetMapping("")
-    public RsData<ArticlesResponse> articles() {
-        List<SellArticle> sellArticles = this.sellArticleService.getList();
+    public RsData<ArticlesResponse> articles(@RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<SellArticle> sellArticles = this.sellArticleService.getList(page);
 
         return RsData.of("S-1", "성공", new ArticlesResponse(sellArticles));
     }
@@ -73,7 +73,6 @@ public class SellArticleController {
         private String category;
         private Boolean directly;
         private Boolean parcel;
-        @NotNull
         private List<MultipartFile> postImage;
     }
 
@@ -103,10 +102,17 @@ public class SellArticleController {
     }
 
     @PatchMapping("/{id}")
-    public RsData<SellArticle> modify(@Valid @RequestBody WriteRequest writeRequest, @PathVariable("id") Long id) {
-        SellArticle sellArticle = this.sellArticleService.getArticle(id);
+    public RsData<SellArticle> modify(@Valid WriteRequest writeRequest, @PathVariable("id") Long id) throws Exception{
 
-        RsData<SellArticle> modifyArticle = sellArticleService.modify(sellArticle, writeRequest.getSubject(), writeRequest.getContent(), writeRequest.getPrice(), writeRequest.getArea());
+        RsData<SellArticle> modifyArticle = sellArticleService.modify(id,
+                writeRequest.getSubject(),
+                writeRequest.getContent(),
+                writeRequest.getPrice(),
+                writeRequest.getArea(),
+                writeRequest.getCategory(),
+                writeRequest.getDirectly(),
+                writeRequest.getParcel(),
+                writeRequest.getPostImage());
 
         return modifyArticle;
     }

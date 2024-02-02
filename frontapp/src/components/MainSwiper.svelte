@@ -14,11 +14,11 @@
 			pagination: {
 				el: '.swiper-pagination',
 				clickable: true
-			},
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev'
 			}
+			// navigation: {
+			// 	nextEl: '.swiper-button-next',
+			// 	prevEl: '.swiper-button-prev'
+			// }
 		});
 	});
 </script>
@@ -51,6 +51,15 @@
     <div class="swiper-box wh100per rel zi1">
         <div class="main-swiper swiper-container">
             <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img src="/img/main_img_1.jpg" alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/img/main_img_2.jpg" alt="">
+                </div>
+                <div class="swiper-slide">
+                    <img src="/img/main_img_3.jpg" alt="">
+                </div>
                 <div class="swiper-slide">
                     <img src="/img/main_img_1.jpg" alt="">
                 </div>
