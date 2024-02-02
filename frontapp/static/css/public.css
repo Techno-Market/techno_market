@@ -723,6 +723,39 @@ textarea:disabled {
 
 /* ------------------------------------------------------------------------------- */
 
+/* 페이징 박스 */
+.paging-box {
+    font-size: 14px;
+}
+.paging-box > ul > li.num > a {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #222;
+}
+.paging-box > ul > li.num > a:hover,
+.paging-box > ul > li.num > a.active {
+    color: #fff;
+    background: #005DE8;
+    font-family: "Pretendard-Bold";
+}
+.paging-box > ul > li.page-btn > a {
+    width: 48px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+.paging-box > ul > li.page-btn > a:hover {
+    color: #333;
+}
+
+/* ------------------------------------------------------------------------------- */
+
 /* 푸터 영역 */
 .footer-area .logo-box {
     width: 90px;

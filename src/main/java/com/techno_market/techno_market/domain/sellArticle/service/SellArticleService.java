@@ -154,27 +154,27 @@ public class SellArticleService {
 
                 if(categoryType == CategoryType.LAPTOP) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "laptop" + "%")
+                            cb.like(a.get("category"), "%" + "노트북" + "%")
                     );
                 } else if(categoryType == CategoryType.MOBILE) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "mobile" + "%")
+                            cb.like(a.get("category"), "%" + "핸드폰" + "%")
                     );
                 } else if(categoryType == CategoryType.MONITOR) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "monitor" + "%")
+                            cb.like(a.get("category"), "%" + "모니터" + "%")
                     );
                 } else if(categoryType == CategoryType.EARPHONE) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "earphone" + "%")
+                            cb.like(a.get("category"), "%" + "이어폰" + "%")
                     );
                 } else if(categoryType == CategoryType.SMARTWATCH) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "smartwatch" + "%")
+                            cb.like(a.get("category"), "%" + "스마트워치" + "%")
                     );
                 } else if(categoryType == CategoryType.TABLET) {
                     return cb.or(
-                            cb.like(a.get("category"), "%" + "tablet" + "%")
+                            cb.like(a.get("category"), "%" + "테블릿" + "%")
                     );
                 }
                 return cb.conjunction();
@@ -202,32 +202,32 @@ public class SellArticleService {
                     switch (categoryType) {
                         case LAPTOP:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "laptop" + "%")
+                                    cb.like(a.get("category"), "%" + "노트북" + "%")
                             ));
                             break;
                         case MOBILE:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "mobile" + "%")
+                                    cb.like(a.get("category"), "%" + "핸드폰" + "%")
                             ));
                             break;
                         case MONITOR:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "monitor" + "%")
+                                    cb.like(a.get("category"), "%" + "모니터" + "%")
                             ));
                             break;
                         case EARPHONE:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "earphone" + "%")
+                                    cb.like(a.get("category"), "%" + "이어폰" + "%")
                             ));
                             break;
                         case SMARTWATCH:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "smartwatch" + "%")
+                                    cb.like(a.get("category"), "%" + "스마트워치" + "%")
                             ));
                             break;
                         case TABLET:
                             predicates.add(cb.or(
-                                    cb.like(a.get("category"), "%" + "tablet" + "%")
+                                    cb.like(a.get("category"), "%" + "테블릿" + "%")
                             ));
                             break;
                     }
