@@ -77,10 +77,11 @@ public class UserService {
     @Transactional
     public RsData<AuthAndMakeTokensResponseBody> authAndMakeTokens(String username, String password) {
         SiteUser user = findByUsername(username)
-            .orElseThrow(() -> new GlobalException("400-1", "해당 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new GlobalException("400-1", "해당 유저가 존재하지 않습니다."));
 
-        if (!passwordMatches(user, password))
+        if (!passwordMatches(user, password)) {
             throw new GlobalException("400-2", "비밀번호가 일치하지 않습니다.");
+        }
 
         String refreshToken = authTokenService.genRefreshToken(user);
         String accessToken = authTokenService.genAccessToken(user);

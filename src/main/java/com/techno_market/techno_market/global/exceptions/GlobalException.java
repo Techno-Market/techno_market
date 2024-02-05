@@ -1,7 +1,15 @@
 package com.techno_market.techno_market.global.exceptions;
 
 public class GlobalException extends RuntimeException {
-    public GlobalException(String resultCode, String msg) {
-        super("resultCode=" + resultCode + ",msg=" + msg);
+
+    private final String code;
+
+    public GlobalException(String code, String message) {
+        super(message);
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

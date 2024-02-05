@@ -2,9 +2,14 @@ package com.techno_market.techno_market.domain.user.service;
 
 import com.techno_market.techno_market.domain.user.entity.SiteUser;
 import com.techno_market.techno_market.global.app.AppConfig;
+import com.techno_market.techno_market.global.exceptions.GlobalException;
+import com.techno_market.techno_market.global.security.SecurityUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
 
