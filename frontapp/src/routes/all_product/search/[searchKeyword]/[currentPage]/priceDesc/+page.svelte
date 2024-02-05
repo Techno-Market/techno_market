@@ -94,9 +94,11 @@
 						{/if}
                         <h3 class="c222 mt20 f16 tal">{item.subject}</h3>
                         <div class="mt12 flex aic jcsb">
-                            <h4 class="c222 f18 tb">{item.price}원</h4>
-                            <span class="c999 f14">{displayedAt(new Date(item.createDate))}</span>
-                        </div>
+							<h4 class="c222 f18 tb">
+								{item.price.toLocaleString()}<span class="tl f16 c777 inblock ml4">원</span>
+							</h4>
+							<span class="c999 f14">{displayedAt(new Date(item.createDate))}</span>
+						</div>
                         <ul class="mt20 flex g4">
                             <li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b005DE8 cfff">{item.area}</li>
                             {#if item.directly}
