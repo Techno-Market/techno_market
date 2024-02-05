@@ -38,7 +38,7 @@ public class SellArticleController {
     public RsData<ArticlesResponse> articles(@RequestParam(value = "page", defaultValue = "0") int page) {
         Page<SellArticle> sellArticles = this.sellArticleService.getList(page);
 
-        return RsData.of("S-1", "성공", new ArticlesResponse(sellArticles));
+        return RsData.of("1", "성공", new ArticlesResponse(sellArticles));
     }
 
     @AllArgsConstructor
@@ -50,7 +50,7 @@ public class SellArticleController {
     @GetMapping("/{id}")
     public RsData<ArticleResponse> article(@PathVariable("id") Long id) {
         SellArticle sellArticle = this.sellArticleService.getArticle(id);
-        return RsData.of("S-2", "성공", new ArticleResponse(sellArticle));
+        return RsData.of("2", "성공", new ArticleResponse(sellArticle));
     }
 
     @AllArgsConstructor
@@ -82,7 +82,6 @@ public class SellArticleController {
         RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(),
                 writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getDirectly(),
                 writeRequest.getParcel(), writeRequest.getPostImage());
-
 
         return rsArticle;
     }
@@ -132,22 +131,22 @@ public class SellArticleController {
     @GetMapping("/search")
     public RsData<SearchArticlesResponse> searchArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page) {
         Page<SellArticle> articles = this.sellArticleService.getSearchList(kw, page);
-        return RsData.of("S-3", "성공", new SearchArticlesResponse(articles));
+        return RsData.of("3", "성공", new SearchArticlesResponse(articles));
     }
     @GetMapping("/category")
     public RsData<SearchArticlesResponse> categoryArticles(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
         Page<SellArticle> articles = this.sellArticleService.getCategoryList(page, categoryType);
-        return RsData.of("S-4", "성공", new SearchArticlesResponse(articles));
+        return RsData.of("4", "성공", new SearchArticlesResponse(articles));
     }
     @GetMapping("/priceDesc")
     public RsData<SearchArticlesResponse> HighestPriceArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
         Page<SellArticle> priceArticles = this.sellArticleService.getHighPriceArticles(kw, page, categoryType);
-        return RsData.of("S-5", "성공", new SearchArticlesResponse(priceArticles));
+        return RsData.of("5", "성공", new SearchArticlesResponse(priceArticles));
     }
     @GetMapping("/priceAsc")
     public RsData<SearchArticlesResponse> LowestPriceArticles(@RequestParam(value = "kw", defaultValue = "") String kw, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "category", defaultValue = "ALL") CategoryType categoryType) {
         Page<SellArticle> priceArticles = this.sellArticleService.getLowPriceArticles(kw, page, categoryType);
-        return RsData.of("S-6", "성공", new SearchArticlesResponse(priceArticles));
+        return RsData.of("6", "성공", new SearchArticlesResponse(priceArticles));
     }
 
 }

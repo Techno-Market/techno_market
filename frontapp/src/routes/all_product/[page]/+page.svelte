@@ -74,7 +74,7 @@
 						{#if article.photo && article.photo[0]}
 							<div class="img-box rel">
 								<img
-									src={`http://localhost:8080/gen/${article.photo[0].filePath}`}
+									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
 								<button

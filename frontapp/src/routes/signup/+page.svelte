@@ -1,5 +1,5 @@
 <script>
-    let userName = "";
+    let username = "";
     let nickName = "";
     let password1 = "";
     let password2 = "";
@@ -9,7 +9,7 @@
     let birthDate = "";
     let privacy = false;
 
-    let userNameEmpty = false;
+    let usernameEmpty = false;
     let nickNameEmpty = false;
     let password1Empty = false;
     let password2Empty = false;
@@ -19,8 +19,8 @@
     let birthDateEmpty = false;
     let privacyEmpty = false;
 
-    let userNameDuplicationSuccess = false;
-    let userNameDuplicationFail = false;
+    let usernameDuplicationSuccess = false;
+    let usernameDuplicationFail = false;
 
     let nickNameDuplicationSuccess = false;
     let nickNameDuplicationFail = false;
@@ -29,25 +29,25 @@
     let passwordMatchFail = false;
 
     //아이디 중복 검사
-    const handleUserNameInput = async () => {
-        userNameEmpty = false;
+    const handleusernameInput = async () => {
+        usernameEmpty = false;
 
-        let userNameValue = document.querySelector('#userName').value;
+        let usernameValue = document.querySelector('#username').value;
 
-        if (!userNameValue) {
-            userNameDuplicationSuccess = false;
-            userNameDuplicationFail = false;
+        if (!usernameValue) {
+            usernameDuplicationSuccess = false;
+            usernameDuplicationFail = false;
             return;
         }
 
-        let response = await fetch(`http://localhost:8080/api/user/userNameCheck/${encodeURIComponent(userNameValue)}`);
+        let response = await fetch(`http://localhost:8080/api/user/userNameCheck/${encodeURIComponent(usernameValue)}`);
         let result = await response.json();
         if (result.data) {
-            userNameDuplicationSuccess = false;
-            userNameDuplicationFail = true;
+            usernameDuplicationSuccess = false;
+            usernameDuplicationFail = true;
         } else {
-            userNameDuplicationSuccess = true;
-            userNameDuplicationFail = false;
+            usernameDuplicationSuccess = true;
+            usernameDuplicationFail = false;
         }
     };
 
@@ -92,8 +92,8 @@
         event.preventDefault();
 
         //빈 공백 유효성 검사
-        if (userName.trim() === "") userNameEmpty = true;
-        else userNameEmpty = false;
+        if (username.trim() === "") usernameEmpty = true;
+        else usernameEmpty = false;
 
         if (nickName.trim() === "") nickNameEmpty = true;
         else nickNameEmpty = false;
@@ -119,10 +119,10 @@
         if (!privacy) privacyEmpty = true;
         else privacyEmpty = false;
 
-        if (!userNameEmpty && !nickNameEmpty && !password1Empty && !password2Empty && !emailEmpty && !emailNumEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess && userNameDuplicationSuccess && nickNameDuplicationSuccess) {
+        if (!usernameEmpty && !nickNameEmpty && !password1Empty && !password2Empty && !emailEmpty && !emailNumEmpty && !nameEmpty && !birthDateEmpty && !privacyEmpty && passwordMatchSuccess && usernameDuplicationSuccess && nickNameDuplicationSuccess) {
             try {
                 const data = {
-                    userName,
+                    username,
                     nickName,
                     password: password1,
                     email,
@@ -177,12 +177,12 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">아이디<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="아이디" id="userName" bind:value={userName} on:input={handleUserNameInput}>
+                            <input type="text" placeholder="아이디" id="username" bind:value={username} on:input={handleusernameInput}>
                         </div>
                         <div class="error-text-box wsn flex g8">
-                            <span class={`error-text f14 cCC0000 mt8 ${userNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
-                            <span class={`error-text f14 cCC0000 mt8 ${userNameDuplicationFail ? 'active' : ''}`}>중복된 아이디 입니다.</span>
-                            <span class={`confirm-text f14 c009521 mt8 ${userNameDuplicationSuccess ? 'active' : ''}`}>사용가능한 아이디 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${usernameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${usernameDuplicationFail ? 'active' : ''}`}>중복된 아이디 입니다.</span>
+                            <span class={`confirm-text f14 c009521 mt8 ${usernameDuplicationSuccess ? 'active' : ''}`}>사용가능한 아이디 입니다.</span>
                         </div>
                     </li>
                     <li>

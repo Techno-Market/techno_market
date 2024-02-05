@@ -1,34 +1,34 @@
 package com.techno_market.techno_market.global.rsData;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@Builder(access = PRIVATE)
+@NoArgsConstructor(access = PRIVATE)
+@AllArgsConstructor(access = PRIVATE)
 public class RsData<T> {
     private String resultCode;
+    private int statusCode;
     private String msg;
     private T data;
-
-    public static <T> RsData<T> of(String resultCode, String msg, T data) {
-        return new RsData<>(resultCode, msg, data);
-    }
 
     public static <T> RsData<T> of(String resultCode, String msg) {
         return of(resultCode, msg, null);
     }
 
-    @JsonIgnore
-    public boolean isSuccess() {
-        return resultCode.startsWith("S-");
+    public static <T> RsData<T> of(String resultCode, String msg, T data) {
+        int statusCode = Integer.parseInt(resultCode.split("-", 2)[0]);
+
+        return RsData.<T>builder()
+                .resultCode(resultCode)
+                .statusCode(statusCode)
+                .msg(msg)
+                .data(data)
+                .build();
     }
 
-    @JsonIgnore
-    public boolean isFail() {
-        return !isSuccess();
-    }
 }
 

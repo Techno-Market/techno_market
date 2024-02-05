@@ -9,7 +9,9 @@
 
 	onMount(async () => {
 		try {
-			let res = await fetch('http://localhost:8080/api/articles');
+			let res = await fetch('http://localhost:8080/api/articles', {
+        credentials: 'include',
+    });
 			data = await res.json();
 			console.log(data.data);
 		} catch (error) {
@@ -75,7 +77,7 @@
 						<a href="/sales_post/detail/{article.id}">
 							<div class="img-box rel">
 								<img
-									src={`http://localhost:8080/gen/${article.photo[0].filePath}`}
+									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
 								<button

@@ -67,7 +67,7 @@ public class SellArticleService {
         sellArticleCreateDto.setDirectly(a.getDirectly());
         sellArticleCreateDto.setParcel(a.getParcel());
 
-        return RsData.of("S-2", "게시물이 생성되었습니다.", sellArticleCreateDto);
+        return RsData.of("2", "게시물이 생성되었습니다.", sellArticleCreateDto);
     }
 
     public Page<SellArticle> getList(int page) {
@@ -110,12 +110,12 @@ public class SellArticleService {
         }
         sellArticleRepository.save(sellArticle);
 
-        return RsData.of("S-3", "게시물이 수정되었습니다.", sellArticle);
+        return RsData.of("3", "게시물이 수정되었습니다.", sellArticle);
     }
 
     public RsData<SellArticle> delete(SellArticle sellArticle) {
         this.sellArticleRepository.delete(sellArticle);
-        return RsData.of("S-3", "게시물이 삭제되었습니다.", sellArticle);
+        return RsData.of("3", "게시물이 삭제되었습니다.", sellArticle);
     }
     public Page<SellArticle> getSearchList(String kw, int page) {
         List<Sort.Order> sorts = new ArrayList<>();

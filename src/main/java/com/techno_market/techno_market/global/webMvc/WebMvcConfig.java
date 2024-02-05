@@ -21,7 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         System.out.println(getGenFileDirPath);
-        registry.addResourceHandler("/gen/**")
+        registry.addResourceHandler("/api/gen/**")
                 .addResourceLocations("file:///" + getGenFileDirPath + "/");
     }
 }

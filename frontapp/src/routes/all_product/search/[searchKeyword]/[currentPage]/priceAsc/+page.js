@@ -5,7 +5,9 @@ export async function load({ fetch, params }) {
 
     const upperCaseCategory = categoryType.toUpperCase();
 
-    let response = await fetch(`http://localhost:8080/api/articles/priceAsc?kw=${searchKeyword}&page=${currentPage}&category=${upperCaseCategory}`);
+    let response = await fetch(`http://localhost:8080/api/articles/priceAsc?kw=${searchKeyword}&page=${currentPage}&category=${upperCaseCategory}`, {
+      credentials: 'include'
+  });
     let result = await response.json();
     let data;
     data = {

@@ -56,7 +56,7 @@
 							<div class="swiper-slide">
 								<div class="img-box rel">
 									<img
-										src={`http://localhost:8080/gen/${photo.filePath}`}
+										src={`http://localhost:8080/api/gen/${photo.filePath}`}
 										alt={photo.origFileName}
 									/>
 								</div>

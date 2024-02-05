@@ -1,4 +1,45 @@
-<form action="" method="post" onsubmit="return box_check();">
+<script>
+    function submitLoginForm() {
+        const form = this;
+
+        form.username.value = form.username.value.trim();
+
+        if (form.username.value.length === 0) {
+            alert('Username is required');
+            form.username.focus();
+            return;
+        }
+
+        form.password.value = form.password.value.trim();
+
+        if (form.password.value.length === 0) {
+            alert('Password is required');
+            form.password.focus();
+            return;
+        }
+
+        fetch('http://localhost:8080/api/user/login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: form.username.value,
+                password: form.password.value
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+</script>
+
+<form on:submit|preventDefault={submitLoginForm}>
     <div class="login-area login-cnt-area w100per rel zi1">
         <div class="con w100per">
             <h1 class="title-text lh120 tb tac wow fadeInUp" data-wow-delay="0.3s" data-wow-duration="0.6s">로그인</h1>
