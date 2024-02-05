@@ -7,6 +7,8 @@ import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateD
 import com.techno_market.techno_market.domain.sellArticle.entity.CategoryType;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.sellArticle.repository.SellArticleRepository;
+import com.techno_market.techno_market.domain.user.entity.SiteUser;
+import com.techno_market.techno_market.domain.user.repository.UserRepository;
 import com.techno_market.techno_market.global.rsData.RsData;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -34,10 +36,15 @@ public class SellArticleService {
     private final SellArticleRepository sellArticleRepository;
     private final PhotoRepository photoRepository;
     private final FileHandler fileHandler;
+    private final UserRepository userRepository;
 
     @Transactional
     public RsData<SellArticleCreateDto> create(String subject, String content, int price, String area, String category, Boolean directly,
-                                               Boolean parcel, List<MultipartFile> postImage) throws Exception {
+                                               Boolean parcel, List<MultipartFile> postImage, String username) throws Exception {
+        // 사용자 정보를 통해 사용자 엔터티를 찾거나 새로 생성하여 저장
+        SiteUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
+
         SellArticle a = new SellArticle();
         a.setSubject(subject);
         a.setContent(content);
@@ -47,6 +54,9 @@ public class SellArticleService {
         a.setDirectly(directly);
         a.setParcel(parcel);
         a.setCreateDate(LocalDateTime.now());
+
+        // 현재 로그인한 사용자와 게시물을 연결
+        a.setAuthor(user);
 
         List<Photo> photoList = fileHandler.parseFileInfo(postImage);
 
@@ -68,6 +78,13 @@ public class SellArticleService {
         sellArticleCreateDto.setParcel(a.getParcel());
 
         return RsData.of("2", "게시물이 생성되었습니다.", sellArticleCreateDto);
+    }
+
+    public boolean isCurrentUserAuthorized(Long sellArticleId, String currentUsername) {
+        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 게시물을 찾을 수 없습니다."));
+
+        return sellArticle.getAuthor().getUsername().equals(currentUsername);
     }
 
     public Page<SellArticle> getList(int page) {

@@ -2,6 +2,7 @@ package com.techno_market.techno_market.domain.sellArticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
+import com.techno_market.techno_market.domain.user.entity.SiteUser;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.*;
@@ -42,6 +43,10 @@ public class SellArticle {
     private List<Photo> photo = new ArrayList<>();
 
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")  // user_id라는 컬럼으로 Join
+    private SiteUser author;
+
     @CreatedDate
     private LocalDateTime createDate;
     @LastModifiedDate
@@ -58,5 +63,15 @@ public class SellArticle {
     }
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    public void setUser(SiteUser user) {
+        this.author = user;
+
+        // 유저에게도 이 게시글이 추가되어 있지 않은 경우
+        if (!user.getSellArticles().contains(this)) {
+            // 유저에게 이 게시글을 추가
+            user.addSellArticle(this);
+        }
     }
 }
