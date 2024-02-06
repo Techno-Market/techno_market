@@ -23,8 +23,8 @@ import java.util.List;
 public class Answer extends BaseEntity {
     @Column(name = "text")
     private String comment;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private SiteUser user;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private SellArticle sellArticle;
 }

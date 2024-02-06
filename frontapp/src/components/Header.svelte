@@ -1,3 +1,47 @@
+<script>
+    import { goto } from '$app/navigation';
+
+    let searchQuery = '';
+    let currentPage = 0; 
+
+    function performSearch() {
+        const searchKeyword = searchQuery.trim();
+        if (searchKeyword !== '') {
+            goto(`/all_product/search/${encodeURIComponent(searchKeyword)}/${currentPage}`);
+        }
+    }
+    function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    }
+
+    import { onMount } from 'svelte';
+
+    let member = {};
+    let isLogin = false;
+    onMount(()=> {
+        // 로그인한 회원정보 불러오기
+        fetch('http://localhost:8080/api/user/me', {
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then(data => {
+                // 성공시 데이터 member 에 담기
+                if ( data ) {
+                    console.log(data.data?.item);
+                    member = data.data?.item;
+                    if (member) isLogin = true;
+                    else isLogin = false;
+                }
+            })
+            .catch(error => {
+                // 실패시 처리
+                console.error(error);
+            });
+    })
+</script>
+<div>{isLogin}</div>
 <header class="header-area w100per bfff fixed zi5 xy-tl">
     <div class="con wh100per">
         <div class="header-box-1 w100per flex aic jcsb h70">
@@ -16,25 +60,24 @@
             </div>
             <div class="right-box flex aic cg24">
                 <ul class="sub-menu-box flex aic cg12">
-                    <li>
-                        <a href="/login" class="c333 f14 tm test">로그인</a>
-                    </li>
-                    <li>
-                        <a href="/signup" class="c333 f14 tm">회원가입</a>
-                    </li>
-
-                    <!-- <li>
-                        <a href="" class="c333 f14 tm test">내 정보</a>
-                    </li>
-                    <li>
-                        <a href="" class="c333 f14 tm">채팅</a>
-                    </li>
-                    <li>
-                        <a href="" class="c333 f14 tm">찜 목록</a>
-                    </li>
-                    <li>
-                        <a href="" class="c333 f14 tm">로그아웃</a>
-                    </li> -->
+                    {#if isLogin }
+                        <li>
+                            <a href="" class="c333 f14 tm">내 정보</a>
+                        </li>
+                        <li>
+                            <a href="" class="c333 f14 tm">찜 목록</a>
+                        </li>
+                        <li>
+                            <a href="" class="c333 f14 tm">로그아웃</a>
+                        </li>
+                    {:else}
+                        <li>
+                            <a href="/login" class="c333 f14 tm">로그인</a>
+                        </li>
+                        <li>
+                            <a href="/signup" class="c333 f14 tm">회원가입</a>
+                        </li>
+                    {/if}
                 </ul>
             </div>
         </div>
@@ -62,54 +105,6 @@
                     </li>
                 </ul>
             </div>
-            <!-- <div class="right-box">
-                <div class="search-swiper-box h20 rel zi1" style="width: 180px;">
-                    <div class="search-swiper swiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" style="justify-content: space-between; align-items: center; cursor: pointer;">
-                                <div class="flex g8">
-                                    <span class="num c222 tb f14">1</span>
-                                    <span class="text c555 tm f14">에어팟</span>
-                                </div>
-                                <span class="f12 cED220D">▲</span>
-                            </div>
-                            <div class="swiper-slide" style="justify-content: space-between; align-items: center; cursor: pointer;">
-                                <div class="flex g8">
-                                    <span class="num c222 tb f14">2</span>
-                                    <span class="text c555 tm f14">아이폰 14 pro</span>
-                                </div>
-                                <span class="f12 c0076BA">▼</span>
-                            </div>
-                            <div class="swiper-slide" style="justify-content: space-between; align-items: center; cursor: pointer;">
-                                <div class="flex g8">
-                                    <span class="num c222 tb f14">3</span>
-                                    <span class="text c555 tm f14">플립5</span>
-                                </div>
-                                <span class="f12 c0076BA">▼</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </div>
 </header>
-
-<script>
-    import { goto } from '$app/navigation';
-
-    let searchQuery = '';
-    let currentPage = 0; 
-
-    function performSearch() {
-        const searchKeyword = searchQuery.trim();
-        if (searchKeyword !== '') {
-            goto(`/all_product/search/${encodeURIComponent(searchKeyword)}/${currentPage}`);
-        }
-    }
-    function handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            performSearch();
-        }
-    }
-</script>

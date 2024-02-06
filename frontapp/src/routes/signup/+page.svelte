@@ -154,6 +154,55 @@
         }
         else window.alert('입력 내용을 확인해 주세요.');
     };
+
+
+    const sendVerificationEmail = async () => {
+        try {
+            // 이메일 전송 요청
+            const response = await fetch('http://localhost:8080/api/user/send-verification-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            if (response.ok) {
+                // 성공적으로 이메일이 전송되었을 때의 로직
+                window.alert('이메일이 전송되었습니다. 인증번호를 확인해주세요.');
+            } else {
+                // 이메일 전송 실패 시의 로직
+                const responseData = await response.json();
+                window.alert(`이메일 전송 실패: ${responseData.message}`);
+            }
+        } catch (error) {
+            console.error('Error sending verification email:', error);
+        }
+    };
+
+    const verifyEmail = async () => {
+        try {
+            // 인증번호 확인 요청
+            const response = await fetch('http://localhost:8080/api/user/verify-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, verificationCode: emailNum }),
+            });
+
+            if (response.ok) {
+                // 성공적으로 인증번호가 일치할 때의 로직
+                window.alert('이메일 인증이 완료되었습니다.');
+            } else {
+                // 인증번호가 일치하지 않을 때의 로직
+                const responseData = await response.json();
+                window.alert(`이메일 인증 실패: ${responseData.message}`);
+            }
+        } catch (error) {
+            console.error('Error verifying email:', error);
+        }
+    };
 </script>
 
 <style>
@@ -219,7 +268,7 @@
                             <div class="input-type-1">
                                 <input type="text" placeholder="이메일" bind:value={email} on:input={() => emailEmpty = false}>
                             </div>
-                            <button type="button" class="btn-type-2">전송</button>
+                            <button type="button" class="btn-type-2" on:click={sendVerificationEmail}>전송</button>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${emailEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
@@ -231,7 +280,7 @@
                             <div class="input-type-1">
                                 <input type="text" placeholder="인증번호" bind:value={emailNum} on:input={() => emailNumEmpty = false}>
                             </div>
-                            <button type="button" class="btn-type-2">확인</button>
+                            <button type="button" class="btn-type-2" on:click={verifyEmail}>확인</button>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${emailNumEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>

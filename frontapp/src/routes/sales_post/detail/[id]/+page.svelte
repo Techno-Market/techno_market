@@ -31,18 +31,41 @@
             const response = await fetch(`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`, {
 				credentials: 'include',
                 method: 'DELETE',
+				credentials: 'include'
             });
 
             if (response.ok) {
                 // 삭제 성공
                 // TODO: 필요한 처리 추가
-                goto('/all_product/0', { replaceState: true }); // 삭제 후 이동할 경로
+                goto('/all_product/0', { replaceState: true }); 
             } else {
                 // 삭제 실패
                 console.error('Failed to delete article');
             }
         } catch (error) {
             console.error('Error while deleting article:', error);
+        }
+    }
+	async function deleteAnswer(ans) {
+		const answerId = ans.id;
+        try {
+            const response = await fetch(`http://localhost:8080/api/answers/${answerId}`, {
+                method: 'DELETE',
+				credentials: 'include'
+            });
+
+            if (response.ok) {
+                // 삭제 성공
+                // TODO: 필요한 처리 추가
+				alert("삭제되었습니다");
+                goto(`/sales_post/detail/${encodeURIComponent(data.articleId)}`, { replaceState: true }); 
+            } else {
+                // 삭제 실패
+				alert("삭제가 실패하였습니다");
+                console.error('Failed to delete answer');
+            }
+        } catch (error) {
+            console.error('Error while deleting answer:', error);
         }
     }
 
@@ -201,6 +224,16 @@
 		<input type="submit" value="저장" class="btn-type-1 w100per" />
 	</div>
 </form>
-<ul>
-	<li></li>
-</ul>
+{#if data.result2.data.answers.length > 0}
+    {#each data.result2.data.answers as ans}
+		<ul>
+			<li>{ans.id}</li>
+			<li>{ans.comment}</li>
+			<li>{ans.user.username}</li>
+			
+			<button on:click={deleteAnswer(ans)} class="btn-type-1-2 w50per">삭제하기</button>
+			
+		</ul>
+    {/each}
+{/if} 
+
