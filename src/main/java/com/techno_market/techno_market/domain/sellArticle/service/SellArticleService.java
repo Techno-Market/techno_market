@@ -133,7 +133,9 @@ public class SellArticleService {
                 query.distinct(true);
                 return cb.or(
                         cb.like(a.get("subject"), "%" + kw + "%"),
-                        cb.like(a.get("area"), "%" + kw + "%")
+                        cb.like(a.get("area"), "%" + kw + "%"),
+                        cb.like(a.get("category"), "%" + kw + "%"),
+                        cb.like(a.get("content"), "%" + kw + "%")
                 );
             }
         };

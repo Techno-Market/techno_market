@@ -13,6 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 
 @Getter
+@Setter
 @SuperBuilder
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

@@ -4,7 +4,12 @@ export async function load({params, fetch}) {
         credentials: 'include'
 
     })
+    const articleId = params.id;
     let result = await res.json();
-    
-    return result;
+    let data;
+    data = {
+        result,
+        articleId,
+      };
+    return data;
 }

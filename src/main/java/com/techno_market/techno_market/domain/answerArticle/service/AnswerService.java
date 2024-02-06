@@ -23,14 +23,20 @@ public class AnswerService {
         Answer answer = this.answerRepository.findById(id).orElseThrow();
         return answer;
     }
-    public Answer create(SiteUser user, String comment, Answer parent, SellArticle sellArticle) {
+    public Answer create(SiteUser user, String comment, SellArticle sellArticle) {
         Answer answer = Answer.builder()
                 .comment(comment)
-                .parent(parent)
                 .user(user)
                 .sellArticle(sellArticle)
+                .createDate(LocalDateTime.now())
                 .build();
         return this.answerRepository.save(answer);
+    }
+    public Answer modify(Answer answer, String comment) {
+        answer.setComment(comment);
+        answer.setModifyDate(LocalDateTime.now());
+        this.answerRepository.save(answer);
+        return answer;
     }
     public Answer delete(Answer answer) {
         this.answerRepository.delete(answer);
