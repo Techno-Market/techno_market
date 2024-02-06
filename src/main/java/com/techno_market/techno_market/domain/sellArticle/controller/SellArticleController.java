@@ -107,7 +107,8 @@ public class SellArticleController {
     }
 
     @PatchMapping("/{id}")
-    public RsData<SellArticle> modify(@Valid WriteRequest writeRequest, @PathVariable("id") Long id) throws Exception{
+    public RsData<SellArticle> modify(@Valid WriteRequest writeRequest, @PathVariable("id") Long id, @AuthenticationPrincipal SecurityUser user) throws Exception{
+        SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
 
         RsData<SellArticle> modifyArticle = sellArticleService.modify(id,
                 writeRequest.getSubject(),
@@ -117,14 +118,15 @@ public class SellArticleController {
                 writeRequest.getCategory(),
                 writeRequest.getDirectly(),
                 writeRequest.getParcel(),
-                writeRequest.getPostImage());
+                writeRequest.getPostImage(),
+                author);
 
         return modifyArticle;
     }
 
 
     @DeleteMapping("/{id}")
-    public RsData<SellArticle> delete(@PathVariable("id") Long id) {
+    public RsData<SellArticle> delete(@PathVariable("id") Long id, @AuthenticationPrincipal SecurityUser user) {
         SellArticle sellArticle = this.sellArticleService.getArticle(id);
         RsData<SellArticle> articleRsData = this.sellArticleService.delete(sellArticle);
         return articleRsData;

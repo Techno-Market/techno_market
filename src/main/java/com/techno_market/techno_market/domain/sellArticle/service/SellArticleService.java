@@ -94,7 +94,7 @@ public class SellArticleService {
     }
 
     public RsData<SellArticle> modify(Long sellArticleId, String subject, String content, int price, String area, String category,
-                                      Boolean directly, Boolean parcel, List<MultipartFile> postImage) throws  Exception {
+                                      Boolean directly, Boolean parcel, List<MultipartFile> postImage, SiteUser user) throws  Exception {
         SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
                 .orElseThrow(() -> new Exception("해당 ID의 게시물을 찾을 수 없습니다."));
 
