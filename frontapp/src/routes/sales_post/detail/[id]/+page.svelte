@@ -10,6 +10,7 @@
 	let swiper;
 
 	onMount(() => {
+		fetchAnswers();
 		swiper = new Swiper('.swiper-container', {
 			slidesPerView: 1,
 			spaceBetween: 0,
@@ -26,6 +27,45 @@
 
 	import { goto } from '$app/navigation';
 
+	function displayedAt(createdAt) {
+		const milliSeconds = new Date() - createdAt;
+		const seconds = milliSeconds / 1000;
+
+		if (seconds < 60) {
+			return `방금 전`;
+		}
+
+		const minutes = seconds / 60;
+		if (minutes < 60) {
+			return `${Math.floor(minutes)}분 전`;
+		}
+
+		const hours = minutes / 60;
+		if (hours < 24) {
+			return `${Math.floor(hours)}시간 전`;
+		}
+
+		const days = hours / 24;
+		if (days < 2) {
+			return `1일 전`;
+		} else if (days < 7) {
+			return `${Math.floor(days)}일 전`;
+		}
+
+		const weeks = days / 7;
+		if (weeks < 5) {
+			return `${Math.floor(weeks)}주 전`;
+		}
+
+		const months = days / 30;
+		if (months < 12) {
+			return `${Math.floor(months)}개월 전`;
+		}
+
+		const years = days / 365;
+		return `${Math.floor(years)}년 전`;
+	}
+
     async function deleteArticle() {
         try {
             const response = await fetch(`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`, {
@@ -34,8 +74,6 @@
             });
 
             if (response.ok) {
-                // 삭제 성공
-                // TODO: 필요한 처리 추가
                 goto('/all_product/0', { replaceState: true }); 
             } else {
                 // 삭제 실패
@@ -46,27 +84,31 @@
         }
     }
 	async function deleteAnswer(ans) {
-		const answerId = ans.id;
+    // 확인을 눌렀을 때 true 반환, 취소를 눌렀을 때 false 반환
+    const confirmed = window.confirm("정말로 삭제하시겠습니까?");
+    
+    if (confirmed) {
+        const answerId = ans.id;
         try {
             const response = await fetch(`http://localhost:8080/api/answers/${answerId}`, {
                 method: 'DELETE',
-				credentials: 'include'
+                credentials: 'include'
             });
 
             if (response.ok) {
-                // 삭제 성공
-                // TODO: 필요한 처리 추가
-				alert("삭제되었습니다");
-                goto(`/sales_post/detail/${encodeURIComponent(data.articleId)}`, { replaceState: true }); 
+                window.alert("삭제되었습니다");
+                fetchAnswers();
             } else {
-                // 삭제 실패
-				alert("삭제가 실패하였습니다");
+                window.alert("삭제가 실패하였습니다");
                 console.error('Failed to delete answer');
             }
         } catch (error) {
             console.error('Error while deleting answer:', error);
         }
+    } else {
+        console.log('삭제가 취소되었습니다.');
     }
+}
 
 	const submitAnswerForm = async (event) => {
 		event.preventDefault();
@@ -97,7 +139,7 @@
 				const responseData = await response.json();
 				console.log(responseData);
 				window.alert('저장되었습니다.');
-				goto(`/sales_post/detail/${encodeURIComponent(data.articleId)}`, { replaceState: true });
+				fetchAnswers();
 			} else {
 				const responseData = await response.json();
 				console.error(responseData);
@@ -117,6 +159,27 @@
 			}
 		}
 	};
+	const fetchAnswers = async () => {
+        try {
+            // AJAX 요청을 통해 댓글 데이터 가져오기
+            const response = await fetch(`http://localhost:8080/api/answers/${data.articleId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const newAnswers =await response.json();
+                // 새로운 댓글 데이터로 업데이트
+				console.log("댓글 : " + newAnswers);
+                data.result2.data.answers = newAnswers.data.answers;
+            } else {
+                // 댓글 데이터 가져오기 실패
+                console.error('Failed to fetch answers data');
+            }
+        } catch (error) {
+            console.error('Error while fetching answers data:', error);
+        }
+    };
 </script>
 
 <div class="product-detail-area bsb w100per rel zi2 pt60">
@@ -223,16 +286,14 @@
 		<input type="submit" value="저장" class="btn-type-1 w100per" />
 	</div>
 </form>
-{#if data.result2.data.answers.length > 0}
     {#each data.result2.data.answers as ans}
 		<ul>
 			<li>{ans.id}</li>
 			<li>{ans.comment}</li>
-			<li>{ans.user.username}</li>
-			
+			<li>{ans.user.nickName}</li>
+			<li>{displayedAt(new Date(ans.createDate))}</li>
 			<button on:click={deleteAnswer(ans)} class="btn-type-1-2 w50per">삭제하기</button>
-			
+			<button on:click={modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
 		</ul>
     {/each}
-{/if} 
 
