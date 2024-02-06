@@ -31,7 +31,7 @@ public class AnswerArticleController {
     }
     @GetMapping("/{sellArticleId}")
     public RsData<AnswerArticlesResponse> getAnswers(@PathVariable("sellArticleId") Long id) {
-        List<Answer> answers = this.answerService.getList();
+        List<Answer> answers = this.answerService.getList(id);
         return RsData.of("1", "댓글 리스트 불러오기", new AnswerArticlesResponse(answers));
     }
     @AllArgsConstructor
@@ -39,11 +39,11 @@ public class AnswerArticleController {
     public static class AnswerArticleResponse {
         private final Answer answer;
     }
-    @GetMapping("/{id}")
-    public RsData<AnswerArticleResponse> getAnswer(@PathVariable("id") Long id) {
-        Answer answer = this.answerService.getAnswerById(id);
-        return RsData.of("2", "댓글 불러오기", new AnswerArticleResponse(answer));
-    }
+//    @GetMapping("/{id}")
+//    public RsData<AnswerArticleResponse> getAnswer(@PathVariable("id") Long id) {
+//        Answer answer = this.answerService.getAnswerById(id);
+//        return RsData.of("2", "댓글 불러오기", new AnswerArticleResponse(answer));
+//    }
     @Data
     public static class WriteRequest{
         private String comment;

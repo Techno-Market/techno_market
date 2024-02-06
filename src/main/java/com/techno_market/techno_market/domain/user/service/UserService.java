@@ -89,6 +89,9 @@ public class UserService {
         String refreshToken = authTokenService.genRefreshToken(user);
         String accessToken = authTokenService.genAccessToken(user);
 
+        user.setRefreshToken(refreshToken);
+        userRepository.save(user);
+
         return RsData.of(
                 "200-1",
                 "로그인 성공",

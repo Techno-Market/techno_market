@@ -15,8 +15,8 @@ import java.util.List;
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
-    public List<Answer> getList() {
-        List<Answer> answers = this.answerRepository.findAll();
+    public List<Answer> getList(Long id) {
+        List<Answer> answers = this.answerRepository.findAllBySellArticleId(id);
         return answers;
     }
     public Answer getAnswerById(Long id) {
