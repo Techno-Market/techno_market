@@ -109,8 +109,10 @@ public class SellArticleController {
     @PatchMapping("/{id}")
     public RsData<SellArticle> modify(@Valid WriteRequest writeRequest, @PathVariable("id") Long id, @AuthenticationPrincipal SecurityUser user) throws Exception{
         SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
-
-        RsData<SellArticle> modifyArticle = sellArticleService.modify(id,
+        SellArticle sellArticle = this.sellArticleService.getArticle(id);
+        RsData<SellArticle> modifyArticle = sellArticleService.modify(
+                author,
+                sellArticle,
                 writeRequest.getSubject(),
                 writeRequest.getContent(),
                 writeRequest.getPrice(),
@@ -118,8 +120,8 @@ public class SellArticleController {
                 writeRequest.getCategory(),
                 writeRequest.getDirectly(),
                 writeRequest.getParcel(),
-                writeRequest.getPostImage(),
-                author);
+                writeRequest.getPostImage()
+                );
 
         return modifyArticle;
     }
@@ -127,8 +129,9 @@ public class SellArticleController {
 
     @DeleteMapping("/{id}")
     public RsData<SellArticle> delete(@PathVariable("id") Long id, @AuthenticationPrincipal SecurityUser user) {
+        SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
         SellArticle sellArticle = this.sellArticleService.getArticle(id);
-        RsData<SellArticle> articleRsData = this.sellArticleService.delete(sellArticle);
+        RsData<SellArticle> articleRsData = this.sellArticleService.delete(author, sellArticle);
         return articleRsData;
     }
     @AllArgsConstructor

@@ -93,10 +93,9 @@ public class SellArticleService {
         return sellArticle;
     }
 
-    public RsData<SellArticle> modify(Long sellArticleId, String subject, String content, int price, String area, String category,
-                                      Boolean directly, Boolean parcel, List<MultipartFile> postImage, SiteUser user) throws  Exception {
-        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
-                .orElseThrow(() -> new Exception("해당 ID의 게시물을 찾을 수 없습니다."));
+    public RsData<SellArticle> modify(SiteUser user, SellArticle sellArticle,String subject, String content, int price, String area, String category,
+                                      Boolean directly, Boolean parcel, List<MultipartFile> postImage) throws  Exception {
+        if (user.getId().equals(sellArticle.getAuthor().getId())){
 
         sellArticle.setSubject(subject);
         sellArticle.setContent(content);
@@ -113,13 +112,18 @@ public class SellArticleService {
                 sellArticle.addPhoto(photoRepository.save(photo));
             }
         }
+        } else {
+            throw new RuntimeException("유저가 일치하지 않습니다");
+        }
         sellArticleRepository.save(sellArticle);
 
         return RsData.of("3", "게시물이 수정되었습니다.", sellArticle);
     }
 
-    public RsData<SellArticle> delete(SellArticle sellArticle) {
-        this.sellArticleRepository.delete(sellArticle);
+    public RsData<SellArticle> delete(SiteUser user, SellArticle sellArticle) {
+        if (user.getUsername().equals(sellArticle.getAuthor().getUsername())) {
+            this.sellArticleRepository.delete(sellArticle);
+        }
         return RsData.of("3", "게시물이 삭제되었습니다.", sellArticle);
     }
     public Page<SellArticle> getSearchList(String kw, int page) {

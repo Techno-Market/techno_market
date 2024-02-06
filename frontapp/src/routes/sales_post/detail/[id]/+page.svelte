@@ -8,6 +8,7 @@
 	import 'swiper/swiper-bundle.css';
 
 	let swiper;
+	let username = "";
 
 	onMount(() => {
 		fetchAnswers();
@@ -23,6 +24,21 @@
 				prevEl: '.swiper-button-prev'
 			}
 		});
+
+		fetch('http://localhost:8080/api/user/me', {
+				credentials: "include"
+		})
+				.then(response => response.json())
+				.then(data => {
+						if ( data ) {
+								username = data.data?.item?.username;
+						}
+				})
+				.catch(error => {
+						// 실패시 처리
+						console.error(error);
+				});
+
 	});
 
 	import { goto } from '$app/navigation';
@@ -69,7 +85,6 @@
     async function deleteArticle() {
         try {
             const response = await fetch(`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`, {
-				credentials: 'include',
                 method: 'DELETE',
 				credentials: 'include'
             });
@@ -265,12 +280,14 @@
 					</button>
 					<a href="/" class="btn-type-1" style="width: calc(100% - 44px);">채팅하기</a>
 				</div>
-
 				<!--본인 작성 글-->
-				<div class="flex aic g12 bsb pl16 pr16 mt20">
-					<a href="/sales_post/modify/{data.result.data.sellArticle.id}" class="btn-type-1 w50per">수정하기</a>
-					<button on:click={deleteArticle} class="btn-type-1-2 w50per">삭제하기</button>
-				</div>
+				{#if username && data.result.data.sellArticle.author.username === username}
+					<div class="flex aic g12 bsb pl16 pr16 mt20">
+						
+						<a href="/sales_post/modify/{data.result.data.sellArticle.id}" class="btn-type-1 w50per">수정하기</a>
+						<button on:click={deleteArticle} class="btn-type-1-2 w50per">삭제하기</button>
+					</div>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -297,4 +314,3 @@
 			<button on:click={modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
 		</ul>
     {/each}
-

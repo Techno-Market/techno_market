@@ -32,7 +32,7 @@
 				imgBox.className = 'img-box rel';
 
 				const imgPreview = document.createElement('img');
-				imgPreview.src = `http://localhost:8080/gen/${photo.filePath}`;
+				imgPreview.src = `http://localhost:8080/api/gen/${photo.filePath}`;
 
 				const removeButton = document.createElement('button');
 				removeButton.className = 'img-box abs w20 zi2 xy-tr cp';
