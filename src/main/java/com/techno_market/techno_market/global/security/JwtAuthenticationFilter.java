@@ -21,7 +21,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         String requestUri = request.getRequestURI();
-        if (requestUri.equals("/api/user/logout") || requestUri.startsWith("/api/")) {
+        if (requestUri.equals("/api/user/logout") || requestUri.equals("/api/user/login")) {
             filterChain.doFilter(request, response);
             return;
         }

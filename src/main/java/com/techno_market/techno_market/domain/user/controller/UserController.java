@@ -94,4 +94,22 @@ public class UserController {
             return RsData.of(e.getCode(), e.getMessage(), null);
         }
     }
+
+    @Getter
+    public static class MeResponseBody {
+        private UserDto item;
+
+        public MeResponseBody(SiteUser siteUser) {
+            this.item = new UserDto(siteUser);
+        }
+    }
+
+    @GetMapping(value = "/me")
+    public RsData<MeResponseBody> getMe() {
+        return RsData.of(
+                "200",
+                "내 정보 가져오기 성공",
+                new MeResponseBody(rq.getMember())
+        );
+    }
 }
