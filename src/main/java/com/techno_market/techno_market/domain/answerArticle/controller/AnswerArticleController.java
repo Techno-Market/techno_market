@@ -29,8 +29,8 @@ public class AnswerArticleController {
     public static class AnswerArticlesResponse {
         private final List<Answer> answers;
     }
-    @GetMapping("")
-    public RsData<AnswerArticlesResponse> getAnswers() {
+    @GetMapping("/{sellArticleId}")
+    public RsData<AnswerArticlesResponse> getAnswers(@PathVariable("sellArticleId") Long id) {
         List<Answer> answers = this.answerService.getList();
         return RsData.of("1", "댓글 리스트 불러오기", new AnswerArticlesResponse(answers));
     }
@@ -57,15 +57,17 @@ public class AnswerArticleController {
         return RsData.of("3", "댓글 작성 성공", new AnswerArticleResponse(answer));
     }
     @PatchMapping("/{id}")
-    public RsData<AnswerArticleResponse> modify(@PathVariable("id") Long id, WriteRequest writeRequest, @AuthenticationPrincipal User user) {
+    public RsData<AnswerArticleResponse> modify(@PathVariable("id") Long id, WriteRequest writeRequest, @AuthenticationPrincipal SecurityUser user) {
+        SiteUser writer = this.userService.findByUsername(user.getUsername()).orElseThrow();
         Answer answer = this.answerService.getAnswerById(id);
-        this.answerService.modify(answer, writeRequest.getComment());
+        this.answerService.modify(writer, answer, writeRequest.getComment());
         return RsData.of("4", "댓글 수정 성공", new AnswerArticleResponse(answer));
     }
     @DeleteMapping("/{id}")
-    public RsData<AnswerArticleResponse> delete(@PathVariable("id") Long id) {
+    public RsData<AnswerArticleResponse> delete(@PathVariable("id") Long id, @AuthenticationPrincipal SecurityUser user) {
+        SiteUser writer = this.userService.findByUsername(user.getUsername()).orElseThrow();
         Answer answer = this.answerService.getAnswerById(id);
-        this.answerService.delete(answer);
+        this.answerService.delete(writer, answer);
         return RsData.of("5", "댓글 삭제 성공", new AnswerArticleResponse(answer));
     }
 }

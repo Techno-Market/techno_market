@@ -124,6 +124,7 @@
 				`http://localhost:8080/api/articles/${data.data.sellArticle.id}`,
 				{
 					method: 'PATCH',
+					credentials: 'include',
 					body: formData
 				}
 			);

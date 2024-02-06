@@ -32,14 +32,20 @@ public class AnswerService {
                 .build();
         return this.answerRepository.save(answer);
     }
-    public Answer modify(Answer answer, String comment) {
-        answer.setComment(comment);
-        answer.setModifyDate(LocalDateTime.now());
-        this.answerRepository.save(answer);
+    public Answer modify(SiteUser writer, Answer answer, String comment) {
+        if (writer.getId().equals(answer.getUser().getId())){
+            answer.setComment(comment);
+            answer.setModifyDate(LocalDateTime.now());
+            this.answerRepository.save(answer);
+        } else {
+            throw new RuntimeException("유저가 일치하지 않습니다");
+        }
         return answer;
     }
-    public Answer delete(Answer answer) {
-        this.answerRepository.delete(answer);
+    public Answer delete(SiteUser user, Answer answer) {
+        if (user.getUsername().equals(answer.getUser().getUsername())) {
+           this.answerRepository.delete(answer);
+        }
         return answer;
     }
 }
