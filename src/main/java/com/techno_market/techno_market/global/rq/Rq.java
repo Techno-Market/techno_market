@@ -69,7 +69,7 @@ public class Rq {
         return cookie.getValue();
     }
 
-    private long getCookieAsLong(String name, int defaultValue) {
+    private long getCookieAsLong(String name, long defaultValue) {
         String value = getCookieValue(name, null);
 
         if (value == null) {

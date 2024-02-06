@@ -18,7 +18,7 @@ public class AuthTokenService {
     public String genToken(SiteUser user, long expireSeconds) {
         Claims claims = Jwts
                 .claims()
-                .add("id", user.getId() + "")
+                .add("id", user.getId())
                 .add("username", user.getUsername())
                 .add("authorities", user.getAuthoritiesAsStringList())
                 .build();
@@ -47,7 +47,7 @@ public class AuthTokenService {
                 .setSigningKey(AppConfig.getJwtSecretKey())
                 .build()
                 .parseClaimsJws(token)
-                .getPayload();
+                .getBody();
 
         return Map.of(
                 "id", payload.get("id", Long.class),
