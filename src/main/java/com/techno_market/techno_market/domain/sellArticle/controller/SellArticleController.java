@@ -6,6 +6,8 @@ import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateD
 import com.techno_market.techno_market.domain.sellArticle.entity.CategoryType;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.sellArticle.service.SellArticleService;
+import com.techno_market.techno_market.domain.user.entity.SiteUser;
+import com.techno_market.techno_market.domain.user.service.UserService;
 import com.techno_market.techno_market.global.rsData.RsData;
 import com.techno_market.techno_market.global.security.SecurityUser;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +32,7 @@ import java.util.List;
 public class SellArticleController {
     private final SellArticleService sellArticleService;
     private final PhotoService fileService;
+    private final UserService userService;
 
     @AllArgsConstructor
     @Getter
@@ -80,10 +84,11 @@ public class SellArticleController {
     }
 
     @PostMapping("")
-    public RsData<SellArticleCreateDto> write(@Valid WriteRequest writeRequest) throws Exception{
+    public RsData<SellArticleCreateDto> write(@Valid WriteRequest writeRequest, @AuthenticationPrincipal SecurityUser user) throws Exception{
+        SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
         RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(),
                 writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getDirectly(),
-                writeRequest.getParcel(), writeRequest.getPostImage());
+                writeRequest.getParcel(), writeRequest.getPostImage(),author);
         return rsArticle;
     }
 

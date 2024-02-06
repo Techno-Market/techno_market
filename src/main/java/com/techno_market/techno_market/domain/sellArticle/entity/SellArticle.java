@@ -44,7 +44,6 @@ public class SellArticle {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id")  // user_id라는 컬럼으로 Join
     private SiteUser author;
 
     @CreatedDate
@@ -63,15 +62,5 @@ public class SellArticle {
     }
     public void increaseViewCount() {
         this.viewCount++;
-    }
-
-    public void setUser(SiteUser user) {
-        this.author = user;
-
-        // 유저에게도 이 게시글이 추가되어 있지 않은 경우
-        if (!user.getSellArticles().contains(this)) {
-            // 유저에게 이 게시글을 추가
-            user.addSellArticle(this);
-        }
     }
 }

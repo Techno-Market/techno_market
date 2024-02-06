@@ -45,14 +45,4 @@ public class SiteUser extends BaseEntity {
     public List<String> getAuthoritiesAsStringList() {
         return List.of("ROLE_MEMBER");
     }
-
-    public void addSellArticle(SellArticle sellArticle) {
-        this.sellArticles.add(sellArticle);
-
-        // 유저에게 이 게시글이 설정되어 있지 않은 경우
-        if (sellArticle.getAuthor() != this) {
-            // 게시글에 이 유저를 설정
-            sellArticle.setAuthor(this);
-        }
-    }
 }

@@ -29,6 +29,7 @@
     async function deleteArticle() {
         try {
             const response = await fetch(`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`, {
+				credentials: 'include',
                 method: 'DELETE',
             });
 
@@ -163,7 +164,7 @@
 				<h2 class="c222 tb f32 mt20 flex aib">
 					{data.result.data.sellArticle.price.toLocaleString()}<span class="tl f24">원</span>
 				</h2>
-				<span class="c222 f16 tm mt20">빵빵이 판매자</span>
+				<span class="c222 f16 tm mt20">{data.result.data.sellArticle.author.nickName}</span>
 				<p
 					class="f16 c777 lh160 mt20 bsb pt16 pr16 pb16 pl16"
 					style="border-top: 1px solid #dbdbdb; border-bottom: 1px solid #dbdbdb;"

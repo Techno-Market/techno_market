@@ -42,7 +42,7 @@ public class SellArticleService {
     private final UserRepository userRepository;
     @Transactional
     public RsData<SellArticleCreateDto> create(String subject, String content, int price, String area, String category, Boolean directly,
-                                               Boolean parcel, List<MultipartFile> postImage) throws Exception {
+                                               Boolean parcel, List<MultipartFile> postImage,SiteUser user) throws Exception {
         SellArticle a = new SellArticle();
         a.setSubject(subject);
         a.setContent(content);
@@ -58,6 +58,7 @@ public class SellArticleService {
                 a.addPhoto(photoRepository.save(photo));
             }
         }
+        a.setAuthor(user);
 
         this.sellArticleRepository.save(a).getId();
 
