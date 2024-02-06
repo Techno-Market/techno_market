@@ -6,9 +6,12 @@ import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateD
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.user.dto.UserDto;
 import com.techno_market.techno_market.domain.user.entity.SiteUser;
+import com.techno_market.techno_market.domain.user.service.AuthTokenService;
 import com.techno_market.techno_market.domain.user.service.UserService;
+import com.techno_market.techno_market.global.exceptions.GlobalException;
 import com.techno_market.techno_market.global.rq.Rq;
 import com.techno_market.techno_market.global.rsData.RsData;
+import com.techno_market.techno_market.global.security.SecurityUser;
 import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,22 +75,41 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public RsData<LoginResponseBody> login(
-            @Valid @RequestBody LoginRequestBody body
-    ) {
-        RsData<UserService.AuthAndMakeTokensResponseBody> authAndMakeTokensRs = userService.authAndMakeTokens(body.getUsername(), body.getPassword());
+    public RsData<LoginResponseBody> login(@Valid @RequestBody LoginRequestBody body) {
+        try {
+            RsData<UserService.AuthAndMakeTokensResponseBody> authAndMakeTokensRs =
+                    userService.authAndMakeTokens(body.getUsername(), body.getPassword());
 
-        rq.setCrossDomainCookie("refreshToken", authAndMakeTokensRs.getData().getRefreshToken());
-        rq.setCrossDomainCookie("accessToken", authAndMakeTokensRs.getData().getAccessToken());
+            rq.setCrossDomainCookie("refreshToken", authAndMakeTokensRs.getData().getRefreshToken());
+            rq.setCrossDomainCookie("accessToken", authAndMakeTokensRs.getData().getAccessToken());
 
+            return RsData.of(
+                    authAndMakeTokensRs.getResultCode(),
+                    authAndMakeTokensRs.getMsg(),
+                    new LoginResponseBody(
+                            new UserDto(authAndMakeTokensRs.getData().getUser())
+                    )
+            );
+        } catch (GlobalException e) {
+            return RsData.of(e.getCode(), e.getMessage(), null);
+        }
+    }
+
+    @Getter
+    public static class MeResponseBody {
+        private UserDto item;
+
+        public MeResponseBody(SiteUser siteUser) {
+            this.item = new UserDto(siteUser);
+        }
+    }
+
+    @GetMapping(value = "/me")
+    public RsData<MeResponseBody> getMe() {
         return RsData.of(
-                authAndMakeTokensRs.getResultCode(),
-                authAndMakeTokensRs.getMsg(),
-                new LoginResponseBody(
-                        new UserDto(
-                                authAndMakeTokensRs.getData().getUser()
-                        )
-                )
+                "200",
+                "내 정보 가져오기 성공",
+                new MeResponseBody(rq.getMember())
         );
     }
 }
