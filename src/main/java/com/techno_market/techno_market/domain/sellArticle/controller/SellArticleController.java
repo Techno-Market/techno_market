@@ -80,26 +80,11 @@ public class SellArticleController {
     }
 
     @PostMapping("")
-    public RsData<SellArticleCreateDto> write(@Valid WriteRequest writeRequest) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication.getPrincipal() instanceof SecurityUser) {
-            SecurityUser loginUser = (SecurityUser) authentication.getPrincipal();
-
-            // 게시글 작성 권한 검증
-            if (!sellArticleService.isCurrentUserAuthorized(null, loginUser.getUsername())) {
-                return RsData.of("4030", "인가되지 않은 사용자입니다.");
-            }
-
-            RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(),
-                    writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getDirectly(),
-                    writeRequest.getParcel(), writeRequest.getPostImage(), loginUser.getUsername());
-
-            return rsArticle;
-        } else {
-            // Principal이 SecurityUser가 아닌 경우에 대한 처리
-            return RsData.of("500", "인증된 사용자 정보를 찾을 수 없습니다.");
-        }
+    public RsData<SellArticleCreateDto> write(@Valid WriteRequest writeRequest) throws Exception{
+        RsData<SellArticleCreateDto> rsArticle = this.sellArticleService.create(writeRequest.getSubject(), writeRequest.getContent(),
+                writeRequest.getPrice(), writeRequest.getArea(), writeRequest.getCategory(), writeRequest.getDirectly(),
+                writeRequest.getParcel(), writeRequest.getPostImage());
+        return rsArticle;
     }
 
     @AllArgsConstructor

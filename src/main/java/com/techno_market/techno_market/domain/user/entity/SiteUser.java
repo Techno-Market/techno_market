@@ -52,7 +52,7 @@ public class SiteUser extends BaseEntity {
         // 유저에게 이 게시글이 설정되어 있지 않은 경우
         if (sellArticle.getAuthor() != this) {
             // 게시글에 이 유저를 설정
-            sellArticle.setUser(this);
+            sellArticle.setAuthor(this);
         }
     }
 }

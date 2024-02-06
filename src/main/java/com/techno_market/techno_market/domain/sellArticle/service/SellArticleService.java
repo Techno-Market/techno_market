@@ -10,6 +10,7 @@ import com.techno_market.techno_market.domain.sellArticle.repository.SellArticle
 import com.techno_market.techno_market.domain.user.entity.SiteUser;
 import com.techno_market.techno_market.domain.user.repository.UserRepository;
 import com.techno_market.techno_market.global.rsData.RsData;
+import com.techno_market.techno_market.global.security.SecurityUser;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,14 +40,9 @@ public class SellArticleService {
     private final PhotoRepository photoRepository;
     private final FileHandler fileHandler;
     private final UserRepository userRepository;
-
     @Transactional
     public RsData<SellArticleCreateDto> create(String subject, String content, int price, String area, String category, Boolean directly,
-                                               Boolean parcel, List<MultipartFile> postImage, String username) throws Exception {
-        // 사용자 정보를 통해 사용자 엔터티를 찾거나 새로 생성하여 저장
-        SiteUser user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("로그인한 사용자를 찾을 수 없습니다."));
-
+                                               Boolean parcel, List<MultipartFile> postImage) throws Exception {
         SellArticle a = new SellArticle();
         a.setSubject(subject);
         a.setContent(content);
@@ -54,17 +52,13 @@ public class SellArticleService {
         a.setDirectly(directly);
         a.setParcel(parcel);
         a.setCreateDate(LocalDateTime.now());
-
-        // 현재 로그인한 사용자와 게시물을 연결
-        a.setAuthor(user);
-
         List<Photo> photoList = fileHandler.parseFileInfo(postImage);
-
         if (!photoList.isEmpty()) {
             for (Photo photo : photoList) {
                 a.addPhoto(photoRepository.save(photo));
             }
         }
+
         this.sellArticleRepository.save(a).getId();
 
         // SellArticleDto로 변환
@@ -78,13 +72,6 @@ public class SellArticleService {
         sellArticleCreateDto.setParcel(a.getParcel());
 
         return RsData.of("2", "게시물이 생성되었습니다.", sellArticleCreateDto);
-    }
-
-    public boolean isCurrentUserAuthorized(Long sellArticleId, String currentUsername) {
-        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
-                .orElseThrow(() -> new RuntimeException("해당 ID의 게시물을 찾을 수 없습니다."));
-
-        return sellArticle.getAuthor().getUsername().equals(currentUsername);
     }
 
     public Page<SellArticle> getList(int page) {
