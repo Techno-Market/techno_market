@@ -7,21 +7,22 @@
         fetch('http://localhost:8080/api/user/me', {
             credentials: "include"
         })
-            .then(response => response.json())
-            .then(data => {
-                // 성공시 데이터 member 에 담기
-                if ( data ) {
-                    console.log(data.data?.item);
-                    member = data.data?.item;
-                }
-            })
-            .catch(error => {
-                // 실패시 처리
-                console.error(error);
-            });
+        .then(response => response.json())
+        .then(data => {
+            // 성공시 데이터 member 에 담기
+            if ( data ) {
+                member = data.data?.item;
+                nickName = member.nickName;
+            }
+        })
+        .catch(error => {
+            // 실패시 처리
+            console.error(error);
+        });
     })
 
-    let nickName = "";
+    let nickName ="";
+    let password = "";
     let password1 = "";
     let password2 = "";
 
@@ -29,8 +30,13 @@
     let password1Empty = false;
     let password2Empty = false;
 
-    let nickNameDuplicationSuccess = false;
+    let nickNameDuplicationSuccess = true;
     let nickNameDuplicationFail = false;
+
+    let passwordCheckSuccess = false;
+    let passwordCheckFail = false;
+
+    $: isDisabled = !passwordCheckSuccess;
 
     let passwordMatchSuccess = false;
     let passwordMatchFail = false;
@@ -67,24 +73,23 @@
 
     //기존 패스워스 검사
     const handlePasswordInput = async () => {
-
-        let passwordValue = document.querySelector('#password').value;
-
-        let response = await fetch(`http://localhost:8080/api/user/passwordCheck/${encodeURIComponent(nickNameValue)}`);
+            const response = await fetch('http://localhost:8080/api/user/passwordCheck', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include",
+            body: JSON.stringify({password}),
+        });
         let result = await response.json();
 
-        if (nickNameValue === member.nickName) {
-            nickNameDuplicationSuccess = true;
-            nickNameDuplicationFail = false;
+        if (result.data) {
+            passwordCheckSuccess = true;
+            passwordCheckFail = false;
         }
         else {
-            if (result.data) {
-            nickNameDuplicationSuccess = false;
-            nickNameDuplicationFail = true;
-            } else {
-                nickNameDuplicationSuccess = true;
-                nickNameDuplicationFail = false;
-            }
+            passwordCheckSuccess = false;
+            passwordCheckFail = true;
         }
     };
 
@@ -102,36 +107,30 @@
         }
     };
 		
+
     const submitSignupFormModify = async (event) => {
         event.preventDefault();
-
-        //빈 공백 유효성 검사
 
         if (nickName.trim() === "") nickNameEmpty = true;
         else nickNameEmpty = false;
 
-        if (password1.trim() === "") password1Empty = true;
-        else password1Empty = false;
+        if (passwordCheckSuccess) {
+            if (password1.trim() === "") password1Empty = true;
+            else password1Empty = false;
 
-        if (password2.trim() === "") password2Empty = true;
-        else password2Empty = false;
+            if (password2.trim() === "") password2Empty = true;
+            else password2Empty = false;
+        }
 
-        if (email.trim() === "") emailEmpty = true;
-        else emailEmpty = false;
-
-        if (!nickNameEmpty && !password1Empty && !password2Empty) {
+        if (nickNameDuplicationSuccess && !nickNameEmpty && !password1Empty && !password2Empty && passwordMatchSuccess) {
             try {
                 const data = {
-                    username,
                     nickName,
                     password: password1,
-                    email,
-                    name,
-                    birthDate,
                 };
-
-                const response = await fetch('http://localhost:8080/api/user/signup', {
-                    method: 'POST',
+                const response = await fetch('http://localhost:8080/api/user/mypage', {
+                    method: 'PATCH',
+                    credentials: "include",
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -141,12 +140,12 @@
                 if (response.ok) {
                     const responseData = await response.json();
                     console.log(responseData);
-                    window.alert('회원가입이 완료되었습니다.');
-                    window.location.href = 'http://localhost:5173/login';
+                    window.alert('수정이 완료되었습니다.');
+                    // window.location.href = 'http://localhost:5173/';
                 } else {
                     const responseData = await response.json();
                     console.error(responseData);
-                    window.alert('회원가입이 실패했습니다.');
+                    window.alert('수정이 실패했습니다.');
                 }
             } catch (error) {
                 console.error('Error submitting form:', error);
@@ -172,7 +171,6 @@
     <div class="con w100per">
         <h1 class="title-text lh120 tb tac">내 정보</h1>
         <form on:submit|preventDefault={submitSignupFormModify}>
-        <form>
             <div class="signup-box flex fdc">
                 <ul class="flex fdc g36">
                     <li>
@@ -184,7 +182,7 @@
                     <li>
                         <h3 class="c333 f18 tb mb16">닉네임<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="닉네임" id="nickName" value="{member.nickName}" on:input={handleNickNameInput}>
+                            <input type="text" placeholder="닉네임" id="nickName" bind:value={nickName} on:input={handleNickNameInput}>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${nickNameEmpty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
@@ -197,27 +195,26 @@
                         <div class="input-type-1">
                             <div class="input-btn-box flex g8">
                                 <div class="input-type-1">
-                                    <input type="password" placeholder="비밀번호" id="password">
+                                    <input type="password" placeholder="비밀번호" bind:value={password}>
                                 </div>
-                                <button type="button" class="btn-type-2">확인</button>
+                                <button type="button" class="btn-type-2" on:click={handlePasswordInput}>확인</button>
                             </div>
                         </div>
                         <div class="error-text-box wsn flex g8">
-                            <span class="error-text f14 cCC0000 mt8">필수 입력 항목 입니다.</span>
-                            <span class="error-text f14 cCC0000 mt8">비밀번호가 일치하지 않습니다.</span>
-                            <span class="confirm-text f14 c009521 mt8">비밀번호가 일치합니다.</span>
+                            <span class={`error-text f14 cCC0000 mt8 ${passwordCheckFail ? 'active' : ''}`}>비밀번호가 일치하지 않습니다.</span>
+                            <span class={`confirm-text f14 c009521 mt8 ${passwordCheckSuccess ? 'active' : ''}`}>비밀번호가 일치합니다.</span>
                         </div>
                     </li>
                     <li>
                         <h3 class="c333 f18 tb mb16">새로운 비밀번호<span class="tb cCC0000 inblock">*</span></h3>
                         <div class="input-type-1">
-                            <input type="password" placeholder="비밀번호" bind:value={password1} on:input={() => password1Empty = false}>
+                            <input type="password" placeholder="비밀번호" bind:value={password1} on:input={() => password1Empty = false} disabled={isDisabled}>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${password1Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>
                         </div>
                         <div class="input-type-1 mt8">
-                            <input type="password" placeholder="비밀번호 확인" bind:value={password2} on:input={handlePassword2Input}>
+                            <input type="password" placeholder="비밀번호 확인" bind:value={password2} on:input={handlePassword2Input} disabled={isDisabled}>
                         </div>
                         <div class="error-text-box wsn flex g8">
                             <span class={`error-text f14 cCC0000 mt8 ${password2Empty ? 'active' : ''}`}>필수 입력 항목 입니다.</span>

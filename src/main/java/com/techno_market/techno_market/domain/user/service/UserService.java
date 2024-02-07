@@ -8,6 +8,7 @@ import com.techno_market.techno_market.global.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -129,5 +130,23 @@ public class UserService {
     @Transactional
     public String genAccessToken(SiteUser user) {
         return authTokenService.genAccessToken(user);
+    }
+
+
+    public RsData<Boolean> isPasswordCheck(SiteUser siteUser, String password) {
+        boolean passwordCheck = passwordEncoder.matches(password, siteUser.getPassword());
+        if (passwordCheck) {
+            return RsData.of("2", "패스워트 일치", true);
+        } else {
+            return RsData.of("3", "패스워드 불일치", false);
+        }
+    }
+
+    @Transactional
+    public RsData<SiteUser> modifi(SiteUser author, String nickName, String password) {
+        author.setNickName(nickName);
+        author.setPassword(passwordEncoder.encode(password));
+        userRepository.save(author);
+        return RsData.of("1", "수정 성공", author);
     }
 }

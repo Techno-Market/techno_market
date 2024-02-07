@@ -25,20 +25,19 @@
         fetch('http://localhost:8080/api/user/me', {
             credentials: "include"
         })
-            .then(response => response.json())
-            .then(data => {
-                // 성공시 데이터 member 에 담기
-                if ( data ) {
-                    console.log(data.data?.item);
-                    member = data.data?.item;
-                    if (member) isLogin = true;
-                    else isLogin = false;
-                }
-            })
-            .catch(error => {
-                // 실패시 처리
-                console.error(error);
-            });
+        .then(response => response.json())
+        .then(data => {
+            // 성공시 데이터 member 에 담기
+            if ( data ) {
+                member = data.data?.item;
+                if (member) isLogin = true;
+                else isLogin = false;
+            }
+        })
+        .catch(error => {
+            // 실패시 처리
+            console.error(error);
+        });
     })
 </script>
 <header class="header-area w100per bfff fixed zi5 xy-tl">
