@@ -2,7 +2,11 @@
 	export let data;
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
+	onMount(() => {
+		init();
+	})
 	function displayedAt(createdAt) {
 		const milliSeconds = new Date() - createdAt;
 		const seconds = milliSeconds / 1000;
@@ -62,6 +66,45 @@
 			console.error('Error fetching data:', error);
 		}
 	}
+
+	let isFavorited = false;
+	// UI 업데이트 함수 (찜 여부에 따라 하트 이미지 업데이트 등의 작업을 수행)
+	function updateUI(articleId) {
+    const heartImage = document.getElementById(`heartImage_${articleId}`);
+    const article = data.data.articles.content.find(article => article.id === articleId);
+
+    if (heartImage && article) {
+        heartImage.src = article.isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg";
+    }
+}
+	function updateFavorite(articleId) {
+		const article = data.data.articles.content.find(article => article.id === articleId);
+		if (article) {
+			article.isFavorited = !article.isFavorited;
+			updateUI(article.id);
+			// 여기서 API 호출로 찜 상태 업데이트를 수행할 수도 있습니다.
+		}
+	}
+
+	async function init() {
+		try {
+        for (const article of data.data.articles.content) {
+            const response = await fetch(`http://localhost:8080/api/wishlists/favorites/${article.id}`, {
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                article.isFavorited = responseData.isFavorited;
+                updateUI(article.id); // 각 게시물의 UI를 업데이트합니다.
+            } else {
+                console.error(`Error fetching user favorites for article ${article.id}:`, response.statusText);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching user favorites:', error);
+    }
+}
 </script>
 
 <div class="sub-cnt-area w100per rel zi1">
@@ -77,12 +120,8 @@
 									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
-								<button
-									class="favor-box img-box w24 abs"
-									id="favor_btn"
-									style="top: 12px; right: 12px;"
-								>
-									<img src="/img/ico_heart.svg" alt="" />
+								<button class="favor-box img-box w24 abs" id={`favor_btn_${article.id}`} style="top: 12px; right: 12px;" on:click={() => updateFavorite(article.id)}>
+									<img id={`heartImage_${article.id}`} src={article.isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg"} alt="" />
 								</button>
 							</div>
 						{/if}

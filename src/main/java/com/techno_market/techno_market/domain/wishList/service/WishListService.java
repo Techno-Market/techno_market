@@ -25,39 +25,32 @@ public class WishListService {
     }
 
     @Transactional
-    public void toggleFavorite(Long sellArticleId, String username) {
-        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
-                .orElseThrow(() -> new RuntimeException("Matching not found with id: " + sellArticleId));
+    public boolean toggleFavorite(Long articleId, String username) {
+        SellArticle sellArticle = sellArticleRepository.findById(articleId)
+                .orElseThrow(() -> new RuntimeException("Matching not found with id: " + articleId));
 
-        WishList wishList = wishListRepository.findBySiteUserUsernameAndSellArticleId(username, sellArticleId);
+        WishList wishList = wishListRepository.findBySiteUserUsernameAndSellArticleId(username, articleId);
         if (wishList != null) {
-            // Remove matching from wish list
             wishListRepository.delete(wishList);
-
-            // Remove wish list from matching
             sellArticle.getWishLists().remove(wishList);
+            return false; // 찜 해제
         } else {
-            SiteUser siteUser = this.userRepository.findByUsername(username).orElseThrow(() -> new DataNotFoundException("siteuser not found"));
+            SiteUser siteUser = this.userRepository.findByUsername(username)
+                    .orElseThrow(() -> new DataNotFoundException("siteuser not found"));
 
             wishList = new WishList();
             wishList.setSiteUser(siteUser);
-            wishList.setSellArticle(sellArticle); // Set matching relationship
+            wishList.setSellArticle(sellArticle);
             wishListRepository.save(wishList);
 
-            // Add wish list to matching
             sellArticle.getWishLists().add(wishList);
+            return true; // 찜 추가
         }
     }
-
     @Transactional
-    public void deleteWishItem(Long wishListId) {
-        // 삭제 전용 로직을 구현
-        WishList wishList = wishListRepository.findById(wishListId)
-                .orElseThrow(() -> new RuntimeException("WishList not found with id: " + wishListId));
-
-        SellArticle sellArticle = wishList.getSellArticle();
-        sellArticle.getWishLists().remove(wishList);
-        wishListRepository.delete(wishList);
+    public boolean isUserFavorited(String username, Long articleId) {
+        if (wishListRepository.existsBySiteUserUsername(username) && wishListRepository.existsBySellArticleId(articleId)) {
+            return true;
+        } else return false;
     }
-
 }

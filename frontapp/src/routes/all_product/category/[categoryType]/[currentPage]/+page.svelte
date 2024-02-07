@@ -3,6 +3,7 @@
     import axios from 'axios';
 	import { goto } from '$app/navigation';
 
+	
     function displayedAt(createdAt) {
 		const milliSeconds = new Date() - createdAt;
 		const seconds = milliSeconds / 1000;
@@ -77,37 +78,30 @@
             <p class="mt100 tac f18 c777">해당 카테고리 판매글이 없습니다.</p>
         {/if}
         <ul class="product-box flex fww">
-            {#each data.result.data.articles.content as item (item.id)}
+            {#each data.result.data.articles.content as article (article.id)}
                 <li>
-                    <a href="/sales_post/detail/{item.id}">
-                        {#if item.photo && item.photo[0]}
+                    <a href="/sales_post/detail/{article.id}">
+                        {#if article.photo && article.photo[0]}
 							<div class="img-box rel">
 								<img
-								src={`http://localhost:8080/api/gen/${item.photo[0].filePath}`}
-									alt={item.photo[0].origFileName}
+								src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
+									alt={article.photo[0].origFileName}
 								/>
-								<button
-									class="favor-box img-box w24 abs"
-									id="favor_btn"
-									style="top: 12px; right: 12px;"
-								>
-									<img src="/img/ico_heart.svg" alt="" />
-								</button>
 							</div>
 						{/if}
-                        <h3 class="c222 mt20 f16 tal">{item.subject}</h3>
+                        <h3 class="c222 mt20 f16 tal">{article.subject}</h3>
                         <div class="mt12 flex aic jcsb">
 							<h4 class="c222 f18 tb">
-								{item.price.toLocaleString()}<span class="tl f16 c777 inblock ml4">원</span>
+								{article.price.toLocaleString()}<span class="tl f16 c777 inblock ml4">원</span>
 							</h4>
-							<span class="c999 f14">{displayedAt(new Date(item.createDate))}</span>
+							<span class="c999 f14">{displayedAt(new Date(article.createDate))}</span>
 						</div>
                         <ul class="mt20 flex g4">
-                            <li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b005DE8 cfff">{item.area}</li>
-                            {#if item.directly}
+                            <li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b005DE8 cfff">{article.area}</li>
+                            {#if article.directly}
 								<li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b00A71B cfff">직거래</li>
 							{/if}
-							{#if item.parcel}
+							{#if article.parcel}
 								<li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b00A71B cfff">택배거래</li>
 							{/if}
                         </ul>

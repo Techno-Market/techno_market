@@ -19,7 +19,7 @@ public class ApiSecurityConfig {
                 .securityMatcher("/api/**")
                 .authorizeRequests(
                         authorizeRequests -> authorizeRequests
-                                .requestMatchers("/api/gen/**", "/api/user/**", "/api/articles/**", "/api/answers/**", "/api/email/**").permitAll()
+                                .requestMatchers("/api/gen/**", "/api/user/**", "/api/articles/**", "/api/answers/**", "/api/email/**",  "/api/wishlists/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .csrf(

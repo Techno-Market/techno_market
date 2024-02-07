@@ -8,6 +8,15 @@
 	let data = [];
 
 	onMount(async () => {
+		swiper = new Swiper('.popularity-product-swiper', {
+			slidesPerView: 5,
+			spaceBetween: 20,
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev'
+			}
+		});
+
 		try {
 			let res = await fetch('http://localhost:8080/api/articles', {
         credentials: 'include',
@@ -17,15 +26,6 @@
 		} catch (error) {
 			console.error('데이터를 불러오는 중 에러 발생:', error);
 		}
-
-		swiper = new Swiper('.popularity-product-swiper', {
-			slidesPerView: 5,
-			spaceBetween: 20,
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev'
-			}
-		});
 	});
 
 	function displayedAt(createdAt) {
@@ -80,13 +80,6 @@
 									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
-								<button
-									class="favor-box img-box w24 abs"
-									id="favor_btn"
-									style="top: 12px; right: 12px;"
-								>
-									<img src="/img/ico_heart.svg" alt="" />
-								</button>
 							</div>
 							<h3 class="c222 mt20 f16 tal">{article.subject}</h3>
 							<div class="mt12 flex aic jcsb">

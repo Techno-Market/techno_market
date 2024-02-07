@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface WishListRepository extends JpaRepository<WishList, Long> {
     List<WishList> findBySiteUserUsername(String username);
+    boolean existsBySiteUserUsername(String username);
+    boolean existsBySellArticleId(Long sellArticleId);
     WishList findBySiteUserUsernameAndSellArticleId(String username, Long sellArticleId);
 }

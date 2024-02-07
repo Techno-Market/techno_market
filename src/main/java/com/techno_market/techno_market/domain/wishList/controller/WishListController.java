@@ -9,7 +9,9 @@ import com.techno_market.techno_market.global.rsData.RsData;
 import com.techno_market.techno_market.global.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,22 +36,38 @@ public class WishListController {
     }
     @GetMapping("")
     public RsData<LikeResponse> wishlist(@AuthenticationPrincipal SecurityUser user) {
-        SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
-        List<WishList> wishList = wishListService.getWishListByUsername(siteUser.getUsername());
-        return RsData.of("1", "찜목록 불러오기 성공", new LikeResponse(wishList));
+            SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
+            List<WishList> wishLists = wishListService.getWishListByUsername(siteUser.getUsername());
+
+        return RsData.of("1", "리스트 출력 성공", new LikeResponse(wishLists));
+    }
+    @GetMapping("/favorites/{articleId}")
+    public ResponseEntity<Map<String, Boolean>> getUserFavorites(@PathVariable(name = "articleId") Long articleId, @AuthenticationPrincipal SecurityUser user) {
+        try {
+            SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
+            boolean isFavorited = wishListService.isUserFavorited(siteUser.getUsername(), articleId);
+
+            Map<String, Boolean> responseMap = Collections.singletonMap("isFavorited", isFavorited);
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", false));
+        }
     }
 
 
-    @PostMapping("/toggleFavorite/{sellArticleId}")
-    public ResponseEntity<String> toggleFavorite(@PathVariable(name = "sellArticleId") Long sellArticleId, @AuthenticationPrincipal SecurityUser user) {
-        SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
-        wishListService.toggleFavorite(sellArticleId, siteUser.getUsername());
-        return ResponseEntity.ok("Toggle successful");
+    @PostMapping("/toggleFavorite/{articleId}")
+    public ResponseEntity<Map<String, String>> toggleFavorite(@PathVariable(name = "articleId") Long articleId, @AuthenticationPrincipal SecurityUser user) {
+        try {
+            SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
+            boolean isToggled = wishListService.toggleFavorite(articleId, siteUser.getUsername());
+
+            Map<String, String> responseMap = new HashMap<>();
+            responseMap.put("message", isToggled ? "찜 추가 성공" : "찜 해제 성공");
+
+            return ResponseEntity.ok(responseMap);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "에러 발생: " + e.getMessage()));
+        }
     }
 
-    @PostMapping("/deleteWishList/{wishListId}")
-    public ResponseEntity<String> deleteWishItem(@PathVariable(name = "wishListId") Long wishListId) {
-        wishListService.deleteWishItem(wishListId);
-        return ResponseEntity.ok("Delete successful");
-    }
 }
