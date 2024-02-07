@@ -342,7 +342,7 @@
 		
 		<!-- 댓글 영역 -->
 		<div class="answer-area bsb mt60 pt60" style="border-top: 1px solid #dbdbdb">
-			<h3 class="c222 f18 tb">댓글 0개</h3>
+			<h3 class="c222 f18 tb">댓글 - {data.result2.data.answers.length}개</h3>
 			<ul class="answer-box flex fdc mt8">
 				{#each data.result2.data.answers as ans}
 					{#if editingAnswer === ans}
@@ -364,10 +364,12 @@
 						<li class="answer-box rel">
 							<div class="flex aic jcsb">
 								<h3 class="c222 f15 tb">{ans.user.nickName}</h3>
+								{#if username && ans.user.username === username}
 								<div class="flex g8 f12 c999">
 									<button on:click={() => modifyAnswer(ans)} class="">수정</button>
 									<button on:click={deleteAnswer(ans)} class="">삭제</button>
 								</div>
+								{/if}
 							</div>
 							<p class="c333 f14 mt8">{ans.comment}</p>
 							<span class="mt8 c999 f12">{displayedAt(new Date(ans.createDate))}</span>
