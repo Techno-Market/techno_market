@@ -67,12 +67,14 @@
 
 <div class="sub-cnt-area w100per rel zi1">
     <div class="con w100per">
-		<h1 class="title-text lh120 tb">Category - '{data.categoryType}' - {data.result.data.articles.totalElements}개의 상품</h1>
+		<h1 class="title-text lh120 tb flex aic g8">{data.categoryType}<span class="tb f16 c777">{data.result.data.articles.totalElements}개의 상품</span></h1>
+		<div class="flex aic jce g16 f14 c999">
+			<a href="/all_product/category/{data.categoryType}/0/priceDesc">가격 높은 순↑</a>
+			<a href="/all_product/category/{data.categoryType}/0/priceAsc">가격 낮은 순↓</a>
+		</div>
 		{#if data.result.data.articles.content.length === 0}
-            <h2 class="title-text lh120 tb">카테고리 결과가 없습니다..</h2>
+            <p class="mt100 tac f18 c777">해당 카테고리 판매글이 없습니다.</p>
         {/if}
-		<a href="/all_product/category/{data.categoryType}/0/priceDesc">가격 높은 순</a>
-		<a href="/all_product/category/{data.categoryType}/0/priceAsc">가격 낮은 순</a>
         <ul class="product-box flex fww">
             {#each data.result.data.articles.content as item (item.id)}
                 <li>
