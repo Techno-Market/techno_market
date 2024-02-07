@@ -87,10 +87,10 @@
                             <a href="">나의 판매글</a>
                         </li>
                         <li>
-                            <a href="/wishlist" class="c333 f14 tm">찜 목록</a>
+                            <a href="/wishlist">찜 목록</a>
                         </li>
                         <li>
-                            <a href="/" on:click={() => logout()} class="c333 f14 tm">로그아웃</a>
+                            <a href="/" on:click={() => logout()}>로그아웃</a>
                         </li>
                     {:else}
                         <li>

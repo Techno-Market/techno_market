@@ -20,6 +20,7 @@ public class UserDto {
     private String username;
     private String nickName;
     private String name;
+    private String email;
     private List<String> authorities;
 
     public UserDto(SiteUser user) {
@@ -30,6 +31,7 @@ public class UserDto {
         this.username = user.getUsername();
         this.nickName = user.getNickName();
         this.name = user.getName();
+        this.email = user.getEmail();
         this.authorities = user.getAuthoritiesAsStringList();
     }
 }

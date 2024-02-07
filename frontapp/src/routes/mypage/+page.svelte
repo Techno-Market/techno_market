@@ -141,7 +141,7 @@
                     const responseData = await response.json();
                     console.log(responseData);
                     window.alert('수정이 완료되었습니다.');
-                    // window.location.href = 'http://localhost:5173/';
+                    window.location.href = 'http://localhost:5173/';
                 } else {
                     const responseData = await response.json();
                     console.error(responseData);
@@ -222,12 +222,12 @@
                             <span class={`confirm-text f14 c009521 mt8 ${passwordMatchSuccess ? 'active' : ''}`}>비밀번호가 일치합니다.</span>
                         </div>
                     </li>
-                    <!-- <li>
-                        <h3 class="c333 f18 tb mb16">이메일<span class="tb cCC0000 inblock">*</span></h3>
+                    <li>
+                        <h3 class="c333 f18 tb mb16">이메일</h3>
                         <div class="input-type-1">
-                            <input type="text" placeholder="이메일" bind:value={email} disabled>
+                            <input type="text" placeholder="이메일" value="{member.email}" disabled>
                         </div>
-                    </li> -->
+                    </li>
                     <li>
                         <h3 class="c333 f18 tb mb16">이름</h3>
                         <div class="input-type-1">
