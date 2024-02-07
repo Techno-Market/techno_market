@@ -7,7 +7,10 @@ import com.techno_market.techno_market.domain.sellArticle.dto.SellArticleCreateD
 import com.techno_market.techno_market.domain.sellArticle.entity.CategoryType;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.sellArticle.repository.SellArticleRepository;
+import com.techno_market.techno_market.domain.user.entity.SiteUser;
+import com.techno_market.techno_market.domain.user.repository.UserRepository;
 import com.techno_market.techno_market.global.rsData.RsData;
+import com.techno_market.techno_market.global.security.SecurityUser;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -19,6 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,10 +39,10 @@ public class SellArticleService {
     private final SellArticleRepository sellArticleRepository;
     private final PhotoRepository photoRepository;
     private final FileHandler fileHandler;
-
+    private final UserRepository userRepository;
     @Transactional
     public RsData<SellArticleCreateDto> create(String subject, String content, int price, String area, String category, Boolean directly,
-                                               Boolean parcel, List<MultipartFile> postImage) throws Exception {
+                                               Boolean parcel, List<MultipartFile> postImage,SiteUser user) throws Exception {
         SellArticle a = new SellArticle();
         a.setSubject(subject);
         a.setContent(content);
@@ -47,14 +52,14 @@ public class SellArticleService {
         a.setDirectly(directly);
         a.setParcel(parcel);
         a.setCreateDate(LocalDateTime.now());
-
         List<Photo> photoList = fileHandler.parseFileInfo(postImage);
-
         if (!photoList.isEmpty()) {
             for (Photo photo : photoList) {
                 a.addPhoto(photoRepository.save(photo));
             }
         }
+        a.setAuthor(user);
+
         this.sellArticleRepository.save(a).getId();
 
         // SellArticleDto로 변환
@@ -88,10 +93,9 @@ public class SellArticleService {
         return sellArticle;
     }
 
-    public RsData<SellArticle> modify(Long sellArticleId, String subject, String content, int price, String area, String category,
+    public RsData<SellArticle> modify(SiteUser user, SellArticle sellArticle,String subject, String content, int price, String area, String category,
                                       Boolean directly, Boolean parcel, List<MultipartFile> postImage) throws  Exception {
-        SellArticle sellArticle = sellArticleRepository.findById(sellArticleId)
-                .orElseThrow(() -> new Exception("해당 ID의 게시물을 찾을 수 없습니다."));
+        if (user.getId().equals(sellArticle.getAuthor().getId())){
 
         sellArticle.setSubject(subject);
         sellArticle.setContent(content);
@@ -108,13 +112,18 @@ public class SellArticleService {
                 sellArticle.addPhoto(photoRepository.save(photo));
             }
         }
+        } else {
+            throw new RuntimeException("유저가 일치하지 않습니다");
+        }
         sellArticleRepository.save(sellArticle);
 
         return RsData.of("3", "게시물이 수정되었습니다.", sellArticle);
     }
 
-    public RsData<SellArticle> delete(SellArticle sellArticle) {
-        this.sellArticleRepository.delete(sellArticle);
+    public RsData<SellArticle> delete(SiteUser user, SellArticle sellArticle) {
+        if (user.getUsername().equals(sellArticle.getAuthor().getUsername())) {
+            this.sellArticleRepository.delete(sellArticle);
+        }
         return RsData.of("3", "게시물이 삭제되었습니다.", sellArticle);
     }
     public Page<SellArticle> getSearchList(String kw, int page) {

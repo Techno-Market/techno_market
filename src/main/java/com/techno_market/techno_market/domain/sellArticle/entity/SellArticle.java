@@ -1,7 +1,9 @@
 package com.techno_market.techno_market.domain.sellArticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.techno_market.techno_market.domain.answerArticle.entity.Answer;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
+import com.techno_market.techno_market.domain.user.entity.SiteUser;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.*;
@@ -41,6 +43,14 @@ public class SellArticle {
     @JsonManagedReference
     private List<Photo> photo = new ArrayList<>();
 
+
+    @ManyToOne
+    private SiteUser author;
+
+    @OneToMany( mappedBy = "sellArticle",
+            cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Answer> answers;
 
     @CreatedDate
     private LocalDateTime createDate;
