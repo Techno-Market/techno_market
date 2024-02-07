@@ -222,7 +222,9 @@ public class SellArticleService {
                 if (StringUtils.isNotBlank(kw) || categoryType == CategoryType.ALL) {
                     predicates.add(cb.or(
                             cb.like(a.get("subject"), "%" + kw + "%"),
-                            cb.like(a.get("area"), "%" + kw + "%")
+                            cb.like(a.get("area"), "%" + kw + "%"),
+                            cb.like(a.get("category"), "%" + kw + "%"),
+                            cb.like(a.get("content"), "%" + kw + "%")
                     ));
                 }
 
