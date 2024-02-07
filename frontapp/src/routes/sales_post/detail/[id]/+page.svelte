@@ -402,12 +402,6 @@
 					<ul class="flex aic g16">
 						<li class="flex aic g4">
 							<span class="img-box w20">
-								<img src="/img/ico_heart_777.svg" alt="" />
-							</span>
-							<span class="c777 f14">0</span>
-						</li>
-						<li class="flex aic g4">
-							<span class="img-box w20">
 								<img src="/img/ico_eye_777.svg" alt="" />
 							</span>
 							<span class="c777 f14">{data.result.data.sellArticle.viewCount}</span>

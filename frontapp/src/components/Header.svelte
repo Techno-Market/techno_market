@@ -84,9 +84,6 @@
                             <a href="/mypage">내 정보</a>
                         </li>
                         <li>
-                            <a href="">나의 판매글</a>
-                        </li>
-                        <li>
                             <a href="/wishlist">찜 목록</a>
                         </li>
                         <li>
