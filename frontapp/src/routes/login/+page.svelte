@@ -61,7 +61,7 @@
                     <span class="line"></span>
                     <a href="" class="c777 f14">회원가입</a>
                 </div>
-                <div class="sns-login-box mt70">
+                <!-- <div class="sns-login-box mt70">
                     <h3 class="tm c333 f16 tac rel">SNS 계정으로 로그인</h3>
                     <ul class="sns-box flex aic jcc mt40 g50">
                         <li class="w36">
@@ -80,7 +80,7 @@
                             </a>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

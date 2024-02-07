@@ -247,8 +247,20 @@
     };
 </script>
 
+<style>
+	.answer-box > li {
+		box-sizing: border-box;
+		padding: 20px 0;
+	}
+	.answer-box > li:not(:first-child) {
+		border-top: 1px solid #dbdbdb;
+	}
+</style>
+
 <div class="product-detail-area bsb w100per rel zi2 pt60">
 	<div class="con w100per">
+
+		<!-- 상품 정보 영역 -->
 		<div class="product-infor-box-1 flex jcsb g40">
 			<div class="product-detail-swiper-box wh100per rel zi1">
 				<div class="swiper-container">
@@ -274,7 +286,9 @@
 					<div class="swiper-button-prev" on:click={() => swiper.slidePrev()}>
 						<img src="/img/arrow_prev_point_030095.svg" alt="Prev" />
 					</div>
-					<div class="swiper-pagination"></div>
+					<button class="favor-box img-box w40 abs zi2" id="favor_btn" style="top: 20px; right: 20px;">
+						<img src="/img/ico_heart.svg" alt="">
+					</button>
 				</div>
 			</div>
 			<div class="product-text-box">
@@ -297,12 +311,6 @@
 						</li>
 						<li class="flex aic g4">
 							<span class="img-box w20">
-								<img src="/img/ico_chat_777.svg" alt="" />
-							</span>
-							<span class="c777 f14">0</span>
-						</li>
-						<li class="flex aic g4">
-							<span class="img-box w20">
 								<img src="/img/ico_eye_777.svg" alt="" />
 							</span>
 							<span class="c777 f14">{data.result.data.sellArticle.viewCount}</span>
@@ -317,66 +325,66 @@
 				<span class="c222 f16 tm mt20">{data.result.data.sellArticle.author.nickName}</span>
 				<p
 					class="f16 c777 lh160 mt20 bsb pt16 pr16 pb16 pl16"
-					style="border-top: 1px solid #dbdbdb; border-bottom: 1px solid #dbdbdb;"
+					style="border-top: 1px solid #dbdbdb;"
 				>
 					{@html data.result.data.sellArticle.content.replace(/\r\n/g, '<br>')}
 				</p>
-
-				<!--본인 작성 글이 아닐 경우-->
-				<div class="flex aic g12 bsb pl16 pr16 mt20">
-					<button class="favor-box img-box w32" id="favor_btn">
-						<img src="/img/ico_heart.svg" alt="" />
-					</button>
-					<a href="/" class="btn-type-1" style="width: calc(100% - 44px);">채팅하기</a>
-				</div>
 				<!--본인 작성 글-->
 				{#if username && data.result.data.sellArticle.author.username === username}
-					<div class="flex aic g12 bsb pl16 pr16 mt20">
-						
+					<div class="flex aic g12 bsb pl16 pr16 pt20" style="border-top: 1px solid #dbdbdb;">
 						<a href="/sales_post/modify/{data.result.data.sellArticle.id}" class="btn-type-1 w50per">수정하기</a>
 						<button on:click={deleteArticle} class="btn-type-1-2 w50per">삭제하기</button>
 					</div>
 				{/if}
 			</div>
 		</div>
+		
+		<!-- 댓글 영역 -->
+		<div class="answer-area bsb mt60 pt60" style="border-top: 1px solid #dbdbdb">
+			<h3 class="c222 f18 tb">댓글 0개</h3>
+			<ul class="answer-box flex fdc mt8">
+				{#each data.result2.data.answers as ans}
+					{#if editingAnswer === ans}
+					<li>
+						<form on:submit|preventDefault={submitModifiedAnswer}>
+							<div class="input-type-1 rel">
+								<input type="text" name="modifiedComment" bind:value={modifiedComment} placeholder="수정된 댓글을 입력하세요" style="padding-right: 100px;" />
+								<div class="c999 f15 flex g12 tb abs y-middle" style="right: 20px;">
+									<button type="submit" class="tb">저장</button>
+									<button on:click={cancelModification} class="tb">취소</button>
+								</div>
+							</div>
+							<div class="error-text-box wsn flex g8 mt8" data-field="modifiedComment">
+								<span class="error-text f14 cCC0000"></span>
+							</div>
+						</form>
+					</li>
+					{:else}
+						<li class="answer-box rel">
+							<div class="flex aic jcsb">
+								<h3 class="c222 f15 tb">{ans.user.nickName}</h3>
+								<div class="flex g8 f12 c999">
+									<button on:click={() => modifyAnswer(ans)} class="">수정</button>
+									<button on:click={deleteAnswer(ans)} class="">삭제</button>
+								</div>
+							</div>
+							<p class="c333 f14 mt8">{ans.comment}</p>
+							<span class="mt8 c999 f12">{displayedAt(new Date(ans.createDate))}</span>
+						</li>
+					{/if}
+				{/each}
+			</ul>
+			<form on:submit|preventDefault={submitAnswerForm}>
+				<div class="input-type-1 rel mt20">
+					<input type="text" name="comment" placeholder="댓글을 입력하세요" style="padding-right: 60px;" />	
+					<button type="submit" class="c333 f15 tb abs y-middle" style="right: 20px;">등록</button>
+				</div>
+				<div class="error-text-box wsn flex g8 mt8" data-field="comment">
+					<span class="error-text f14 cCC0000"></span>
+				</div>
+			</form>
+		</div>
+
 	</div>
 </div>
-<form on:submit|preventDefault={submitAnswerForm}>
-	<h3 class="c333 f18 tb mb16">댓글<span class="tb cCC0000 inblock">*</span></h3>
-	<div class="input-type-1">
-		<input type="text" name="comment" placeholder="댓글을 입력하세요" />
-	</div>
-	<div class="error-text-box wsn flex g8 mt8" data-field="comment">
-		<span class="error-text f14 cCC0000"></span>
-	</div>
-	<div class="flex g8 mgc mt80 w100per" style="max-width: 360px;">
-		<input type="submit" value="저장" class="btn-type-1 w100per" />
-	</div>
-</form>
-{#each data.result2.data.answers as ans}
-	{#if editingAnswer === ans}
-		<form on:submit|preventDefault={submitModifiedAnswer}>
-			<h3 class="c333 f18 tb mb16">댓글 수정<span class="tb cCC0000 inblock">*</span></h3>
-			<div class="input-type-1">
-				<input type="text" name="modifiedComment" bind:value={modifiedComment} placeholder="수정된 댓글을 입력하세요" />
-			</div>
-			<div class="error-text-box wsn flex g8 mt8" data-field="modifiedComment">
-				<span class="error-text f14 cCC0000"></span>
-			</div>
-			<div class="flex g8 mgc mt80 w100per" style="max-width: 360px;">
-				<input type="submit" value="저장" class="btn-type-1 w50per" />
-				<button on:click={cancelModification} class="btn-type-1 w50per">취소</button>
-			</div>
-		</form>
-	{:else}
-		<ul>
-			<li>{ans.id}</li>
-			<li>{ans.comment}</li>
-			<li>{ans.user.nickName}</li>
-			<li>{displayedAt(new Date(ans.createDate))}</li>
-			<button on:click={deleteAnswer(ans)} class="btn-type-1-2 w50per">삭제하기</button>
-			<button on:click={() => modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
-		</ul>
-    		{/if}
-		{/each}
 

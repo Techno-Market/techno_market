@@ -41,7 +41,6 @@
             });
     })
 </script>
-<div>{isLogin}</div>
 <header class="header-area w100per bfff fixed zi5 xy-tl">
     <div class="con wh100per">
         <div class="header-box-1 w100per flex aic jcsb h70">
@@ -58,27 +57,34 @@
                     </div>
                 </div>
             </div>
-            <div class="right-box flex aic cg24">
-                <ul class="sub-menu-box flex aic cg12">
+            <div class="right-box flex aic cg12">
+                <ul class="sub-menu-box flex aic c999 f14 cg12">
                     {#if isLogin }
                         <li>
-                            <a href="" class="c333 f14 tm">내 정보</a>
+                            <a href="">내 정보</a>
                         </li>
                         <li>
-                            <a href="" class="c333 f14 tm">찜 목록</a>
+                            <a href="">나의 판매글</a>
                         </li>
                         <li>
-                            <a href="" class="c333 f14 tm">로그아웃</a>
+                            <a href="">찜 목록</a>
+                        </li>
+                        <li>
+                            <a href="">로그아웃</a>
                         </li>
                     {:else}
                         <li>
-                            <a href="/login" class="c333 f14 tm">로그인</a>
+                            <a href="/login">로그인</a>
                         </li>
                         <li>
-                            <a href="/signup" class="c333 f14 tm">회원가입</a>
+                            <a href="/signup">회원가입</a>
                         </li>
                     {/if}
                 </ul>
+                {#if isLogin }
+                    <span class="w1 h12 bddd"></span>
+                    <span class="f14 tm c222">{member.nickName}</span>
+                {/if}
             </div>
         </div>
         <div class="header-box-2 w100per h50 flex aic jcsb">
@@ -104,6 +110,9 @@
                         <a href="http://localhost:5173/all_product/category/earphone/0" class="tm">이어폰</a>
                     </li>
                 </ul>
+            </div>
+            <div class="right-box">
+                <a href="/sales_post/form" class="f12 b005DE8 cfff bsb bdr4 pt8 pb8 pl8 pr8">판매글 등록</a>
             </div>
         </div>
     </div>

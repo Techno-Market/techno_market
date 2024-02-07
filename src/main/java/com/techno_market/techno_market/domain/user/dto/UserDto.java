@@ -16,6 +16,7 @@ public class UserDto {
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private String username;
+    private String nickName;
     private List<String> authorities;
 
     public UserDto(SiteUser user) {
@@ -23,6 +24,7 @@ public class UserDto {
         this.createDate = user.getCreateDate();
         this.modifyDate = user.getModifyDate();
         this.username = user.getUsername();
+        this.nickName = user.getNickName();
         this.authorities = user.getAuthoritiesAsStringList();
     }
 }

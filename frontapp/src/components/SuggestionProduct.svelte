@@ -68,7 +68,7 @@
 	}
 </script>
 
-<div class="product-swiper-box wh100per rel mt40 zi1">
+<div class="product-swiper-box wh100per rel mt20 zi1">
 	<div class="suggestion-product-swiper swiper-container ofh">
 		<div class="swiper-wrapper">
 			{#if data && data.data}
