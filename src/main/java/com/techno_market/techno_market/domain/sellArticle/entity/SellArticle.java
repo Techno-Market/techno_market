@@ -54,6 +54,7 @@ public class SellArticle {
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "sellArticle", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
     private List<WishList> wishLists;
 
     @CreatedDate

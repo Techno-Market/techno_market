@@ -1,6 +1,7 @@
 package com.techno_market.techno_market.global.rsData;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.techno_market.techno_market.domain.wishList.controller.WishListController;
 import lombok.*;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -29,6 +30,5 @@ public class RsData<T> {
                 .data(data)
                 .build();
     }
-
 }
 

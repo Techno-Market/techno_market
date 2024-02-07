@@ -8,6 +8,15 @@
 	let data = [];
 
 	onMount(async () => {
+		swiper = new Swiper('.popularity-product-swiper', {
+			slidesPerView: 5,
+			spaceBetween: 20,
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev'
+			}
+		});
+		
 		try {
 			let res = await fetch('http://localhost:8080/api/articles', {
         credentials: 'include',
@@ -17,15 +26,6 @@
 		} catch (error) {
 			console.error('데이터를 불러오는 중 에러 발생:', error);
 		}
-
-		swiper = new Swiper('.popularity-product-swiper', {
-			slidesPerView: 5,
-			spaceBetween: 20,
-			navigation: {
-				nextEl: '.swiper-button-next',
-				prevEl: '.swiper-button-prev'
-			}
-		});
 	});
 
 	function displayedAt(createdAt) {

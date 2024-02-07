@@ -62,6 +62,7 @@
 			console.error('Error fetching data:', error);
 		}
 	}
+	
 </script>
 
 <div class="sub-cnt-area w100per rel zi1">

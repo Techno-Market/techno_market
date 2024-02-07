@@ -1,8 +1,24 @@
 <script>
 	export let data;
-	import axios from 'axios';
-	import { goto } from '$app/navigation';
-    console.log(data.data.wishlists)
+	import { onMount } from 'svelte';
+	let username = '';
+
+	onMount(() => {
+	fetch('http://localhost:8080/api/user/me', {
+			credentials: 'include'
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data) {
+					username = data.data?.item?.username;
+				}
+			})
+			.catch((error) => {
+				// 실패시 처리
+				console.error(error);
+			});
+		})
+
 	function displayedAt(createdAt) {
 		const milliSeconds = new Date() - createdAt;
 		const seconds = milliSeconds / 1000;
@@ -41,7 +57,73 @@
 		const years = days / 365;
 		return `${Math.floor(years)}년 전`;
 	}
+// 	let isFavorited = false;
 
+//     // API를 통한 찜 상태 업데이트 함수
+//     async function toggleFavorite(articleId) {
+// 		const confirmMessage = isFavorited ? '찜을 해제하시겠습니까?' : '찜을 하시겠습니까?';
+
+//     	const confirmed = window.confirm(confirmMessage);
+
+// 		if (confirmed) {
+//         try {
+//             const response = await fetch(`http://localhost:8080/api/wishlists/toggleFavorite/${data.data.wishLists.sellArticle.id}`, {
+//                 method: 'POST',
+//                 credentials: 'include',
+//             });
+
+//             if (response.ok) {
+//                 const responseData = await response.json();
+//                 const isToggled = responseData.message.includes("찜 추가 성공");
+//                 // isFavorited 값을 업데이트
+//                 isFavorited = isToggled;
+// 				console.log("찜 여부: " + isFavorited);
+// 				if(isFavorited) {
+// 					window.alert("찜 목록에 추가하였습니다");
+// 				} else {
+// 					window.alert("찜 목록에서 해제하였습니다")
+// 				}
+				
+//                 // UI 업데이트 등의 추가 작업 수행
+//                 updateUI();
+//             } else {
+//                 console.error('Error toggling favorite:', response.statusText);
+//             }
+//         } catch (error) {
+//             console.error('Error toggling favorite:', error);
+//         }
+//     }
+// }
+
+//     // UI 업데이트 함수 (찜 여부에 따라 하트 이미지 업데이트 등의 작업을 수행)
+//     function updateUI() {
+//         // 예시: 찜 여부에 따라 하트 이미지 업데이트
+//         const heartImage = document.getElementById('heartImage');
+//         if (heartImage) {
+//             heartImage.src = isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg";
+//         }
+//     }
+
+
+// 	export async function init() {
+// 		try {
+// 			const response = await fetch(`http://localhost:8080/api/wishlists/favorites/${data.data.wishLists.sellArticle.id}`, {
+// 				credentials: 'include',
+// 			});
+			
+// 			if (response.ok) {
+// 				const responseData = await response.json();
+// 				isFavorited = responseData.isFavorited;
+// 				console.log("init :" + isFavorited)
+// 				updateUI();
+// 			} else {
+// 				console.error('Error fetching user favorites:', response.statusText);
+// 			}
+// 		} catch (error) {
+// 			console.error('Error fetching user favorites:', error);
+// 		}
+// 	}
+// 	init();
 
 </script>
 
@@ -49,8 +131,11 @@
 	<div class="con w100per">
 		<h1 class="title-text lh120 tb">전체 상품</h1>
 		<ul class="product-box flex fww">
-			{#each data.data.wishlists as wishlist}
-				<li>
+			{#each data.data.wishLists as wishlist}
+				<div>{wishlist.id}</div>
+				<div>{wishlist.id.articleId}</div>
+				<div>{username}</div>
+				<!-- <li>
 					<a href="/sales_post/detail/{wishlist.id}">
 						{#if wishlist.photo && wishlist.photo[0]}
 							<div class="img-box rel">
@@ -84,7 +169,7 @@
 							{/if}
 						</ul>
 					</a>
-				</li>
+				</li> -->
 			{/each}
 		</ul>
 	</div>
