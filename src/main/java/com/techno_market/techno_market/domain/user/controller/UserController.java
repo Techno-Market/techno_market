@@ -17,6 +17,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -111,6 +114,30 @@ public class UserController {
                 "내 정보 가져오기 성공",
                 new MeResponseBody(rq.getMember())
         );
+    }
+
+    @Data
+    public static class PasswordCheckRequest {
+        private String password;
+    }
+
+    @PostMapping("/passwordCheck")
+    public RsData<Boolean> checkPassword(@Valid @RequestBody PasswordCheckRequest passwordCheckRequest, @AuthenticationPrincipal SecurityUser user) {
+        SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
+        return userService.isPasswordCheck(author, passwordCheckRequest.getPassword());
+    }
+
+    @Data
+    public static class ModifiRequest {
+        private String nickName;
+        private String password;
+    }
+
+    @PatchMapping("/mypage")
+    public RsData<SiteUser> modifi(@Valid @RequestBody ModifiRequest modifiRequest, @AuthenticationPrincipal SecurityUser user) {
+        SiteUser author = this.userService.findByUsername(user.getUsername()).orElseThrow();
+        RsData<SiteUser> RsSiteUser = this.userService.modifi(author, modifiRequest.getNickName(), modifiRequest.getPassword());
+        return RsSiteUser;
     }
 
     @PostMapping("/logout")

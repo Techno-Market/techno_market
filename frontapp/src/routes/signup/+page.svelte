@@ -139,13 +139,9 @@
                 });
 
                 if (response.ok) {
-                    const responseData = await response.json();
-                    console.log(responseData);
                     window.alert('회원가입이 완료되었습니다.');
                     window.location.href = 'http://localhost:5173/login';
                 } else {
-                    const responseData = await response.json();
-                    console.error(responseData);
                     window.alert('회원가입이 실패했습니다.');
                 }
             } catch (error) {

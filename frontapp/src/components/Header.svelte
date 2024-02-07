@@ -81,7 +81,7 @@
                 <ul class="sub-menu-box flex aic c999 f14 cg12">
                     {#if isLogin }
                         <li>
-                            <a href="">내 정보</a>
+                            <a href="/mypage">내 정보</a>
                         </li>
                         <li>
                             <a href="">나의 판매글</a>
