@@ -304,7 +304,7 @@
 					<div class="swiper-button-prev" on:click={() => swiper.slidePrev()}>
 						<img src="/img/arrow_prev_point_030095.svg" alt="Prev" />
 					</div>
-					<button class="favor-box img-box w40 abs zi2" id="favor_btn" style="top: 20px; right: 20px;">
+					<button class="favor-box img-box w40 abs zi2 active" id="favor_btn" style="top: 20px; right: 20px;">
 						<img src="/img/ico_heart.svg" alt="">
 					</button>
 				</div>
@@ -350,7 +350,7 @@
 					{@html data.result.data.sellArticle.content.replace(/\r\n/g, '<br>')}
 				</p>
 
-				<!--본인 작성 글이 아닐 경우-->
+				
 				<!--본인 작성 글-->
 				{#if username && data.result.data.sellArticle.author.username === username}
 					<div class="flex aic g12 bsb pl16 pr16 mt20">
