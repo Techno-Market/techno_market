@@ -1,5 +1,6 @@
 package com.techno_market.techno_market.domain.answerArticle.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
 import com.techno_market.techno_market.domain.user.entity.SiteUser;
@@ -26,5 +27,6 @@ public class Answer extends BaseEntity {
     @ManyToOne
     private SiteUser user;
     @ManyToOne
+    @JsonBackReference
     private SellArticle sellArticle;
 }
