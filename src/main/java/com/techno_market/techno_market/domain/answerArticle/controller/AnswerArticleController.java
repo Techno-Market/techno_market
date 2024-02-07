@@ -8,6 +8,7 @@ import com.techno_market.techno_market.domain.user.entity.SiteUser;
 import com.techno_market.techno_market.domain.user.service.UserService;
 import com.techno_market.techno_market.global.rsData.RsData;
 import com.techno_market.techno_market.global.security.SecurityUser;
+import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -51,11 +52,16 @@ public class AnswerArticleController {
         Answer answer = this.answerService.create(writer, writeRequest.getComment(), sellArticle);
         return RsData.of("3", "댓글 작성 성공", new AnswerArticleResponse(answer));
     }
+    @Data
+    public static class ModifyRequest{
+        private String modifiedComment;
+    }
+
     @PatchMapping("/{id}")
-    public RsData<AnswerArticleResponse> modify(@PathVariable("id") Long id, WriteRequest writeRequest, @AuthenticationPrincipal SecurityUser user) {
+    public RsData<AnswerArticleResponse> modify(@PathVariable("id") Long id, @Valid ModifyRequest modifyRequest, @AuthenticationPrincipal SecurityUser user) {
         SiteUser writer = this.userService.findByUsername(user.getUsername()).orElseThrow();
         Answer answer = this.answerService.getAnswerById(id);
-        this.answerService.modify(writer, answer, writeRequest.getComment());
+        this.answerService.modify(writer, answer, modifyRequest.getModifiedComment());
         return RsData.of("4", "댓글 수정 성공", new AnswerArticleResponse(answer));
     }
     @DeleteMapping("/{id}")
