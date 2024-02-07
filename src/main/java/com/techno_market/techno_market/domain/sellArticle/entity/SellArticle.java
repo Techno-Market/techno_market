@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techno_market.techno_market.domain.answerArticle.entity.Answer;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
 import com.techno_market.techno_market.domain.user.entity.SiteUser;
+import com.techno_market.techno_market.domain.wishList.entity.WishList;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.*;
@@ -51,6 +52,9 @@ public class SellArticle {
             cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<Answer> answers;
+
+    @OneToMany(mappedBy = "sellArticle", cascade = CascadeType.REMOVE)
+    private List<WishList> wishLists;
 
     @CreatedDate
     private LocalDateTime createDate;

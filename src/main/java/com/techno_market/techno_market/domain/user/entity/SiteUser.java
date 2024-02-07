@@ -2,6 +2,7 @@ package com.techno_market.techno_market.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
+import com.techno_market.techno_market.domain.wishList.entity.WishList;
 import com.techno_market.techno_market.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +44,8 @@ public class SiteUser extends BaseEntity {
     @JsonIgnore
     private List<SellArticle> sellArticles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)
+    private List<WishList> wishLists;
     public List<String> getAuthoritiesAsStringList() {
         return List.of("ROLE_MEMBER");
     }

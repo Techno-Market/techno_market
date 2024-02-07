@@ -61,6 +61,9 @@
 	const submitArticleForm = async (event) => {
 		event.preventDefault();
 
+		const confirmed = window.confirm('변경사항을 저장하시겠습니까?');
+
+		if (confirmed) {
 		const form = event.target;
 		const formData = new FormData(form);
 
@@ -142,6 +145,7 @@
 		} catch (error) {
 			console.error('Error submitting form:', error);
 		}
+	}
 	};
 
 	const updateErrorMessages = (errors) => {
@@ -209,6 +213,20 @@
 		// 입력된 값에서 숫자만 추출하고, 쉼표를 추가하여 price 변수에 저장
 		price = formatNumber(event.target.value);
 	};
+
+	const confirmAndProceed = async (callback) => {
+    const confirmed = window.confirm('변경사항을 저장하지 않고 나가시겠습니까?');
+
+    if (confirmed) {
+      callback();
+    }
+  };
+  
+  const handleCancel = () => {
+    confirmAndProceed(() => {
+		goto(`/sales_post/detail/${data.data.sellArticle.id}`);
+    });
+  };
 </script>
 
 <div class="cnt-area w100per rel zi2">
@@ -336,7 +354,7 @@
 				</ul>
 				<div class="flex g8 mgc mt80 w100per" style="max-width: 360px;">
 					<input type="submit" value="저장" class="btn-type-1 w100per" />
-					<a href="/" class="btn-type-1-2 w100per">취소</a>
+					<a on:click={handleCancel} class="btn-type-1-2 w100per">취소</a>
 				</div>
 			</form>
 		</div>
