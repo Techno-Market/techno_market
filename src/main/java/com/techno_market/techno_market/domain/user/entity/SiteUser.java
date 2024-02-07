@@ -1,5 +1,6 @@
 package com.techno_market.techno_market.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techno_market.techno_market.domain.sellArticle.entity.SellArticle;
@@ -46,7 +47,7 @@ public class SiteUser extends BaseEntity {
     private List<SellArticle> sellArticles = new ArrayList<>();
 
     @OneToMany(mappedBy = "siteUser", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     private List<WishList> wishLists;
     public List<String> getAuthoritiesAsStringList() {
         return List.of("ROLE_MEMBER");

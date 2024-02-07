@@ -38,7 +38,8 @@ public class WishListController {
     public RsData<LikeResponse> wishlist(@AuthenticationPrincipal SecurityUser user) {
             SiteUser siteUser = this.userService.findByUsername(user.getUsername()).orElseThrow();
             List<WishList> wishLists = wishListService.getWishListByUsername(siteUser.getUsername());
-            return RsData.of("1", "리스트 출력 성공", new LikeResponse(wishLists));
+
+        return RsData.of("1", "리스트 출력 성공", new LikeResponse(wishLists));
     }
     @GetMapping("/favorites/{articleId}")
     public ResponseEntity<Map<String, Boolean>> getUserFavorites(@PathVariable(name = "articleId") Long articleId, @AuthenticationPrincipal SecurityUser user) {

@@ -1,5 +1,6 @@
 package com.techno_market.techno_market.domain.sellArticle.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.techno_market.techno_market.domain.answerArticle.entity.Answer;
 import com.techno_market.techno_market.domain.photo.entity.Photo;
@@ -54,7 +55,7 @@ public class SellArticle {
     private List<Answer> answers;
 
     @OneToMany(mappedBy = "sellArticle", cascade = CascadeType.REMOVE)
-    @JsonManagedReference
+    @JsonBackReference
     private List<WishList> wishLists;
 
     @CreatedDate

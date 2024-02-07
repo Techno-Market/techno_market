@@ -16,7 +16,7 @@
 				prevEl: '.swiper-button-prev'
 			}
 		});
-		
+
 		try {
 			let res = await fetch('http://localhost:8080/api/articles', {
         credentials: 'include',
@@ -80,13 +80,6 @@
 									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
-								<button
-									class="favor-box img-box w24 abs"
-									id="favor_btn"
-									style="top: 12px; right: 12px;"
-								>
-									<img src="/img/ico_heart.svg" alt="" />
-								</button>
 							</div>
 							<h3 class="c222 mt20 f16 tal">{article.subject}</h3>
 							<div class="mt12 flex aic jcsb">
