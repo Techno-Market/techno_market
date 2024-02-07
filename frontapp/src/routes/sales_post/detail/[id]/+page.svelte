@@ -215,10 +215,10 @@
 		const formData = new FormData(form);
 
 		const comment = formData.get('modifiedComment');
-		console.log("댓글 : " + comment);
+		console.log("댓글 확인 : " + comment);
 		
 		const errors = {};
-		if (!comment.trim()) {
+		if (!comment || !comment.trim()) {
 			errors.comment = '댓글을 입력하세요.';
 		}
 		if (Object.keys(errors).length > 0) {
@@ -227,6 +227,7 @@
 		}
 
         try {
+			console.log('Requesting with comment:', comment);
 			const response = await fetch(`http://localhost:8080/api/answers/${editingAnswer.id}`, {
 				method: 'PATCH',
 				credentials: 'include',

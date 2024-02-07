@@ -55,11 +55,11 @@
                     </label>
                 </div> -->
                 <div class="add-menu-box flex jcc aic g12 mt40">
-                    <a href="" class="c777 f14">아이디 찾기</a>
+                    <a href="/id_search" class="c777 f14">아이디 찾기</a>
                     <span class="line"></span>
-                    <a href="" class="c777 f14"> 비밀번호 찾기</a>
+                    <a href="/password_search" class="c777 f14"> 비밀번호 찾기</a>
                     <span class="line"></span>
-                    <a href="" class="c777 f14">회원가입</a>
+                    <a href="/signup" class="c777 f14">회원가입</a>
                 </div>
                 <!-- <div class="sns-login-box mt70">
                     <h3 class="tm c333 f16 tac rel">SNS 계정으로 로그인</h3>
