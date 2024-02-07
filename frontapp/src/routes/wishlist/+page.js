@@ -3,6 +3,6 @@ export async function load ({fetch}) {
         credentials: 'include'
     })
     let result = await res.json();
-    console.log("결과" + result)
+    console.log("결과" + result);
     return result;  
 }

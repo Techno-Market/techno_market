@@ -49,8 +49,7 @@
 	<div class="con w100per">
 		<h1 class="title-text lh120 tb">전체 상품</h1>
 		<ul class="product-box flex fww">
-            <div>{data.data.wishlists}</div>
-			<!-- {#each data.data.wishlists as wishlist}
+			{#each data.data.wishlists as wishlist}
 				<li>
 					<a href="/sales_post/detail/{wishlist.id}">
 						{#if wishlist.photo && wishlist.photo[0]}
@@ -59,7 +58,7 @@
 									src={`http://localhost:8080/api/gen/${wishlist.photo[0].filePath}`}
 									alt={wishlist.photo[0].origFileName}
 								/>
-								<button
+								<button 
 									class="favor-box img-box w24 abs"
 									id="favor_btn"
 									style="top: 12px; right: 12px;"
@@ -86,7 +85,7 @@
 						</ul>
 					</a>
 				</li>
-			{/each} -->
+			{/each}
 		</ul>
 	</div>
 </div>
