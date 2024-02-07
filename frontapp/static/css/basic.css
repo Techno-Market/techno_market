@@ -116,6 +116,7 @@ body.active {overflow-y: hidden;}
 .bdr20 {border-radius: 20px;}
 .bdr20 {border-radius: 30px;}
 .bdr50 {border-radius: 50%;}
+.ofh {overflow: hidden;}
 span, a {display: block;}
 .ex::after {
     content: "";
@@ -637,7 +638,7 @@ h1, h2, h3, h4, h5, h6 {font-weight: inherit; font-size: inherit;}
 /* 스와이퍼 */
 
 /* 기본 */
-.swiper {
+/* .swiper {
     width: 100%;
     height: 100%;
 }
@@ -645,7 +646,6 @@ h1, h2, h3, h4, h5, h6 {font-weight: inherit; font-size: inherit;}
     text-align: center;
     font-size: 18px;
     background: #fff;
-    /* Center slide text vertically */
     display: -webkit-box;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -664,10 +664,10 @@ h1, h2, h3, h4, h5, h6 {font-weight: inherit; font-size: inherit;}
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
+} */
 
 /* 페이지네이션 */
-.swiper-pagination {
+/* .swiper-pagination {
     bottom: 40px !important;
     z-index: 2 !important;
 }
@@ -680,10 +680,10 @@ h1, h2, h3, h4, h5, h6 {font-weight: inherit; font-size: inherit;}
 }
 .swiper-pagination .swiper-pagination-bullet-active {
     opacity: 0.5 !important;
-}
+} */
 
 /* 이전, 다음 버튼 */
-.swiper-button-prev,
+/* .swiper-button-prev,
 .swiper-button-next {
     transform: translateY(-50%) !important;
     width: 30px !important;
@@ -715,7 +715,7 @@ h1, h2, h3, h4, h5, h6 {font-weight: inherit; font-size: inherit;}
 }
 .swiper-button-next::before {
     background: url(../img/) no-repeat center center/cover;
-}
+} */
 
 /* ------------------------------------------------------------------------------- */
 
