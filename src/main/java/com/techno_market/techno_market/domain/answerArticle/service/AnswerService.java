@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +21,12 @@ public class AnswerService {
         return answers;
     }
     public Answer getAnswerById(Long id) {
-        Answer answer = this.answerRepository.findById(id).orElseThrow();
-        return answer;
+        Optional<Answer> optionalAnswer = this.answerRepository.findById(id);
+        if (optionalAnswer.isPresent()) {
+            return optionalAnswer.get();
+        } else {
+            throw new RuntimeException("댓글이 존재하지 않습니다");
+        }
     }
     public Answer create(SiteUser user, String comment, SellArticle sellArticle) {
         Answer answer = Answer.builder()
@@ -45,6 +50,8 @@ public class AnswerService {
     public Answer delete(SiteUser user, Answer answer) {
         if (user.getUsername().equals(answer.getUser().getUsername())) {
            this.answerRepository.delete(answer);
+        } else {
+            throw new RuntimeException("유저가 일치하지 않습니다");
         }
         return answer;
     }

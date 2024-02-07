@@ -39,11 +39,6 @@ public class AnswerArticleController {
     public static class AnswerArticleResponse {
         private final Answer answer;
     }
-//    @GetMapping("/{id}")
-//    public RsData<AnswerArticleResponse> getAnswer(@PathVariable("id") Long id) {
-//        Answer answer = this.answerService.getAnswerById(id);
-//        return RsData.of("2", "댓글 불러오기", new AnswerArticleResponse(answer));
-//    }
     @Data
     public static class WriteRequest{
         private String comment;

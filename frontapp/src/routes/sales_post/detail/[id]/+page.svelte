@@ -180,6 +180,55 @@
             console.error('Error while fetching answers data:', error);
         }
     };
+	let editingAnswer = null;
+    let modifiedComment = '';
+
+    const modifyAnswer = (ans) => {
+        editingAnswer = ans;
+        modifiedComment = ans.comment;
+    };
+
+    const cancelModification = () => {
+        editingAnswer = null;
+        modifiedComment = '';
+    };
+
+    const submitModifiedAnswer = async (event) => {
+        event.preventDefault();
+		const form = event.target;
+		const formData = new FormData(form);
+
+		const comment = formData.get('modifiedComment');
+		console.log("댓글 : " + comment);
+		
+		const errors = {};
+		if (!comment.trim()) {
+			errors.comment = '댓글을 입력하세요.';
+		}
+		if (Object.keys(errors).length > 0) {
+			updateErrorMessages(errors);
+			return;
+		}
+
+        try {
+			const response = await fetch(`http://localhost:8080/api/answers/${editingAnswer.id}`, {
+				method: 'PATCH',
+				credentials: 'include',
+				body: formData
+			});
+
+			if (response.ok) {
+				const responseData = await response.json();
+				window.alert('저장되었습니다.');
+				fetchAnswers();
+			} else {
+				const responseData = await response.json();
+				window.alert('저장에 실패했습니다.');
+			}
+		} catch (error) {
+			console.error('Error submitting form:', error);
+		}
+    };
 </script>
 
 <div class="product-detail-area bsb w100per rel zi2 pt60">
@@ -286,14 +335,30 @@
 		<input type="submit" value="저장" class="btn-type-1 w100per" />
 	</div>
 </form>
-    {#each data.result2.data.answers as ans}
+{#each data.result2.data.answers as ans}
+	{#if editingAnswer === ans}
+		<form on:submit|preventDefault={submitModifiedAnswer}>
+			<h3 class="c333 f18 tb mb16">댓글 수정<span class="tb cCC0000 inblock">*</span></h3>
+			<div class="input-type-1">
+				<input type="text" name="modifiedComment" bind:value={modifiedComment} placeholder="수정된 댓글을 입력하세요" />
+			</div>
+			<div class="error-text-box wsn flex g8 mt8" data-field="modifiedComment">
+				<span class="error-text f14 cCC0000"></span>
+			</div>
+			<div class="flex g8 mgc mt80 w100per" style="max-width: 360px;">
+				<input type="submit" value="저장" class="btn-type-1 w50per" />
+				<button on:click={cancelModification} class="btn-type-1 w50per">취소</button>
+			</div>
+		</form>
+	{:else}
 		<ul>
 			<li>{ans.id}</li>
 			<li>{ans.comment}</li>
 			<li>{ans.user.nickName}</li>
 			<li>{displayedAt(new Date(ans.createDate))}</li>
 			<button on:click={deleteAnswer(ans)} class="btn-type-1-2 w50per">삭제하기</button>
-			<button on:click={modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
+			<button on:click={() => modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
 		</ul>
-    {/each}
+	{/if}
+{/each}
 
