@@ -7,83 +7,87 @@
 	const submitArticleForm = async (event) => {
 		event.preventDefault();
 
-		const form = event.target;
-		const formData = new FormData(form);
+		const confirmed = window.confirm('저장하시겠습니까?');
 
-		const uniqueImages = Array.from(new Set(selectedImages)); // 중복 제거
-		uniqueImages.forEach((image, index) => {
-			formData.append('postImage', image);
-		});
+		if (confirmed) {
+			const form = event.target;
+			const formData = new FormData(form);
 
-		// 클라이언트 측 유효성 검사 수행
-		const area = formData.get('area');
-		const category = formData.get('category');
-		const subject = formData.get('subject');
-		const postImage = formData.get('postImage');
-		const content = formData.get('content');
-		const price = formData.get('price');
-
-		const errors = {};
-
-		const numericPrice = Number(price.replace(/,/g, ''));
-		formData.set('price', numericPrice);
-		formData.set('directly', directly);
-		formData.set('parcel', parcel);
-
-		if (!category) {
-			errors.category = '카테고리를 선택하세요.';
-		}
-
-		if (!subject.trim()) {
-			errors.subject = '제목을 입력하세요.';
-		}
-
-		if (!postImage) {
-			errors.postImage = '이미지를 선택하세요.';
-		}
-
-		if (!content.trim()) {
-			errors.content = '내용을 입력하세요.';
-		}
-
-		if (!price || isNaN(numericPrice) || numericPrice <= 0) {
-			errors.price = '유효한 금액을 입력하세요.';
-		}
-
-		if (!area.trim()) {
-			errors.area = '지역을 입력하세요.';
-		}
-
-		if (!directly && !parcel) {
-			errors.transactionType = '거래 유형을 선택하세요.';
-		}
-
-		// 클라이언트 측에서 유효성 검사 실패 시 제출 중단
-		if (Object.keys(errors).length > 0) {
-			updateErrorMessages(errors);
-			return;
-		}
-
-		// 서버로 데이터 전송
-		try {
-			const response = await fetch('http://localhost:8080/api/articles', {
-				method: 'POST',
-				credentials: 'include',
-				body: formData
+			const uniqueImages = Array.from(new Set(selectedImages)); // 중복 제거
+			uniqueImages.forEach((image, index) => {
+				formData.append('postImage', image);
 			});
 
-			if (response.ok) {
-				const responseData = await response.json();
-				console.log(responseData);
-				window.alert('저장되었습니다.');
-				goto('/all_product/0', { replaceState: true });
-			} else {
-				const responseData = await response.json();
-				console.error(responseData);
-				window.alert('저장에 실패했습니다.');
+			// 클라이언트 측 유효성 검사 수행
+			const area = formData.get('area');
+			const category = formData.get('category');
+			const subject = formData.get('subject');
+			const postImage = formData.get('postImage');
+			const content = formData.get('content');
+			const price = formData.get('price');
+
+			const errors = {};
+
+			const numericPrice = Number(price.replace(/,/g, ''));
+			formData.set('price', numericPrice);
+			formData.set('directly', directly);
+			formData.set('parcel', parcel);
+
+			if (!category) {
+				errors.category = '카테고리를 선택하세요.';
 			}
-		} catch (error) {
-			console.error('Error submitting form:', error);
+
+			if (!subject.trim()) {
+				errors.subject = '제목을 입력하세요.';
+			}
+
+			if (!postImage) {
+				errors.postImage = '이미지를 선택하세요.';
+			}
+
+			if (!content.trim()) {
+				errors.content = '내용을 입력하세요.';
+			}
+
+			if (!price || isNaN(numericPrice) || numericPrice <= 0) {
+				errors.price = '유효한 금액을 입력하세요.';
+			}
+
+			if (!area.trim()) {
+				errors.area = '지역을 입력하세요.';
+			}
+
+			if (!directly && !parcel) {
+				errors.transactionType = '거래 유형을 선택하세요.';
+			}
+
+			// 클라이언트 측에서 유효성 검사 실패 시 제출 중단
+			if (Object.keys(errors).length > 0) {
+				updateErrorMessages(errors);
+				return;
+			}
+
+			// 서버로 데이터 전송
+			try {
+				const response = await fetch('http://localhost:8080/api/articles', {
+					method: 'POST',
+					credentials: 'include',
+					body: formData
+				});
+
+				if (response.ok) {
+					const responseData = await response.json();
+					console.log(responseData);
+					window.alert('저장되었습니다.');
+					goto('/all_product/0', { replaceState: true });
+				} else {
+					const responseData = await response.json();
+					console.error(responseData);
+					window.alert('저장에 실패했습니다.');
+				}
+			} catch (error) {
+				console.error('Error submitting form:', error);
+			}
 		}
 	};
 
@@ -144,14 +148,28 @@
 	}
 
 	//금액 입력할 때 , 찍히게
-	let priceModification = "";
+	let priceModification = '';
 	const formatNumber = (value) => {
-		return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	};
 
 	const handleInput = (event) => {
-		priceModification = formatNumber(event.target.value)
+		priceModification = formatNumber(event.target.value);
 	};
+
+	const confirmAndProceed = async (callback) => {
+    const confirmed = window.confirm('취소하고 나가시겠습니까?');
+
+    if (confirmed) {
+      callback();
+    }
+  };
+  
+  const handleCancel = () => {
+    confirmAndProceed(() => {
+      goto('/');
+    });
+  };
 </script>
 
 <div class="cnt-area w100per rel zi2">
@@ -230,7 +248,8 @@
 										name="price"
 										placeholder="금액"
 										style="padding-right: 24px;"
-										id="moneyInput" bind:value={priceModification}
+										id="moneyInput"
+										bind:value={priceModification}
 										on:input={handleInput}
 									/>
 									<span class="abs y-middle f16 c999" style="right: 16px;">원</span>
@@ -273,7 +292,7 @@
 				</ul>
 				<div class="flex g8 mgc mt80 w100per" style="max-width: 360px;">
 					<input type="submit" value="저장" class="btn-type-1 w100per" />
-					<a href="/" class="btn-type-1-2 w100per">취소</a>
+					<a on:click={handleCancel} class="btn-type-1-2 w100per">취소</a>
 				</div>
 			</form>
 		</div>

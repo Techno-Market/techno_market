@@ -8,7 +8,7 @@
 	import 'swiper/swiper-bundle.css';
 
 	let swiper;
-	let username = "";
+	let username = '';
 
 	onMount(() => {
 		fetchAnswers();
@@ -26,19 +26,18 @@
 		});
 
 		fetch('http://localhost:8080/api/user/me', {
-				credentials: "include"
+			credentials: 'include'
 		})
-				.then(response => response.json())
-				.then(data => {
-						if ( data ) {
-								username = data.data?.item?.username;
-						}
-				})
-				.catch(error => {
-						// 실패시 처리
-						console.error(error);
-				});
-
+			.then((response) => response.json())
+			.then((data) => {
+				if (data) {
+					username = data.data?.item?.username;
+				}
+			})
+			.catch((error) => {
+				// 실패시 처리
+				console.error(error);
+			});
 	});
 
 	import { goto } from '$app/navigation';
@@ -82,49 +81,68 @@
 		return `${Math.floor(years)}년 전`;
 	}
 
-    async function deleteArticle() {
-        try {
-            const response = await fetch(`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`, {
-                method: 'DELETE',
-				credentials: 'include'
-            });
+	async function deleteArticle() {
+		const confirmed = window.confirm('정말로 삭제하시겠습니까?');
+		if (confirmed) {
+			try {
+				const response = await fetch(
+					`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`,
+					{
+						method: 'DELETE',
+						credentials: 'include'
+					}
+				);
 
-            if (response.ok) {
-                goto('/all_product/0', { replaceState: true }); 
-            } else {
-                // 삭제 실패
-                console.error('Failed to delete article');
-            }
-        } catch (error) {
-            console.error('Error while deleting article:', error);
-        }
-    }
-	async function deleteAnswer(ans) {
-    // 확인을 눌렀을 때 true 반환, 취소를 눌렀을 때 false 반환
-    const confirmed = window.confirm("정말로 삭제하시겠습니까?");
-    
+				if (response.ok) {
+					goto('/all_product/0', { replaceState: true });
+					window.alert('삭제되었습니다');
+				} else {
+					// 삭제 실패
+					console.error('Failed to delete article');
+					window.alert('삭제가 실패하였습니다');
+				}
+			} catch (error) {
+				console.error('Error while deleting article:', error);
+			}
+		} else {
+			console.log('삭제가 취소되었습니다.');
+		}
+	}
+
+	const modifyArticle = (at) => {
+    const confirmed = window.confirm('수정하시겠습니까?');
     if (confirmed) {
-        const answerId = ans.id;
-        try {
-            const response = await fetch(`http://localhost:8080/api/answers/${answerId}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-
-            if (response.ok) {
-                window.alert("삭제되었습니다");
-                fetchAnswers();
-            } else {
-                window.alert("삭제가 실패하였습니다");
-                console.error('Failed to delete answer');
-            }
-        } catch (error) {
-            console.error('Error while deleting answer:', error);
-        }
-    } else {
-        console.log('삭제가 취소되었습니다.');
+        editingAnswer = at;
+        modifiedComment = at.comment;
+        goto(`/sales_post/modify/${data.result.data.sellArticle.id}`, { replaceState: true });
     }
-}
+};
+	async function deleteAnswer(ans) {
+		// 확인을 눌렀을 때 true 반환, 취소를 눌렀을 때 false 반환
+		const confirmed = window.confirm('정말로 삭제하시겠습니까?');
+
+		if (confirmed) {
+			const answerId = ans.id;
+			try {
+				const response = await fetch(`http://localhost:8080/api/answers/${answerId}`, {
+					method: 'DELETE',
+					credentials: 'include'
+				});
+
+				if (response.ok) {
+					window.alert('삭제되었습니다');
+					fetchAnswers();
+				} else {
+					window.alert('삭제가 실패하였습니다');
+					console.error('Failed to delete answer');
+				}
+			} catch (error) {
+				console.error('Error while deleting answer:', error);
+			}
+		} else {
+			console.log('삭제가 취소되었습니다.');
+		}
+	}
 
 	const submitAnswerForm = async (event) => {
 		event.preventDefault();
@@ -134,8 +152,8 @@
 
 		// 클라이언트 측 유효성 검사 수행
 		const comment = formData.get('comment');
-		console.log("댓글 : " + comment);
-		
+		console.log('댓글 : ' + comment);
+
 		const errors = {};
 		if (!comment.trim()) {
 			errors.comment = '댓글을 입력하세요.';
@@ -176,47 +194,47 @@
 		}
 	};
 	const fetchAnswers = async () => {
-        try {
-            // AJAX 요청을 통해 댓글 데이터 가져오기
-            const response = await fetch(`http://localhost:8080/api/answers/${data.articleId}`, {
-                method: 'GET',
-                credentials: 'include'
-            });
+		try {
+			// AJAX 요청을 통해 댓글 데이터 가져오기
+			const response = await fetch(`http://localhost:8080/api/answers/${data.articleId}`, {
+				method: 'GET',
+				credentials: 'include'
+			});
 
-            if (response.ok) {
-                const newAnswers =await response.json();
-                // 새로운 댓글 데이터로 업데이트
-				console.log("댓글 : " + newAnswers);
-                data.result2.data.answers = newAnswers.data.answers;
-            } else {
-                // 댓글 데이터 가져오기 실패
-                console.error('Failed to fetch answers data');
-            }
-        } catch (error) {
-            console.error('Error while fetching answers data:', error);
-        }
-    };
+			if (response.ok) {
+				const newAnswers = await response.json();
+				// 새로운 댓글 데이터로 업데이트
+				console.log('댓글 : ' + newAnswers);
+				data.result2.data.answers = newAnswers.data.answers;
+			} else {
+				// 댓글 데이터 가져오기 실패
+				console.error('Failed to fetch answers data');
+			}
+		} catch (error) {
+			console.error('Error while fetching answers data:', error);
+		}
+	};
 	let editingAnswer = null;
-    let modifiedComment = '';
+	let modifiedComment = '';
 
-    const modifyAnswer = (ans) => {
-        editingAnswer = ans;
-        modifiedComment = ans.comment;
-    };
+	const modifyAnswer = (ans) => {
+		editingAnswer = ans;
+		modifiedComment = ans.comment;
+	};
 
-    const cancelModification = () => {
-        editingAnswer = null;
-        modifiedComment = '';
-    };
+	const cancelModification = () => {
+		editingAnswer = null;
+		modifiedComment = '';
+	};
 
-    const submitModifiedAnswer = async (event) => {
-        event.preventDefault();
+	const submitModifiedAnswer = async (event) => {
+		event.preventDefault();
 		const form = event.target;
 		const formData = new FormData(form);
 
 		const comment = formData.get('modifiedComment');
-		console.log("댓글 : " + comment);
-		
+		console.log('댓글 : ' + comment);
+
 		const errors = {};
 		if (!comment.trim()) {
 			errors.comment = '댓글을 입력하세요.';
@@ -226,7 +244,7 @@
 			return;
 		}
 
-        try {
+		try {
 			const response = await fetch(`http://localhost:8080/api/answers/${editingAnswer.id}`, {
 				method: 'PATCH',
 				credentials: 'include',
@@ -244,7 +262,7 @@
 		} catch (error) {
 			console.error('Error submitting form:', error);
 		}
-    };
+	};
 </script>
 
 <div class="product-detail-area bsb w100per rel zi2 pt60">
@@ -280,7 +298,9 @@
 			<div class="product-text-box">
 				<div class="flex aic jcsb">
 					<ul class="flex g4">
-						<li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b005DE8 cfff">{data.result.data.sellArticle.area}</li>
+						<li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b005DE8 cfff">
+							{data.result.data.sellArticle.area}
+						</li>
 						{#if data.result.data.sellArticle.directly}
 							<li class="f13 bdr4 bsb pt4 pb4 pl8 pr8 b00A71B cfff">직거래</li>
 						{/if}
@@ -324,7 +344,7 @@
 
 				<!--본인 작성 글이 아닐 경우-->
 				<div class="flex aic g12 bsb pl16 pr16 mt20">
-					<button class="favor-box img-box w32" id="favor_btn">
+					<button class="favor-box img-box w32 " id="favor_btn">
 						<img src="/img/ico_heart.svg" alt="" />
 					</button>
 					<a href="/" class="btn-type-1" style="width: calc(100% - 44px);">채팅하기</a>
@@ -332,8 +352,7 @@
 				<!--본인 작성 글-->
 				{#if username && data.result.data.sellArticle.author.username === username}
 					<div class="flex aic g12 bsb pl16 pr16 mt20">
-						
-						<a href="/sales_post/modify/{data.result.data.sellArticle.id}" class="btn-type-1 w50per">수정하기</a>
+						<a on:click={modifyArticle} class="btn-type-1 w50per">수정하기</a>
 						<button on:click={deleteArticle} class="btn-type-1-2 w50per">삭제하기</button>
 					</div>
 				{/if}
@@ -358,7 +377,12 @@
 		<form on:submit|preventDefault={submitModifiedAnswer}>
 			<h3 class="c333 f18 tb mb16">댓글 수정<span class="tb cCC0000 inblock">*</span></h3>
 			<div class="input-type-1">
-				<input type="text" name="modifiedComment" bind:value={modifiedComment} placeholder="수정된 댓글을 입력하세요" />
+				<input
+					type="text"
+					name="modifiedComment"
+					bind:value={modifiedComment}
+					placeholder="수정된 댓글을 입력하세요"
+				/>
 			</div>
 			<div class="error-text-box wsn flex g8 mt8" data-field="modifiedComment">
 				<span class="error-text f14 cCC0000"></span>
@@ -377,6 +401,5 @@
 			<button on:click={deleteAnswer(ans)} class="btn-type-1-2 w50per">삭제하기</button>
 			<button on:click={() => modifyAnswer(ans)} class="btn-type-1-2 w50per">수정하기</button>
 		</ul>
-    		{/if}
-		{/each}
-
+	{/if}
+{/each}

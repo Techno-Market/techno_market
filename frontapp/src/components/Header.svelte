@@ -31,15 +31,35 @@
                 if ( data ) {
                     console.log(data.data?.item);
                     member = data.data?.item;
-                    if (member) isLogin = true;
-                    else isLogin = false;
+                    if (data.data?.item) {
+                        isLogin = true
+                        goto("/")
+                    }
                 }
             })
             .catch(error => {
                 // 실패시 처리
+                isLogin = false;
                 console.error(error);
             });
     })
+
+    const logout = () => {
+           fetch('http://localhost:8080/api/user/logout', {
+               method: "POST",
+               credentials: "include"
+           })
+               .then(response => response.json())
+               .then(data => {
+                   console.log(data);
+                   goto("/")
+                   location.reload(true);
+               })
+               .catch(error => {
+                   // 실패시 처리
+                   console.error(error);
+               });
+    }
 </script>
 <div>{isLogin}</div>
 <header class="header-area w100per bfff fixed zi5 xy-tl">
@@ -62,13 +82,16 @@
                 <ul class="sub-menu-box flex aic cg12">
                     {#if isLogin }
                         <li>
+                            <a href="/sales_post/form" class="c333 f14 tm">판매 등록</a>
+                        </li>
+                        <li>
                             <a href="" class="c333 f14 tm">내 정보</a>
                         </li>
                         <li>
-                            <a href="" class="c333 f14 tm">찜 목록</a>
+                            <a href="/wishlist" class="c333 f14 tm">찜 목록</a>
                         </li>
                         <li>
-                            <a href="" class="c333 f14 tm">로그아웃</a>
+                            <a href="/" on:click={() => logout()} class="c333 f14 tm">로그아웃</a>
                         </li>
                     {:else}
                         <li>

@@ -112,4 +112,12 @@ public class UserController {
                 new MeResponseBody(rq.getMember())
         );
     }
+
+    @PostMapping("/logout")
+    public RsData<Void> logout() {
+        rq.removeCrossDomainCookie("accessToken");
+        rq.removeCrossDomainCookie("refreshToken");
+
+        return RsData.of("200", "로그아웃 성공");
+    }
 }
