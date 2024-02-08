@@ -105,6 +105,8 @@
         console.error('Error fetching user favorites:', error);
     }
 }
+
+
 </script>
 
 <div class="sub-cnt-area w100per rel zi1">
@@ -120,9 +122,7 @@
 									src={`http://localhost:8080/api/gen/${article.photo[0].filePath}`}
 									alt={article.photo[0].origFileName}
 								/>
-								<button class="favor-box img-box w24 abs" id={`favor_btn_${article.id}`} style="top: 12px; right: 12px;" on:click={() => updateFavorite(article.id)}>
-									<img id={`heartImage_${article.id}`} src={article.isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg"} alt="" />
-								</button>
+								
 							</div>
 						{/if}
 						<h3 class="c222 mt20 f16 tal">{article.subject}</h3>

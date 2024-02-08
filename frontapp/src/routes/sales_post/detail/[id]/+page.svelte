@@ -374,7 +374,7 @@
 					<div class="swiper-button-prev" on:click={() => swiper.slidePrev()}>
 						<img src="/img/arrow_prev_point_030095.svg" alt="Prev" />
 					</div>
-					{#if username && data.result.data.sellArticle.author.username === username}
+					
 					<button
 						class="favor-box img-box w40 abs zi2 {isFavorited ? 'active' : ''}"
 						id="favor_btn"
@@ -383,7 +383,7 @@
 					>
 						<img id="heartImage" src={isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg"} alt="" />
 					</button>
-					{/if}
+	
 				</div>
 			</div>
 			<div class="product-text-box">

@@ -75,7 +75,7 @@
 		{#if data.result.data.articles.content.length === 0}
             <p class="mt100 tac f18 c777">해당 카테고리 판매글이 없습니다.</p>
         {/if}
-        <ul class="product-box flex fww">
+        <ul class="product-box flex fww mt20">
             {#each data.result.data.articles.content as item (item.id)}
                 <li>
                     <a href="/sales_post/detail/{item.id}">

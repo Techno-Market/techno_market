@@ -33,7 +33,7 @@
                     member = data.data?.item;
                     if (data.data?.item) {
                         isLogin = true
-                        goto("/")
+                        
                     }
                 }
             })
@@ -128,9 +128,11 @@
                     </li>
                 </ul>
             </div>
+            {#if isLogin }
             <div class="right-box">
                 <a href="/sales_post/form" class="f12 b005DE8 cfff bsb bdr4 pt8 pb8 pl8 pr8">판매글 등록</a>
             </div>
+            {/if}
         </div>
     </div>
 </header>
