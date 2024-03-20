@@ -3,6 +3,7 @@
 
     let searchQuery = '';
     let currentPage = 0; 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     function performSearch() {
         const searchKeyword = searchQuery.trim();
@@ -22,7 +23,7 @@
     let isLogin = false;
     onMount(()=> {
         // 로그인한 회원정보 불러오기
-        fetch('http://localhost:8080/api/user/me', {
+        fetch(`${backendUrl}/api/user/me`, {
             credentials: "include"
         })
             .then(response => response.json())
@@ -45,7 +46,7 @@
     })
 
     const logout = () => {
-           fetch('http://localhost:8080/api/user/logout', {
+           fetch(`${backendUrl}/api/user/logout`, {
                method: "POST",
                credentials: "include"
            })

@@ -3,6 +3,7 @@
 	let directly = false;
 	let parcel = false;
 	let selectedImages = [];
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 	const submitArticleForm = async (event) => {
 		event.preventDefault();
@@ -69,7 +70,7 @@
 
 			// 서버로 데이터 전송
 			try {
-				const response = await fetch('http://localhost:8080/api/articles', {
+				const response = await fetch(`${backendUrl}/api/articles`, {
 					method: 'POST',
 					credentials: 'include',
 					body: formData

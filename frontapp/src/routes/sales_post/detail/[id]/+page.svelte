@@ -1,5 +1,6 @@
 <script>
 	export let data;
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 	console.log(data.result.data.sellArticle.photo);
 
@@ -25,7 +26,7 @@
 			}
 		});
 
-		fetch('http://localhost:8080/api/user/me', {
+		fetch(`${backendUrl}/api/user/me`, {
 			credentials: 'include'
 		})
 			.then((response) => response.json())
@@ -88,7 +89,7 @@
 		if (confirmed) {
 			try {
 				const response = await fetch(
-					`http://localhost:8080/api/articles/${data.result.data.sellArticle.id}`,
+					`${backendUrl}/api/articles/${data.result.data.sellArticle.id}`,
 					{
 						method: 'DELETE',
 						credentials: 'include'
@@ -126,7 +127,7 @@
 		if (confirmed) {
 			const answerId = ans.id;
 			try {
-				const response = await fetch(`http://localhost:8080/api/answers/${answerId}`, {
+				const response = await fetch(`${backendUrl}/api/answers/${answerId}`, {
 					method: 'DELETE',
 					credentials: 'include'
 				});
@@ -165,7 +166,7 @@
 			return;
 		}
 		try {
-			const response = await fetch(`http://localhost:8080/api/answers/${data.articleId}`, {
+			const response = await fetch(`${backendUrl}/api/answers/${data.articleId}`, {
 				method: 'POST',
 				credentials: 'include',
 				body: formData
@@ -198,7 +199,7 @@
 	const fetchAnswers = async () => {
 		try {
 			// AJAX 요청을 통해 댓글 데이터 가져오기
-			const response = await fetch(`http://localhost:8080/api/answers/${data.articleId}`, {
+			const response = await fetch(`${backendUrl}/api/answers/${data.articleId}`, {
 				method: 'GET',
 				credentials: 'include'
 			});
@@ -247,7 +248,7 @@
 		}
 
         try {
-			const response = await fetch(`http://localhost:8080/api/answers/${editingAnswer.id}`, {
+			const response = await fetch(`${backendUrl}/api/answers/${editingAnswer.id}`, {
 				method: 'PATCH',
 				credentials: 'include',
 				body: formData
@@ -276,7 +277,7 @@
 
 		if (confirmed) {
         try {
-            const response = await fetch(`http://localhost:8080/api/wishlists/toggleFavorite/${articleId}`, {
+            const response = await fetch(`${backendUrl}/api/wishlists/toggleFavorite/${articleId}`, {
                 method: 'POST',
                 credentials: 'include',
             });
@@ -316,7 +317,7 @@
 
 	export async function init() {
 		try {
-			const response = await fetch(`http://localhost:8080/api/wishlists/favorites/${data.articleId}`, {
+			const response = await fetch(`${backendUrl}/api/wishlists/favorites/${data.articleId}`, {
 				credentials: 'include',
 			});
 
@@ -357,7 +358,7 @@
 							<div class="swiper-slide">
 								<div class="img-box rel">
 									<img
-										src={`http://localhost:8080/api/gen/${photo.filePath}`}
+										src={`${backendUrl}/api/gen/${photo.filePath}`}
 										alt={photo.origFileName}
 									/>
 								</div>

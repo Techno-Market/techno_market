@@ -3,6 +3,8 @@
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     function displayedAt(createdAt) {
 		const milliSeconds = new Date() - createdAt;
 		const seconds = milliSeconds / 1000;
@@ -55,7 +57,7 @@
 			console.log("페이지 : " + page);
 			const upperCaseCategory = categoryType.toUpperCase();
 
-			const response = await axios.get(`http://localhost:8080/api/articles/priceAsc?page=${page + 1}&category=${upperCaseCategory}`);
+			const response = await axios.get(`${backendUrl}/api/articles/priceAsc?page=${page + 1}&category=${upperCaseCategory}`);
 			data.result = response.data;
 			
 			goto(`/all_product/category/${categoryType}/${page}/priceAsc`);
@@ -82,7 +84,7 @@
                         {#if item.photo && item.photo[0]}
 							<div class="img-box rel">
 								<img
-									src={`http://localhost:8080/api/gen/${item.photo[0].filePath}`}
+									src={`${backendUrl}/api/gen/${item.photo[0].filePath}`}
 									alt={item.photo[0].origFileName}
 								/>
 							</div>

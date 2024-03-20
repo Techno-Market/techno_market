@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	export let data;
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
 	// import { navigate } from 'svelte-routing';
 	import { onMount } from 'svelte';
 	let directly = false;
@@ -32,7 +33,7 @@
 				imgBox.className = 'img-box rel';
 
 				const imgPreview = document.createElement('img');
-				imgPreview.src = `http://localhost:8080/api/gen/${photo.filePath}`;
+				imgPreview.src = `${backendUrl}/api/gen/${photo.filePath}`;
 
 				const removeButton = document.createElement('button');
 				removeButton.className = 'img-box abs w20 zi2 xy-tr cp';
@@ -124,7 +125,7 @@
 		// 서버로 데이터 전송
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/articles/${data.data.sellArticle.id}`,
+				`${backendUrl}/api/articles/${data.data.sellArticle.id}`,
 				{
 					method: 'PATCH',
 					credentials: 'include',

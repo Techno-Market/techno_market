@@ -1,5 +1,6 @@
 export async function load ({fetch}) {
-    let res = await fetch(`http://localhost:8080/api/wishlists`, {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    let res = await fetch(`${backendUrl}/api/wishlists`, {
         credentials: 'include'
     })
     let result = await res.json();

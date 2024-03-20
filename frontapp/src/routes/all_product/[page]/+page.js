@@ -1,7 +1,8 @@
 export async function load ({fetch, params}) {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
-    let res = await  fetch(`http://localhost:8080/api/articles?page=${params.page}`, {
+    let res = await  fetch(`${backendUrl}/api/articles?page=${params.page}`, {
         credentials: 'include'
     })
     let result = await res.json();

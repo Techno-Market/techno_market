@@ -28,6 +28,8 @@
     let passwordMatchSuccess = false;
     let passwordMatchFail = false;
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     //아이디 중복 검사
     const handleusernameInput = async () => {
         usernameEmpty = false;
@@ -40,7 +42,7 @@
             return;
         }
 
-        let response = await fetch(`http://localhost:8080/api/user/userNameCheck/${encodeURIComponent(usernameValue)}`);
+        let response = await fetch(`${backendUrl}/api/user/userNameCheck/${encodeURIComponent(usernameValue)}`);
         let result = await response.json();
         if (result.data) {
             usernameDuplicationSuccess = false;
@@ -63,7 +65,7 @@
             return;
         }
 
-        let response = await fetch(`http://localhost:8080/api/user/nickNameCheck/${encodeURIComponent(nickNameValue)}`);
+        let response = await fetch(`${backendUrl}/api/user/nickNameCheck/${encodeURIComponent(nickNameValue)}`);
         let result = await response.json();
         if (result.data) {
             nickNameDuplicationSuccess = false;
@@ -130,7 +132,7 @@
                     birthDate,
                 };
 
-                const response = await fetch('http://localhost:8080/api/user/signup', {
+                const response = await fetch(`${backendUrl}/api/user/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -158,7 +160,7 @@
     const sendVerificationEmail = async () => {
         try {
             // 이메일 전송 요청
-            const response = await fetch('http://localhost:8080/api/email/send', {
+            const response = await fetch(`${backendUrl}/api/email/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -184,7 +186,7 @@
         const email = document.querySelector('input[name="email"]').value;
 
         try {
-            const response = await fetch('http://localhost:8080/api/email/verify', {
+            const response = await fetch(`${backendUrl}/api/email/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

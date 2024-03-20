@@ -1,10 +1,12 @@
 <script>
     import { onMount } from 'svelte';
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     let member = {};
     onMount(()=> {
         // 로그인한 회원정보 불러오기
-        fetch('http://localhost:8080/api/user/me', {
+        fetch(`${backendUrl}/api/user/me`, {
             credentials: "include"
         })
         .then(response => response.json())
@@ -53,7 +55,7 @@
             return;
         }
 
-        let response = await fetch(`http://localhost:8080/api/user/nickNameCheck/${encodeURIComponent(nickNameValue)}`);
+        let response = await fetch(`${backendUrl}/api/user/nickNameCheck/${encodeURIComponent(nickNameValue)}`);
         let result = await response.json();
 
         if (nickNameValue === member.nickName) {
@@ -73,7 +75,7 @@
 
     //기존 패스워스 검사
     const handlePasswordInput = async () => {
-            const response = await fetch('http://localhost:8080/api/user/passwordCheck', {
+            const response = await fetch(`${backendUrl}/api/user/passwordCheck`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +130,7 @@
                     nickName,
                     password: password1,
                 };
-                const response = await fetch('http://localhost:8080/api/user/mypage', {
+                const response = await fetch(`${backendUrl}/api/user/mypage`, {
                     method: 'PATCH',
                     credentials: "include",
                     headers: {

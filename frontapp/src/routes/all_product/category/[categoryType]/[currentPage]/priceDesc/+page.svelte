@@ -3,6 +3,8 @@
 	import axios from 'axios';
 	import { goto } from '$app/navigation';
 
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     function displayedAt(createdAt) {
 		const milliSeconds = new Date() - createdAt;
 		const seconds = milliSeconds / 1000;
@@ -55,7 +57,7 @@
                 console.log("페이지 : " + page);
                 const upperCaseCategory = categoryType.toUpperCase();
                 // 서버로 전달하는 페이지 번호에 1을 더해서 저장
-                const response = await axios.get(`http://localhost:8080/api/articles/priceDesc?page=${page + 1}&category=${upperCaseCategory}`);
+                const response = await axios.get(`${backendUrl}/api/articles/priceDesc?page=${page + 1}&category=${upperCaseCategory}`);
                 data.result = response.data; // 데이터 업데이트
                 
                 // 페이지 이동 시 브라우저의 주소도 업데이트
@@ -83,7 +85,7 @@
                         {#if item.photo && item.photo[0]}
 							<div class="img-box rel">
 								<img
-									src={`http://localhost:8080/api/gen/${item.photo[0].filePath}`}
+									src={`${backendUrl}/api/gen/${item.photo[0].filePath}`}
 									alt={item.photo[0].origFileName}
 								/>
 							</div>

@@ -1,4 +1,6 @@
 <script>
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     function submitLoginForm() {
         const form = this;
 
@@ -10,7 +12,7 @@
             return;
         }
 
-        fetch('http://localhost:8080/api/user/login', {
+        fetch(`${backendUrl}/api/user/login`, {
             method: 'POST',
             credentials: 'include',
             headers: {

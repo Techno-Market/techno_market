@@ -2,10 +2,11 @@
 	export let data;
 	import { onMount } from 'svelte';
 	let username = '';
+	const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 	onMount(() => {
 	init();
-	fetch('http://localhost:8080/api/user/me', {
+	fetch(`${backendUrl}/api/user/me`, {
 			credentials: 'include'
 		})
 			.then((response) => response.json())
@@ -71,7 +72,7 @@ function updateUI() {
 
 async function init() {
     try {
-        const response = await fetch(`http://localhost:8080/api/wishlists/favorites/${data?.data?.wishLists[0]?.sellArticle?.id}`, {
+        const response = await fetch(`${backendUrl}/api/wishlists/favorites/${data?.data?.wishLists[0]?.sellArticle?.id}`, {
             credentials: 'include',
         });
         
@@ -102,7 +103,7 @@ async function init() {
 						{#if wishlist.sellArticle.photo && wishlist.sellArticle.photo[0]}
 							<div class="img-box rel">
 								<img
-									src={`http://localhost:8080/api/gen/${wishlist.sellArticle.photo[0].filePath}`}
+									src={`${backendUrl}/api/gen/${wishlist.sellArticle.photo[0].filePath}`}
 									alt={wishlist.sellArticle.photo[0].origFileName}
 								/>
 								<button 
