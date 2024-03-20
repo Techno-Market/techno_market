@@ -56,55 +56,16 @@
 
 	async function changePage(page) {
 		try {
-			// 서버로 전달하는 페이지 번호에 1을 더해서 저장
 			const response = await axios.get(`http://localhost:8080/api/articles?page=${page + 1}`);
-			data = response.data; // 데이터 업데이트
+			data = response.data; 
 
-			// 페이지 이동 시 브라우저의 주소도 업데이트
 			goto(`/all_product/${page}`);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
 	}
 
-	let isFavorited = false;
-	// UI 업데이트 함수 (찜 여부에 따라 하트 이미지 업데이트 등의 작업을 수행)
-	function updateUI(articleId) {
-    const heartImage = document.getElementById(`heartImage_${articleId}`);
-    const article = data.data.articles.content.find(article => article.id === articleId);
-
-    if (heartImage && article) {
-        heartImage.src = article.isFavorited ? "/img/ico_heart_active.svg" : "/img/ico_heart.svg";
-    }
-}
-	function updateFavorite(articleId) {
-		const article = data.data.articles.content.find(article => article.id === articleId);
-		if (article) {
-			article.isFavorited = !article.isFavorited;
-			updateUI(article.id);
-			// 여기서 API 호출로 찜 상태 업데이트를 수행할 수도 있습니다.
-		}
-	}
-
-	async function init() {
-		try {
-        for (const article of data.data.articles.content) {
-            const response = await fetch(`http://localhost:8080/api/wishlists/favorites/${article.id}`, {
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                article.isFavorited = responseData.isFavorited;
-                updateUI(article.id); // 각 게시물의 UI를 업데이트합니다.
-            } else {
-                console.error(`Error fetching user favorites for article ${article.id}:`, response.statusText);
-            }
-        }
-    } catch (error) {
-        console.error('Error fetching user favorites:', error);
-    }
-}
+	
 </script>
 
 <div class="sub-cnt-area w100per rel zi1">
