@@ -16,7 +16,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
-    @Value("${custom.genFile.dirPath}")
+    @Value("${myapp.image-path}")
     private String getGenFileDirPath;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

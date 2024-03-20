@@ -23,6 +23,5 @@ multipart:
   max-file-size: 10MB
   max-request-size: 10MB
   enabled: true
-custom:
-  genFile:
-    dirPath: C:\Users\techno_market_image
+myapp:
+  image-path: file:///Users/techno_market_image
